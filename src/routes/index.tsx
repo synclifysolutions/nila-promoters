@@ -9,6 +9,9 @@ import heroImg from "@/assets/hero-bg.jpg";
 import { Reveal, Stagger, itemVariants } from "@/components/site/Reveal";
 import { ProjectCard } from "@/components/site/ProjectCard";
 import { COMPLETED, ONGOING, UPCOMING } from "@/lib/projects";
+import mahalakshmilogo from "@/assets/logos/mahalakshmi-logo.png";
+import anugraghalogo from "@/assets/logos/anugragha-logo.png";
+import megalogo from "@/assets/logos/mega-logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -380,43 +383,43 @@ function HomePage() {
       </section>
 
       {/* ══════════════════════════════
-          4. FEATURED PROJECTS — very light blue-grey
-      ══════════════════════════════ */}
-      <section style={{ background: "#F2F7FA" }} className="py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <Reveal className="mb-14 text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#49769F" }}>
-              Portfolio
-            </span>
-            <h2 className="mt-3 font-display text-4xl font-bold md:text-5xl" style={{ color: "#001D39" }}>
-              Our Signature Projects
-            </h2>
-            <div className="mx-auto mt-3 h-0.5 w-16" style={{ background: "#4E8EA2" }} />
-          </Reveal>
-          <Stagger className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-            <ProjectCard p={COMPLETED[0]} />
-            <ProjectCard p={ONGOING[0]} />
-            <ProjectCard p={UPCOMING[0]} />
-          </Stagger>
-          <div className="mt-12 text-center">
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-semibold transition-all hover:scale-105"
-              style={{ border: "2px solid #0A4174", color: "#0A4174" }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "#0A4174";
-                (e.currentTarget as HTMLElement).style.color = "#fff";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "transparent";
-                (e.currentTarget as HTMLElement).style.color = "#0A4174";
-              }}
-            >
-              View All Projects <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
+    4. FEATURED PROJECTS — very light blue-grey
+══════════════════════════════ */}
+<section style={{ background: "#F2F7FA" }} className="py-24">
+  <div className="mx-auto max-w-7xl px-6">
+    <Reveal className="mb-14 text-center">
+      <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#49769F" }}>
+        Portfolio
+      </span>
+      <h2 className="mt-3 font-display text-4xl font-bold md:text-5xl" style={{ color: "#001D39" }}>
+        Our Signature Projects
+      </h2>
+      <div className="mx-auto mt-3 h-0.5 w-16" style={{ background: "#4E8EA2" }} />
+    </Reveal>
+    <Stagger className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+      <ProjectCard p={{ ...COMPLETED[0], logo: mahalakshmilogo }} />
+      <ProjectCard p={{ ...ONGOING[0],   logo: anugraghalogo }} />
+      <ProjectCard p={{ ...UPCOMING[0],  logo: megalogo }} />
+    </Stagger>
+    <div className="mt-12 text-center">
+      <Link
+        to="/projects"
+        className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-semibold transition-all hover:scale-105"
+        style={{ border: "2px solid #0A4174", color: "#0A4174" }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.background = "#0A4174";
+          (e.currentTarget as HTMLElement).style.color = "#fff";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLElement).style.background = "transparent";
+          (e.currentTarget as HTMLElement).style.color = "#0A4174";
+        }}
+      >
+        View All Projects <ArrowRight className="h-4 w-4" />
+      </Link>
+    </div>
+  </div>
+</section>
 
       {/* ══════════════════════════════
     5. TESTIMONIALS

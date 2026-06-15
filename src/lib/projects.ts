@@ -40,7 +40,6 @@ export const ONGOING: Project[] = [
     name: "Anugragah Avenue",
     location: "Kumbakonam",
     status: "Ongoing",
-    highlight: "🔥 Limited Plots Remaining",
     description:
       "Anugragah Avenue is Nila Promoters' current flagship project — a DTCP approved premium plotted layout in a prime Kumbakonam location. Offering plots for families seeking the best of connectivity, green surroundings, and strong investment value.",
     imageLabel: "Upload Anugragah Avenue site photo",
