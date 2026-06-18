@@ -1,54 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight, CheckCircle2, Zap, Clock } from "lucide-react";
+import { MapPin, ArrowRight } from "lucide-react";
 import { ImagePlaceholder } from "./ImagePlaceholder";
+import type { Project } from "@/data/projects";
+import { statusConfig } from "@/lib/feature-icons";
 
-export type ProjectStatus = "Completed" | "Ongoing" | "Upcoming";
-
-export interface Project {
-  name: string;
-  location: string;
-  description: string;
-  status: ProjectStatus;
-  imageLabel: string;
-  highlight?: string;
-  cta?: string;
-  logo?: string;
-}
-
-const statusConfig: Record<ProjectStatus, {
-  label: string;
-  dot: string;
-  text: string;
-  bg: string;
-  border: string;
-  Icon: React.FC<{ className?: string }>;
-}> = {
-  Completed: {
-    label: "Completed",
-    dot: "#10b981",
-    text: "#065f46",
-    bg: "#ecfdf5",
-    border: "#a7f3d0",
-    Icon: CheckCircle2,
-  },
-  Ongoing: {
-    label: "Ongoing",
-    dot: "#0ea5e9",
-    text: "#0c4a6e",
-    bg: "#f0f9ff",
-    border: "#bae6fd",
-    Icon: Zap,
-  },
-  Upcoming: {
-    label: "Upcoming",
-    dot: "#C9A84C",
-    text: "#78350f",
-    bg: "#fffbeb",
-    border: "#fde68a",
-    Icon: Clock,
-  },
-};
+export type { Project };
 
 export function ProjectCard({ p }: { p: Project }) {
   const cfg = statusConfig[p.status];
@@ -63,7 +20,6 @@ export function ProjectCard({ p }: { p: Project }) {
       className="group relative flex flex-col overflow-hidden bg-white border border-[#e8e3d8] transition-all duration-500 hover:border-[#C9A84C]/50 hover:shadow-[0_20px_60px_rgba(0,29,57,0.1)] hover:-translate-y-1"
       style={{ borderRadius: "2px" }}
     >
-      {/* ── Logo / Image area ── */}
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#F5F0E8]">
         {p.logo ? (
           <div className="absolute inset-0 flex items-center justify-center p-8">
@@ -81,21 +37,14 @@ export function ProjectCard({ p }: { p: Project }) {
           <ImagePlaceholder label={p.imageLabel} className="absolute inset-0 rounded-none" />
         )}
 
-        {/* Status badge — top left */}
         <div
           className="absolute left-4 top-4 z-20 inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-bold uppercase tracking-widest"
-          style={{
-            background: cfg.bg,
-            color: cfg.text,
-            border: `1px solid ${cfg.border}`,
-            borderRadius: "2px",
-          }}
+          style={{ background: cfg.bg, color: cfg.text, border: `1px solid ${cfg.border}`, borderRadius: "2px" }}
         >
           <span className="h-1.5 w-1.5 rounded-full" style={{ background: cfg.dot }} />
           {cfg.label}
         </div>
 
-        {/* Highlight strip */}
         {p.highlight && (
           <div
             className="absolute bottom-0 left-0 right-0 z-20 px-4 py-2 text-center text-[11px] font-bold tracking-widest"
@@ -106,15 +55,10 @@ export function ProjectCard({ p }: { p: Project }) {
         )}
       </div>
 
-      {/* ── Gold accent line — grows on hover ── */}
       <div className="h-[2px] w-full bg-[#F5F0E8] overflow-hidden">
-        <div
-          className="h-full w-0 transition-all duration-500 group-hover:w-full"
-          style={{ background: "#C9A84C" }}
-        />
+        <div className="h-full w-0 transition-all duration-500 group-hover:w-full" style={{ background: "#C9A84C" }} />
       </div>
 
-      {/* ── Card body ── */}
       <div className="flex flex-1 flex-col p-7">
         <div className="mb-4 inline-flex w-fit items-center gap-1.5">
           <MapPin className="h-3 w-3" style={{ color: "#C9A84C" }} />
@@ -123,10 +67,7 @@ export function ProjectCard({ p }: { p: Project }) {
           </span>
         </div>
 
-        <h3
-          className="font-display text-xl font-bold leading-snug"
-          style={{ color: "#001D39" }}
-        >
+        <h3 className="font-display text-xl font-bold leading-snug" style={{ color: "#001D39" }}>
           {p.name}
         </h3>
 
@@ -134,13 +75,11 @@ export function ProjectCard({ p }: { p: Project }) {
           {p.description}
         </p>
 
-        {/* CTA */}
-        <div
-          className="mt-6 flex items-center justify-between border-t pt-5"
-          style={{ borderColor: "rgba(0,29,57,0.07)" }}
-        >
+        <div className="mt-6 flex items-center justify-between border-t pt-5" style={{ borderColor: "rgba(0,29,57,0.07)" }}>
+          {/* 🔽 this now opens the new Project Details page */}
           <Link
-            to="/contact"
+            to="/projects/$slug"
+            params={{ slug: p.slug }}
             className="group/btn inline-flex items-center gap-2 text-sm font-bold transition-all duration-300"
             style={{ color: "#001D39" }}
             onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#C9A84C")}
@@ -149,17 +88,12 @@ export function ProjectCard({ p }: { p: Project }) {
             {p.cta ?? "View Details"}
             <span
               className="flex h-7 w-7 items-center justify-center transition-all duration-300 group-hover/btn:scale-110"
-              style={{
-                background: "#F5F0E8",
-                border: "1px solid rgba(0,29,57,0.12)",
-                borderRadius: "2px",
-              }}
+              style={{ background: "#F5F0E8", border: "1px solid rgba(0,29,57,0.12)", borderRadius: "2px" }}
             >
               <ArrowRight className="h-3.5 w-3.5" style={{ color: "#001D39" }} />
             </span>
           </Link>
 
-          {/* Small dot accent */}
           <div className="h-1.5 w-1.5 rounded-full" style={{ background: "#C9A84C", opacity: 0.4 }} />
         </div>
       </div>
