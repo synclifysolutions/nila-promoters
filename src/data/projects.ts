@@ -7,6 +7,15 @@ import megalogo from "@/assets/logos/mega-logo.png";
 import kurinjilogo from "@/assets/logos/kurunji-logo.png";
 import pamlogo from "@/assets/logos/pam-logo.png";
 import megacitylogo from "@/assets/logos/mega-logo.png";
+import anugragha1 from "@/assets/logos/anugraha-1.jpg";
+import anugragha2 from "@/assets/logos/anugraha-2.jpg";
+import anugragha3 from "@/assets/logos/anugraha-3.jpg";
+import anugragha4 from "@/assets/logos/anugraha-4.jpg";
+import anugragha5 from "@/assets/logos/anugraha-5.jpg";
+import anugragha6 from "@/assets/logos/anugraha-6.jpg";
+import anugragha7 from "@/assets/logos/anugraha-7.jpg";
+import anugragha8 from "@/assets/logos/anugraha-8.jpg";
+import anugragha9 from "@/assets/logos/anugraha-9.jpg";
 
 export type ProjectStatus = "Completed" | "Ongoing" | "Upcoming";
 
@@ -143,22 +152,30 @@ export const ONGOING: Project[] = [
   {
     slug: "anugraha-avenue",
     name: "Anugraha Avenue",
-    location: "Kumbakonam",
-    description: "An exclusive ongoing layout with premium amenities, wide internal roads, and DTCP approved plots available now.",
+    location: "Pudukkottai Main Road, Thanjavur",
+    description:
+      "DTCP & RERA approved premium gated community strategically located on the Thanjavur–Pudukkottai NH Road. Residential plots with modern infrastructure, water facilities, security, and excellent connectivity to educational institutions and hospitals.",
     status: "Ongoing",
     imageLabel: "Anugraha Avenue",
-    highlight: "Plots Available — Book Now",
+    highlight: "DTCP & RERA Approved Plots Available",
     cta: "Enquire Now",
     logo: anugraghalogo,
-    address: "Anugraha Avenue, Kumbakonam, Tamil Nadu",
+    address: "Anugraha Avenue, Thanjavur–Pudukkottai Main Road, Tamil Nadu",
     features: [
-      "DTCP & RERA Approved Gated Layout",
-      "30ft Wide Black-top Roads",
-      "Individual EB Connections",
-      "Drinking Water Facility",
-      "Arch Entrance & Street Lights",
-      "Near Schools & Hospitals",
+      "DTCP & RERA Approved Layout",
+      "Located on Thanjavur–Pudukkottai NH Road",
+      "Near Kings College & Major Educational Institutions",
+      "24ft, 30ft & 33ft Wide Roads",
+      "Residential Neighborhood with Existing Houses",
+      "60,000 Litre Drinking Water Facility",
+      "Individual EB Connection for Every Plot",
+      "24×7 Security Service",
+      "CCTV Surveillance Throughout the Layout",
+      "Elevated Land with No Water Stagnation",
+      "Arch Entrance & Well-Planned Infrastructure",
+      "Close to Schools, Colleges & Hospitals",
     ],
+    gallery: [anugragha1, anugragha2, anugragha3, anugragha4, anugragha5, anugragha6, anugragha7, anugragha8, anugragha9]
   },
 ];
 

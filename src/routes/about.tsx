@@ -2,12 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import nilaMd from '@/assets/nila-md.png';
+import nilaHero3 from '@/assets/nila-hero3.jpg';
 import {
   Award,
   Sparkles, Heart, Scale, Users, Leaf, ArrowRight,
 } from "lucide-react";
 import nilaLogo from "@/assets/nila-logo.png";
-import { StatsStrip } from "@/components/site/StatsStrip";
+import nilahero1 from "@/assets/nila-hero1.jpg";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -21,6 +22,8 @@ export const Route = createFileRoute("/about")({
   }),
   component: AboutPage,
 });
+
+const GOLD = "#E8C77E";
 
 const milestones = [
   { y: "2020", t: "Nila Promoters Founded", d: "First plotted layout launched in Kumbakonam." },
@@ -40,39 +43,18 @@ const values = [
   { Icon: Leaf, t: "Community Growth", d: "Building neighbourhoods, not just plots." },
 ];
 
-/* ─── Animated counter ─── */
-function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    const duration = 1800;
-    const step = (timestamp: number, startTime: number) => {
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(eased * to));
-      if (progress < 1) requestAnimationFrame((t) => step(t, startTime));
-    };
-    requestAnimationFrame((t) => step(t, t));
-  }, [inView, to]);
-
-  return <span ref={ref}>{count}{suffix}</span>;
-}
-
-/* ─── Word-by-word reveal ─── */
+/* ─── Word-by-word reveal (replays every time in view) ─── */
 function SplitReveal({ text, className = "", delay = 0 }: { text: string; className?: string; delay?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: false, margin: "-60px" });
   const words = text.split(" ");
   return (
     <span ref={ref} className={className} aria-label={text}>
       {words.map((word, i) => (
         <motion.span
           key={i}
-          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
-          animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+          initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+          animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 30, filter: "blur(8px)" }}
           transition={{ duration: 0.6, delay: delay + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
           className="inline-block mr-[0.25em]"
         >
@@ -83,15 +65,15 @@ function SplitReveal({ text, className = "", delay = 0 }: { text: string; classN
   );
 }
 
-/* ─── Fade-up reveal ─── */
+/* ─── Fade-up + blur reveal (replays every time in view) ─── */
 function FadeUp({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: false, margin: "-60px" });
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 40, filter: "blur(10px)" }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
@@ -125,73 +107,81 @@ function AboutPage() {
     <>
       <PageBanner />
 
-      {/* ── INTRO: Logo left, text right ── */}
-      <section className="relative overflow-hidden bg-white py-28">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 h-[600px] w-[600px] rounded-full bg-[#1B3650]/5 blur-[120px]" />
+      {/* ── OUR STORY: Full-bleed BG image, content LEFT, logo top-right of image ── */}
+      <section className="relative overflow-hidden py-0" style={{ minHeight: "480px" }}>
+        {/* Full-bleed background image — clearly visible */}
+        <div className="absolute inset-0">
+          <img
+            src={nilaHero3}
+            alt=""
+            className="h-full w-full object-cover object-center"
+          />
+          {/* Light left-side overlay so text reads clearly; right stays open */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(100deg, rgba(15,34,53,0.82) 0%, rgba(15,34,53,0.65) 45%, rgba(15,34,53,0.18) 75%, rgba(15,34,53,0.05) 100%)",
+            }}
+          />
         </div>
-        <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
-          {/* Logo card */}
-          <FadeUp delay={0}>
-            <div className="relative group">
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-br from-[#1B3650] via-[#1B3650]/40 to-[#1B3650]/10 blur-sm opacity-60 group-hover:opacity-90 transition-opacity duration-700" />
-              <div className="relative flex items-center justify-center rounded-3xl bg-[#0F2235] p-16 shadow-2xl min-h-[420px]">
-                <div className="absolute inset-0 rounded-3xl overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(249,244,241,0.15)_0%,transparent_70%)]" />
-                  <div
-                    className="absolute inset-0 opacity-10"
-                    style={{
-                      backgroundImage:
-                        "repeating-linear-gradient(45deg, rgba(249,244,241,0.3) 0 1px, transparent 1px 24px)",
-                    }}
-                  />
-                </div>
-                <motion.img
-                  src={nilaLogo}
-                  alt="Nila Promoters Logo"
-                  className="relative z-10 max-h-64 w-auto object-contain"
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ filter: "drop-shadow(0 0 32px rgba(249,244,241,0.45))" }}
-                />
-                <div className="absolute top-5 left-5 h-8 w-8 border-t-2 border-l-2 border-[#F9F4F1]/40 rounded-tl-lg" />
-                <div className="absolute top-5 right-5 h-8 w-8 border-t-2 border-r-2 border-[#F9F4F1]/40 rounded-tr-lg" />
-                <div className="absolute bottom-5 left-5 h-8 w-8 border-b-2 border-l-2 border-[#F9F4F1]/40 rounded-bl-lg" />
-                <div className="absolute bottom-5 right-5 h-8 w-8 border-b-2 border-r-2 border-[#F9F4F1]/40 rounded-br-lg" />
-              </div>
-            </div>
-          </FadeUp>
 
-          {/* Text */}
-          <div>
-            <FadeUp delay={0.1}>
-              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.35em] text-[#1B3650]">
-                <span className="h-px w-8 bg-[#1B3650]" /> Our Story
+        {/* Logo — top-right corner, clearly visible, large */}
+        <motion.div
+          className="absolute top-8 right-8 z-20 md:top-10 md:right-12"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <img
+            src={nilaLogo}
+            alt="Nila Promoters Logo"
+            className="w-36 md:w-52 h-auto object-contain"
+            style={{
+              filter: "drop-shadow(0 4px 24px rgba(0,0,0,0.55)) brightness(1.08)",
+            }}
+          />
+        </motion.div>
+
+        {/* Content — left side */}
+        <div className="relative z-10 mx-auto max-w-7xl px-6 py-20 md:py-24">
+          <div className="max-w-xl">
+            <FadeUp delay={0.05}>
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.35em]" style={{ color: GOLD }}>
+                <span className="h-px w-8" style={{ background: GOLD }} /> Our Story
               </span>
             </FadeUp>
-            <h2 className="mt-5 font-display text-5xl font-bold text-[#0F2235] leading-tight md:text-6xl">
+
+            <h2 className="mt-5 font-display text-4xl font-bold text-white leading-tight md:text-5xl">
               <SplitReveal text="A Promise Rooted in Kumbakonam" delay={0.15} />
             </h2>
-            <div className="mt-4 h-1 w-20 bg-gradient-to-r from-[#1B3650] to-[#1B3650]/30 rounded-full" />
+
+            <div className="mt-4 h-1 w-20 rounded-full" style={{ background: `linear-gradient(90deg, ${GOLD}, transparent)` }} />
+
             <FadeUp delay={0.4}>
-              <p className="mt-7 text-lg leading-relaxed text-muted-foreground">
-                Nila Promoters was founded in 2020 with a single, powerful commitment — to make land
-                ownership in Kumbakonam transparent, accessible, and truly valuable. As a DTCP and
-                RERA approved developer, we specialize exclusively in premium residential plot sales
-                across the most prime locations in and around Kumbakonam.
+              <p className="mt-6 text-base leading-relaxed text-white/75">
+                <span style={{ color: GOLD, fontWeight: 700 }}>Nila Promoters</span> was founded in 2020 with a single,
+                powerful commitment — to make land ownership in Kumbakonam transparent, accessible, and truly valuable.
+                As a DTCP and RERA approved developer, we specialize exclusively in premium residential plot sales across
+                the most prime locations in and around Kumbakonam.
               </p>
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                Every plot we sell carries a clear legal title, government approvals, and the promise
-                of long-term investment growth — backed by five years of unwavering trust.
+              <p className="mt-4 text-sm leading-relaxed text-white/60">
+                Every plot we sell carries a clear legal title, government approvals, and the promise of long-term
+                investment growth — backed by five years of unwavering trust.
               </p>
             </FadeUp>
+
             <FadeUp delay={0.55}>
-              <div className="mt-10 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap gap-3">
                 {["DTCP Approved", "RERA Registered", "Clear Title", "Est. 2020"].map((badge) => (
                   <span
                     key={badge}
-                    className="rounded-full border border-[#1B3650]/40 bg-[#1B3650]/8 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#0F2235]"
+                    className="rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest"
+                    style={{
+                      background: "rgba(232,199,126,0.12)",
+                      border: `1px solid ${GOLD}55`,
+                      color: GOLD,
+                    }}
                   >
                     {badge}
                   </span>
@@ -202,64 +192,70 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* ── STATS ── */}
-      <StatsStrip
-        stats={[
-          { value: 5, label: "Years in Business" },
-          { value: 500, label: "Families Served" },
-          { value: 10, label: "Projects Delivered" },
-          { value: 100, suffix: "%", label: "DTCP/RERA Approved" },
-        ]}
-      />
-
-      {/* ── MD PROFILE ── */}
-      <section className="relative overflow-hidden bg-[#0F2235] py-28">
+      {/* ── MD PROFILE / LEADERSHIP ── */}
+      <section className="relative overflow-hidden bg-[#0F2235] py-16 md:py-20">
         <ParallaxBg />
+        <div className="absolute inset-0 opacity-[0.08]">
+          <img src={nilaHero3} alt="" className="h-full w-full object-cover object-center" />
+        </div>
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(180deg, rgba(15,34,53,0.6) 0%, rgba(15,34,53,0.92) 60%, #0F2235 100%)" }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(circle, rgba(232,199,126,0.18) 1.5px, transparent 1.5px)`,
+            backgroundSize: "30px 30px",
+            maskImage: "radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 75%)",
+            WebkitMaskImage: "radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 75%)",
+          }}
+        />
+
         <div className="relative mx-auto max-w-6xl px-6">
-          <FadeUp className="text-center mb-20">
-            <span className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.35em] text-[#F9F4F1]">
-              <span className="h-px w-10 bg-[#F9F4F1]" /> Leadership <span className="h-px w-10 bg-[#F9F4F1]" />
+          <FadeUp className="text-center mb-10">
+            <span className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.35em]" style={{ color: GOLD }}>
+              <span className="h-px w-10" style={{ background: GOLD }} /> Leadership <span className="h-px w-10" style={{ background: GOLD }} />
             </span>
             <h2 className="mt-4 font-display text-4xl font-bold text-white md:text-5xl">
-              The Vision Behind Nila Promoters
+              The Vision Behind <span style={{ color: GOLD }}>Nila Promoters</span>
             </h2>
           </FadeUp>
 
-          <div className="flex flex-col md:flex-row items-center gap-16 lg:gap-24">
+          <div className="flex flex-col md:flex-row items-center gap-10 lg:gap-16">
             <FadeUp className="flex-1 flex flex-col justify-center">
-              <div className="w-12 h-0.5 bg-[#F9F4F1] mb-8" />
-              <h3 className="font-display text-5xl font-bold text-white leading-tight">
-                R. Mahesh
+              <div className="w-12 h-0.5" style={{ background: GOLD }} />
+              <h3 className="mt-5 font-display text-5xl font-bold text-white leading-tight">
+                Mr.R. Mahesh
               </h3>
-              <p className="mt-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#F9F4F1]/70">
+              <p className="mt-3 text-sm font-semibold uppercase tracking-[0.25em]" style={{ color: `${GOLD}B3` }}>
                 Managing Director, Nila Promoters
               </p>
-              <div className="flex items-center gap-4 mt-8 mb-8">
+              <div className="flex items-center gap-4 mt-5 mb-5">
                 <div className="h-px w-16 bg-[#F9F4F1]/40" />
-                <div className="h-1.5 w-1.5 rounded-full bg-[#F9F4F1]" />
+                <div className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
               </div>
               <blockquote className="font-display text-xl md:text-2xl italic leading-relaxed text-white/80 max-w-lg">
-                "At Nila Promoters, we don't just sell land — we build futures,
+                "At <span style={{ color: GOLD }}>Nila Promoters</span>, we don't just sell land — we build futures,
                 one plot at a time. Every family that trusts us is our greatest achievement."
               </blockquote>
-              <div className="mt-10 flex items-center gap-4">
+              <div className="mt-6 flex items-center gap-4">
                 <div className="h-px w-8 bg-[#F9F4F1]/30" />
                 <span className="text-xs uppercase tracking-[0.2em] text-[#F9F4F1]/50 font-semibold">
-                  Est. Nila Promoters
+                  Est. <span style={{ color: GOLD }}>Nila Promoters</span>
                 </span>
               </div>
             </FadeUp>
 
-            <FadeUp delay={0.2} className="flex-shrink-0 md:w-80 lg:w-96">
+            <FadeUp delay={0.2} className="w-full max-w-sm flex-shrink-0 md:w-80 md:max-w-none lg:w-96">
               <div className="relative">
-                <div className="absolute -inset-4 rounded-3xl bg-[#F9F4F1]/8 blur-2xl" />
-                <div className="absolute -top-3 -right-3 h-16 w-16 border-t-2 border-r-2 border-[#F9F4F1]/40 rounded-tr-2xl z-10" />
-                <div className="absolute -bottom-3 -left-3 h-16 w-16 border-b-2 border-l-2 border-[#F9F4F1]/40 rounded-bl-2xl z-10" />
+                <div className="absolute -inset-4 rounded-3xl blur-2xl" style={{ background: `${GOLD}14` }} />
+                <div className="absolute -top-3 -right-3 h-16 w-16 border-t-2 border-r-2 rounded-tr-2xl z-10" style={{ borderColor: `${GOLD}66` }} />
+                <div className="absolute -bottom-3 -left-3 h-16 w-16 border-b-2 border-l-2 rounded-bl-2xl z-10" style={{ borderColor: `${GOLD}66` }} />
                 <img
                   src={nilaMd}
                   alt="R. Mahesh – Managing Director, Nila Promoters"
-                  className="relative z-10 w-full rounded-2xl object-cover object-top shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
-                  style={{ maxHeight: '480px' }}
+                  className="relative z-10 w-full rounded-2xl object-contain shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
                 />
               </div>
             </FadeUp>
@@ -288,16 +284,16 @@ function AboutPage() {
                 return (
                   <motion.div
                     key={m.y}
-                    initial={{ opacity: 0, x: left ? -50 : 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-80px" }}
+                    initial={{ opacity: 0, x: left ? -50 : 50, filter: "blur(8px)" }}
+                    whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    viewport={{ once: false, margin: "-80px" }}
                     transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                     className={`relative flex flex-col gap-4 pl-14 md:pl-0 ${left ? "md:pr-[53%]" : "md:pl-[53%]"}`}
                   >
                     <div className="absolute left-[10px] top-5 h-5 w-5 -translate-x-1/2 rounded-full bg-[#1B3650] shadow-[0_0_0_4px_rgba(27,54,80,0.2),0_0_20px_rgba(27,54,80,0.4)] md:left-1/2" />
                     <div className="group relative overflow-hidden rounded-2xl border border-[#0F2235]/10 bg-[#F4EFEA] p-7 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-500 hover:shadow-[0_8px_40px_rgba(27,54,80,0.15)] hover:border-[#1B3650]/40">
                       <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-[#1B3650]/80 to-[#1B3650]/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                      <div className="font-display text-4xl font-black text-[#1B3650]/50 leading-none mb-1">{m.y}</div>
+                      <div className="font-display text-4xl font-black leading-none mb-1" style={{ color: GOLD }}>{m.y}</div>
                       <h4 className="font-display text-xl font-bold text-[#0F2235]">{m.t}</h4>
                       <p className="mt-1.5 text-sm leading-relaxed text-[#0F2235]/60">{m.d}</p>
                     </div>
@@ -312,34 +308,46 @@ function AboutPage() {
       {/* ── VISION / MISSION ── */}
       <section className="relative overflow-hidden bg-[#0F2235] py-28">
         <ParallaxBg />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(circle, rgba(249,244,241,0.10) 1.5px, transparent 1.5px)`,
+            backgroundSize: "28px 28px",
+          }}
+        />
         <div className="relative mx-auto max-w-6xl px-6">
-          <FadeUp className="mb-16 text-center">
-            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.35em] text-[#F9F4F1]">
-              <span className="h-px w-8 bg-[#F9F4F1]" /> What Drives Us <span className="h-px w-8 bg-[#F9F4F1]" />
+          <FadeUp className="mb-14 text-center">
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.35em]" style={{ color: GOLD }}>
+              <span className="h-px w-8" style={{ background: GOLD }} /> What Drives Us <span className="h-px w-8" style={{ background: GOLD }} />
             </span>
           </FadeUp>
-          <div className="grid gap-6 md:grid-cols-2">
+
+          <div className="grid gap-px overflow-hidden rounded-3xl border border-white/10 md:grid-cols-2" style={{ background: "rgba(255,255,255,0.06)" }}>
             {[
               {
+                n: "01",
                 t: "Our Vision",
                 d: "To be Kumbakonam's most trusted land developer — where every plot is a promise of prosperity, legal clarity, and lifelong value.",
-                icon: "◈",
               },
               {
+                n: "02",
                 t: "Our Mission",
                 d: "To deliver DTCP & RERA approved plots at prime locations across Kumbakonam with complete transparency, fair pricing, and unwavering customer support.",
-                icon: "◉",
               },
             ].map((v, i) => (
-              <FadeUp key={v.t} delay={i * 0.15}>
-                <div className="group relative h-full overflow-hidden rounded-2xl border border-[#F9F4F1]/15 bg-white/4 p-10 backdrop-blur-sm transition-all duration-500 hover:border-[#F9F4F1]/40 hover:bg-white/7">
-                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(249,244,241,0.08)_0%,transparent_60%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F9F4F1]/60 to-transparent" />
-                  <span className="text-4xl text-[#F9F4F1]/30 font-display">{v.icon}</span>
-                  <h3 className="mt-4 font-display text-3xl font-bold text-[#F9F4F1]">{v.t}</h3>
-                  <p className="mt-4 text-base leading-relaxed text-white/70">{v.d}</p>
-                  <div className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#F9F4F1]/50 group-hover:text-[#F9F4F1] transition-colors duration-300">
-                    Nila Promoters <ArrowRight className="h-3 w-3" />
+              <FadeUp key={v.t} delay={i * 0.15} className="h-full">
+                <div className="group relative h-full bg-[#0F2235] p-7 md:p-8 transition-colors duration-500 hover:bg-[#13283e]">
+                  <span
+                    className="font-display text-5xl font-bold leading-none transition-colors duration-500"
+                    style={{ color: "rgba(249,244,241,0.08)", WebkitTextStroke: `1px ${GOLD}40` }}
+                  >
+                    {v.n}
+                  </span>
+                  <h3 className="mt-3 font-display text-2xl font-bold text-white">{v.t}</h3>
+                  <div className="mt-3 h-px w-12 transition-all duration-500 group-hover:w-20" style={{ background: GOLD }} />
+                  <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{v.d}</p>
+                  <div className="mt-6 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/30 transition-colors duration-300 group-hover:text-white">
+                    Nila Promoters <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
                   </div>
                 </div>
               </FadeUp>
@@ -348,75 +356,158 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* ── CORE VALUES ── */}
-      <section className="relative overflow-hidden py-28" style={{ background: "#F9F4F1" }}>
-        <div className="mx-auto max-w-7xl px-6">
+      {/* ── CORE VALUES — Light white background ── */}
+      <section className="relative overflow-hidden py-28 bg-white">
+        {/* Very subtle dot texture */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(circle, rgba(15,34,53,0.04) 1px, transparent 1px)`,
+            backgroundSize: "32px 32px",
+          }}
+        />
+        {/* Soft navy glow bottom-right */}
+        <div
+          className="absolute bottom-0 right-0 h-80 w-80 blur-[120px] pointer-events-none"
+          style={{ background: "rgba(27,54,80,0.06)" }}
+        />
 
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
-            <FadeUp>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="h-px w-8" style={{ background: "#1B3650" }} />
-                <span className="text-[11px] font-bold uppercase tracking-[0.38em]" style={{ color: "#1B3650" }}>
-                  What Guides Us
-                </span>
-              </div>
-              <h2 className="font-display text-5xl font-bold leading-[1.05] md:text-6xl" style={{ color: "#0F2235" }}>
-                Our Core{" "}
-                <span className="italic" style={{ color: "#1B3650" }}>Values</span>
-              </h2>
-            </FadeUp>
-            <FadeUp delay={0.1}>
-              <p className="text-sm leading-relaxed md:text-right md:max-w-[260px]" style={{ color: "rgba(15,34,53,0.42)" }}>
-                Principles that have earned the trust of 500+ families across Kumbakonam.
-              </p>
-            </FadeUp>
-          </div>
+        <div className="relative mx-auto max-w-7xl px-6">
+          {/* Header */}
+          <FadeUp className="mb-16 flex flex-col items-center text-center">
+            <span className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em]" style={{ color: GOLD }}>
+              <span className="h-px w-10" style={{ background: GOLD }} /> What Guides Us <span className="h-px w-10" style={{ background: GOLD }} />
+            </span>
+            <h2 className="mt-5 font-display text-4xl font-bold text-[#0F2235] md:text-6xl leading-tight">
+              Our Core <span style={{ color: GOLD }}>Values</span>
+            </h2>
+            <p className="mt-4 max-w-md text-sm text-[#0F2235]/50 leading-relaxed">
+              Six principles that shape every decision we make — from the plot we approve to the family we serve.
+            </p>
+          </FadeUp>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* 3-column grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {values.map(({ Icon, t, d }, i) => (
               <motion.div
                 key={t}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.55, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="group relative overflow-hidden bg-white p-9 border transition-all duration-300 hover:shadow-[0_12px_40px_rgba(15,34,53,0.08)]"
-                style={{ borderColor: "rgba(15,34,53,0.09)", borderRadius: 0 }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLElement).style.borderColor = "rgba(15,34,53,0.18)")
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.borderColor = "rgba(15,34,53,0.09)")
-                }
+                initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                viewport={{ once: false, margin: "-60px" }}
+                transition={{ duration: 0.65, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="group relative overflow-hidden rounded-2xl p-8 flex flex-col gap-5 cursor-default"
+                style={{
+                  background: "#F9F4F1",
+                  border: "1px solid rgba(15,34,53,0.08)",
+                }}
               >
+                {/* Hover gold left-border accent */}
                 <div
-                  className="absolute bottom-0 left-0 right-0 h-[3px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
-                  style={{ background: "#1B3650" }}
+                  className="absolute left-0 top-6 bottom-6 w-[3px] rounded-full scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-top"
+                  style={{ background: GOLD }}
                 />
+
+                {/* Icon */}
                 <div
-                  className="mb-6 flex h-12 w-12 items-center justify-center rounded-[10px] border transition-all duration-300 group-hover:bg-[#0F2235] group-hover:border-[#0F2235]"
+                  className="flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110"
                   style={{
-                    background: "rgba(15,34,53,0.05)",
-                    border: "1px solid rgba(15,34,53,0.10)",
+                    background: `${GOLD}20`,
+                    border: `1px solid ${GOLD}50`,
                   }}
                 >
-                  <Icon
-                    className="h-5 w-5 transition-colors duration-300 group-hover:text-[#F9F4F1]"
-                    style={{ color: "#0F2235" }}
-                  />
+                  <Icon className="h-5 w-5" style={{ color: "#0F2235" }} />
                 </div>
-                <h4 className="font-display text-[18px] font-bold mb-2.5" style={{ color: "#0F2235" }}>
-                  {t}
-                </h4>
-                <p className="text-sm leading-[1.7]" style={{ color: "rgba(15,34,53,0.48)" }}>
-                  {d}
-                </p>
+
+                {/* Text */}
+                <div>
+                  <h4 className="font-display text-xl font-bold text-[#0F2235]">{t}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-[#0F2235]/55">{d}</p>
+                </div>
+
+                {/* Bottom hover line */}
+                <div
+                  className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500"
+                  style={{ background: `linear-gradient(90deg, ${GOLD}, transparent)` }}
+                />
               </motion.div>
             ))}
           </div>
 
+          {/* Bottom stamp */}
+          <FadeUp delay={0.5} className="mt-14 flex justify-center">
+            <div
+              className="inline-flex items-center gap-4 rounded-full px-6 py-3"
+              style={{
+                background: "rgba(15,34,53,0.04)",
+                border: "1px solid rgba(15,34,53,0.10)",
+              }}
+            >
+              <div className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#0F2235]/40">
+                Nila Promoters — Est. 2020
+              </span>
+              <div className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
+            </div>
+          </FadeUp>
         </div>
       </section>
+
+      {/* ── CTA BANNER — same as home page ── */}
+      <motion.section
+        initial={{ opacity: 0, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, filter: "blur(0px)" }}
+        viewport={{ once: false, amount: 0.1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="relative overflow-hidden py-28"
+      >
+        <div className="absolute inset-0">
+          <img src={nilahero1} alt="Nila Promoters plot layout" className="h-full w-full object-cover object-center" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(15,34,53,0.55) 0%, rgba(15,34,53,0.4) 45%, rgba(15,34,53,0.65) 100%)" }} />
+        </div>
+        <div className="absolute -left-32 -top-32 h-96 w-96 rounded-full blur-3xl pointer-events-none" style={{ background: "rgba(232,199,126,0.12)" }} />
+        <div className="absolute -right-32 -bottom-32 h-96 w-96 rounded-full blur-3xl pointer-events-none" style={{ background: "rgba(249,244,241,0.08)" }} />
+        <div className="relative mx-auto max-w-4xl px-6 text-center">
+          <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}>
+            Take the Next Step
+          </span>
+          <h2 className="mt-4 font-display text-3xl font-bold text-white md:text-5xl" style={{ textShadow: "0 2px 6px rgba(0,0,0,0.75), 0 4px 30px rgba(0,0,0,0.55)" }}>
+            Ready to Own Your Dream Plot in{" "}
+            <span className="italic" style={{ color: "#E8C77E" }}>Kumbakonam?</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-xl md:text-lg" style={{ color: "rgba(249,244,241,0.95)", textShadow: "0 2px 6px rgba(0,0,0,0.7)" }}>
+            Schedule a complimentary site visit. Walk the land, ask every question, and decide with complete confidence.
+          </p>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold shadow-lg transition-all hover:scale-105"
+              style={{ background: "linear-gradient(135deg, #E8C77E 0%, #d4ad57 100%)", color: "#0F2235", boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(232,199,126,0.5)")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.4)")}
+            >
+              Book a Site Visit Today <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold backdrop-blur transition-all hover:scale-105"
+              style={{ border: "2px solid rgba(249,244,241,0.5)", color: "#F9F4F1" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(249,244,241,0.12)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+            >
+              View All Projects
+            </Link>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Gold divider between CTA and footer */}
+      <div
+        className="h-[5px] w-full"
+        style={{
+          background: "linear-gradient(90deg, #d4ad57 0%, #E8C77E 50%, #d4ad57 100%)",
+          boxShadow: "0 0 20px rgba(232,199,126,0.65), 0 0 4px rgba(232,199,126,0.9)",
+        }}
+      />
     </>
   );
 }
@@ -434,38 +525,18 @@ export function PageBanner({ title, crumbs }: { title?: string; crumbs?: string[
           className="absolute inset-0"
           style={{
             backgroundImage:
-              "repeating-linear-gradient(45deg, rgba(249,244,241,0.04) 0 1px, transparent 1px 32px)",
+              "radial-gradient(circle, rgba(249,244,241,0.10) 1.5px, transparent 1.5px)",
+            backgroundSize: "28px 28px",
           }}
-        />
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 70% 60%, rgba(249,244,241,0.16) 0%, transparent 55%), radial-gradient(ellipse at 20% 40%, rgba(249,244,241,0.07) 0%, transparent 45%)",
-          }}
-          animate={{ opacity: [0.7, 1, 0.7] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute h-64 w-64 rounded-full bg-[#F9F4F1]/8 blur-3xl"
-          style={{ top: "20%", right: "10%" }}
-          animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute h-40 w-40 rounded-full bg-[#F9F4F1]/6 blur-2xl"
-          style={{ bottom: "30%", left: "15%" }}
-          animate={{ y: [0, 15, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         />
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl px-6">
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center">
         <motion.nav
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-6 flex items-center gap-2 text-xs uppercase tracking-widest text-white/40"
+          className="mb-6 flex items-center justify-center gap-2 text-xs uppercase tracking-widest text-white/40"
         >
           {_crumbs.map((c, i) => (
             <span key={c} className="flex items-center gap-2">
@@ -483,38 +554,43 @@ export function PageBanner({ title, crumbs }: { title?: string; crumbs?: string[
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="mb-4 flex items-center gap-3"
+          className="mb-4 flex items-center justify-center gap-3"
         >
-          <div className="h-px w-12 bg-[#F9F4F1]" />
-          <span className="text-xs font-bold uppercase tracking-[0.35em] text-[#F9F4F1]">Nila Promoters</span>
+          <div className="h-px w-12" style={{ background: GOLD }} />
+          <span className="text-xs font-bold uppercase tracking-[0.35em]" style={{ color: GOLD }}>Nila Promoters</span>
         </motion.div>
 
         <h1 className="font-display text-5xl font-bold text-white leading-tight md:text-7xl" aria-label={_title}>
-          {words.map((word, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 60, skewY: 4 }}
-              animate={{ opacity: 1, y: 0, skewY: 0 }}
-              transition={{ duration: 0.9, delay: 0.25 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="inline-block mr-[0.25em]"
-            >
-              {word}
-            </motion.span>
-          ))}
+          {words.map((word, i) => {
+            const isBrand = word === "Nila" || word === "Promoters";
+            return (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 60, skewY: 4 }}
+                animate={{ opacity: 1, y: 0, skewY: 0 }}
+                transition={{ duration: 0.9, delay: 0.25 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="inline-block mr-[0.25em]"
+                style={{ color: isBrand ? GOLD : "white" }}
+              >
+                {word}
+              </motion.span>
+            );
+          })}
         </h1>
 
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 1, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-5 h-1 w-28 origin-left rounded-full bg-gradient-to-r from-[#F9F4F1] to-[#F9F4F1]/30"
+          className="mt-5 h-1 w-28 origin-center rounded-full"
+          style={{ background: `linear-gradient(90deg, ${GOLD}, transparent)` }}
         />
 
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.1 }}
-          className="mt-5 text-base text-white/50 max-w-md"
+          className="mt-5 max-w-md text-base text-white/50"
         >
           Kumbakonam's most trusted DTCP & RERA approved plot developer since 2020.
         </motion.p>

@@ -1,11 +1,12 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ProjectCard } from "@/components/site/ProjectCard";
-import { ProjectsCTA } from "@/components/site/ProjectsCTA";
 import { PageBanner } from "./about";
 import { COMPLETED, ONGOING, UPCOMING, ALL_PROJECTS, type Project } from "@/data/projects";
-import { MapPin, CheckCircle2, Zap, Clock } from "lucide-react";
+import { MapPin, CheckCircle2, Zap, Clock, ArrowRight } from "lucide-react";
+import nilahero1 from "@/assets/nila-hero1.jpg";
+import { Reveal } from "@/components/site/Reveal";
 
 export const Route = createFileRoute("/projects/")({
   head: () => ({
@@ -22,21 +23,32 @@ export const Route = createFileRoute("/projects/")({
 
 type Tab = "all" | "completed" | "ongoing" | "upcoming";
 
-const TABS: { id: Tab; label: string; Icon: React.FC<{ className?: string }>; count: number }[] = [
-  { id: "all",       label: "All Projects", Icon: MapPin,        count: ALL_PROJECTS.length },
-  { id: "completed", label: "Completed",    Icon: CheckCircle2,  count: COMPLETED.length },
-  { id: "ongoing",   label: "Ongoing",      Icon: Zap,           count: ONGOING.length },
-  { id: "upcoming",  label: "Upcoming",     Icon: Clock,         count: UPCOMING.length },
+const GOLD = "#E8C77E";
+const NAVY = "#0F2235";
+
+/* Same dot-grid signature used in PageBanner and the homepage's dark
+   sections, so every dark band on the site reads as one system. */
+const DOT_GRID_DARK: React.CSSProperties = {
+  backgroundImage: "radial-gradient(circle, rgba(249,244,241,0.10) 1.5px, transparent 1.5px)",
+  backgroundSize: "28px 28px",
+};
+
+const TABS: { id: Tab; label: string; Icon: React.FC<{ className?: string }> }[] = [
+  { id: "all",       label: "All",       Icon: MapPin       },
+    { id: "ongoing",   label: "Ongoing",   Icon: Zap          },
+  { id: "completed", label: "Completed", Icon: CheckCircle2 },
+
+  { id: "upcoming",  label: "Upcoming",  Icon: Clock        },
 ];
 
 function FadeUp({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: false, margin: "-60px" });
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      initial={{ opacity: 0, y: 32, filter: "blur(8px)" }}
+      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 32, filter: "blur(8px)" }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
@@ -55,70 +67,65 @@ function ProjectsPage() {
     <>
       <PageBanner title="Our Projects" crumbs={["Home", "Projects"]} />
 
-      <div style={{ background: "#001D39" }} className="py-10">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+      {/* ── STATS STRIP ── */}
+      <div className="relative overflow-hidden" style={{ background: NAVY }}>
+        <div className="absolute inset-0 pointer-events-none" style={DOT_GRID_DARK} />
+        <div className="absolute top-0 inset-x-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)` }} />
+        <div className="relative mx-auto max-w-5xl px-6 py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px overflow-hidden rounded-2xl" style={{ background: `${GOLD}18` }}>
             {[
-              { value: COMPLETED.length, label: "Completed" },
-              { value: ONGOING.length,   label: "Ongoing" },
-              { value: UPCOMING.length,  label: "Upcoming" },
+              { value: COMPLETED.length, label: "Completed"      },
+              { value: ONGOING.length,   label: "Ongoing"        },
+              { value: UPCOMING.length,  label: "Upcoming"       },
               { value: "500+",           label: "Happy Families" },
-            ].map((s) => (
-              <div key={s.label} className="flex flex-col items-center gap-1 py-4 px-6 text-center">
-                <span className="font-display text-4xl font-bold" style={{ color: "#C9A84C" }}>{s.value}</span>
-                <span className="text-xs font-semibold uppercase tracking-[0.22em]" style={{ color: "rgba(255,255,255,0.45)" }}>
+            ].map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="flex flex-col items-center gap-1.5 py-8 px-6 text-center"
+                style={{ background: "rgba(15,34,53,0.85)" }}
+              >
+                <span className="font-display text-4xl font-bold" style={{ color: GOLD }}>{s.value}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-[0.25em]" style={{ color: "rgba(255,255,255,0.38)" }}>
                   {s.label}
                 </span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </div>
 
-      <section style={{ background: "#FAFAF8" }} className="py-24">
+      {/* ── PORTFOLIO SECTION ── */}
+      <section className="py-24" style={{ background: "#F9F4F1" }}>
         <div className="mx-auto max-w-7xl px-6">
-          <FadeUp className="mb-16">
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-px w-8" style={{ background: "#C9A84C" }} />
-                  <span className="text-[11px] font-bold uppercase tracking-[0.38em]" style={{ color: "#8B6914" }}>Portfolio</span>
-                </div>
-                <h2 className="font-display text-5xl font-bold leading-tight md:text-6xl" style={{ color: "#001D39" }}>
-                  Our <span className="italic" style={{ color: "#8B6914" }}>Developments</span>
-                </h2>
-              </div>
-              <p className="text-sm leading-relaxed md:max-w-[280px] md:text-right" style={{ color: "rgba(0,29,57,0.45)" }}>
-                DTCP & RERA approved plotted layouts crafted for families who demand clear titles, prime locations, and complete transparency.
-              </p>
-            </div>
-          </FadeUp>
 
-          <FadeUp delay={0.1} className="mb-12">
-            <div className="inline-flex flex-wrap gap-1 p-1" style={{ background: "#EDE8DF", borderRadius: "2px" }}>
+          {/* Filter bar — centered, refined pill style, no counts */}
+          <FadeUp delay={0.05} className="mb-14 -mx-6 flex justify-start overflow-x-auto px-6 sm:mx-0 sm:justify-center sm:overflow-visible sm:px-0">
+            <div className="inline-flex shrink-0 items-center gap-1 p-1 rounded-full" style={{ background: "rgba(15,34,53,0.07)", border: "1px solid rgba(15,34,53,0.10)" }}>
               {TABS.map((t) => {
                 const isActive = active === t.id;
                 return (
                   <button
                     key={t.id}
                     onClick={() => setActive(t.id)}
-                    className="relative inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold transition-all duration-300"
-                    style={{ background: isActive ? "#001D39" : "transparent", color: isActive ? "#C9A84C" : "rgba(0,29,57,0.5)", borderRadius: "2px" }}
+                    className="relative inline-flex shrink-0 items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 focus:outline-none sm:px-5"
+                    style={{
+                      background: isActive ? NAVY : "transparent",
+                      color: isActive ? GOLD : "rgba(15,34,53,0.45)",
+                      boxShadow: isActive ? "0 2px 12px rgba(15,34,53,0.25)" : "none",
+                    }}
                   >
                     <t.Icon className="h-3.5 w-3.5" />
                     {t.label}
-                    <span
-                      className="text-[10px] font-bold px-1.5 py-0.5"
-                      style={{ background: isActive ? "rgba(201,168,76,0.2)" : "rgba(0,29,57,0.08)", color: isActive ? "#C9A84C" : "rgba(0,29,57,0.4)", borderRadius: "2px" }}
-                    >
-                      {t.count}
-                    </span>
                   </button>
                 );
               })}
             </div>
           </FadeUp>
 
+          {/* Grid */}
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
@@ -126,7 +133,7 @@ function ProjectsPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3"
             >
               {filtered.map((p, i) => (
                 <motion.div
@@ -140,10 +147,68 @@ function ProjectsPage() {
               ))}
             </motion.div>
           </AnimatePresence>
+
         </div>
       </section>
 
-      <ProjectsCTA />
+      {/* ── CTA BANNER — same as home page ── */}
+      <motion.section
+        initial={{ opacity: 0, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, filter: "blur(0px)" }}
+        viewport={{ once: false, amount: 0.1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="relative overflow-hidden py-28"
+      >
+        <div className="absolute inset-0">
+          <img src={nilahero1} alt="Nila Promoters plot layout" className="h-full w-full object-cover object-center" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(15,34,53,0.55) 0%, rgba(15,34,53,0.4) 45%, rgba(15,34,53,0.65) 100%)" }} />
+        </div>
+        <div className="absolute -left-32 -top-32 h-96 w-96 rounded-full blur-3xl pointer-events-none" style={{ background: "rgba(232,199,126,0.12)" }} />
+        <div className="absolute -right-32 -bottom-32 h-96 w-96 rounded-full blur-3xl pointer-events-none" style={{ background: "rgba(249,244,241,0.08)" }} />
+        <div className="relative mx-auto max-w-4xl px-6 text-center">
+          <Reveal>
+            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}>
+              Take the Next Step
+            </span>
+            <h2 className="mt-4 font-display text-3xl font-bold text-white md:text-5xl" style={{ textShadow: "0 2px 6px rgba(0,0,0,0.75), 0 4px 30px rgba(0,0,0,0.55)" }}>
+              Ready to Own Your Dream Plot in{" "}
+              <span className="italic" style={{ color: "#E8C77E" }}>Kumbakonam?</span>
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl md:text-lg" style={{ color: "rgba(249,244,241,0.95)", textShadow: "0 2px 6px rgba(0,0,0,0.7)" }}>
+              Schedule a complimentary site visit. Walk the land, ask every question, and decide with complete confidence.
+            </p>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold shadow-lg transition-all hover:scale-105"
+                style={{ background: "linear-gradient(135deg, #E8C77E 0%, #d4ad57 100%)", color: "#0F2235", boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(232,199,126,0.5)")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.4)")}
+              >
+                Book a Site Visit Today <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/projects"
+                className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold backdrop-blur transition-all hover:scale-105"
+                style={{ border: "2px solid rgba(249,244,241,0.5)", color: "#F9F4F1" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(249,244,241,0.12)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+              >
+                View All Projects
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      </motion.section>
+
+      {/* Gold divider between CTA and footer */}
+      <div
+        className="h-[5px] w-full"
+        style={{
+          background: "linear-gradient(90deg, #d4ad57 0%, #E8C77E 50%, #d4ad57 100%)",
+          boxShadow: "0 0 20px rgba(232,199,126,0.65), 0 0 4px rgba(232,199,126,0.9)",
+        }}
+      />
     </>
   );
 }

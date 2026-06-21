@@ -6,6 +6,7 @@ import {
   ChevronDown, Star, ArrowRight, X,
 } from "lucide-react";
 import nilahero4 from "@/assets/nila-hero4.jpg";
+import nilahero1 from "@/assets/nila-hero1.jpg";
 import nilaAd1 from "@/assets/nila_ad_1.png";
 import nilaAd2 from "@/assets/nila_ad_2.png";
 import { Reveal, Stagger, itemVariants } from "@/components/site/Reveal";
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/")({
    Navy:        #0F2235  (deep navy — primary dark sections/buttons)
    Navy Soft:   #1B3650  (secondary navy — mid-tone sections/cards)
    Ivory:       #F9F4F1  (warm off-white — light backgrounds, cream buttons)
+   Gold:        #E8C77E  (muted gold — used ONLY for the "Nila Promoters." brand wordmark in hero)
    Ink:         #14140F-ish near-black — handled via Tailwind/inline as needed
    No separate blue accent — contrast comes from navy ↔ ivory only, as in the reference.
 */
@@ -248,15 +250,22 @@ function HomePage() {
       <AdPopup />
 
       {/* 1. HERO */}
-      <section ref={heroRef} className="relative h-screen min-h-[700px] w-full overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen sm:min-h-[700px] w-full overflow-hidden">
         <motion.div style={{ y: heroY, scale: heroScale }} className="absolute inset-0">
-          <img
-            src={nilahero4}
-            alt="Premium residential plot layout in Kumbakonam"
-            className="h-full w-full object-cover object-center"
-            style={{ filter: "brightness(1.15) contrast(1.05) saturate(1.08)" }}
-            width={1920} height={1080}
-          />
+          <motion.div
+            initial={{ scale: 1.18, filter: "blur(22px)" }}
+            animate={{ scale: 1, filter: "blur(0px)" }}
+            transition={{ duration: 2.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="h-full w-full"
+          >
+            <img
+              src={nilahero4}
+              alt="Premium residential plot layout in Kumbakonam"
+              className="h-full w-full object-cover object-center"
+              style={{ filter: "brightness(1.15) contrast(1.05) saturate(1.08)" }}
+              width={1920} height={1080}
+            />
+          </motion.div>
         </motion.div>
 
         {/* ── OVERLAYS — lightened so the photo stays bright, just enough for text legibility ── */}
@@ -278,50 +287,66 @@ function HomePage() {
           className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-center px-6 pb-16 pt-28"
         >
           <motion.div
-            initial={{ opacity: 0, x: -28 }} animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, x: -28, filter: "blur(10px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.9, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mb-7 flex items-center gap-3"
           >
             <span className="h-px w-10" style={{ background: "#F9F4F1" }} />
             <span
-              className="rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] backdrop-blur-sm"
+              className="rounded-full px-5 py-2 text-[11px] font-bold uppercase tracking-[0.28em] backdrop-blur-md"
               style={{
-                border: "1px solid rgba(249,244,241,0.35)",
-                background: "rgba(249,244,241,0.12)",
+                border: "1px solid rgba(232,199,126,0.55)",
+                background: "rgba(15,34,53,0.55)",
                 color: "#F9F4F1",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08)",
+                textShadow: "0 1px 4px rgba(0,0,0,0.6)",
               }}
             >
               DTCP · RERA Approved · Est. 2020
             </span>
           </motion.div>
 
-          <h1 className="font-display font-bold leading-[1.02] text-white">
+          <h1 className="font-hero font-bold leading-[1.02] text-white">
             <div className="overflow-hidden">
               <motion.div
-                initial={{ y: "105%" }} animate={{ y: 0 }}
-                transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ y: "105%", filter: "blur(14px)" }} animate={{ y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 1, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
                 className="text-5xl md:text-7xl lg:text-[82px]"
+                style={{ textShadow: "0 2px 8px rgba(0,0,0,0.55), 0 1px 24px rgba(0,0,0,0.35)" }}
               >
                 Where Your Dream Begins with
               </motion.div>
             </div>
             <div className="overflow-hidden">
               <motion.div
-                initial={{ y: "105%" }} animate={{ y: 0 }}
-                transition={{ duration: 0.9, delay: 0.46, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ y: "105%", filter: "blur(14px)" }} animate={{ y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 1, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
                 className="text-5xl md:text-7xl lg:text-[82px]"
+                style={{ textShadow: "0 2px 8px rgba(0,0,0,0.55), 0 1px 24px rgba(0,0,0,0.35)" }}
               >
                 {" "}
-                <span className="italic" style={{ color: "#F9F4F1" }}>Nila Promoters.</span>
+                <span
+                  className="italic"
+                  style={{
+                    color: "#E8C77E",
+                    textShadow: "0 2px 10px rgba(0,0,0,0.6), 0 1px 28px rgba(0,0,0,0.4)",
+                  }}
+                >
+                  Nila Promoters.
+                </span>
               </motion.div>
             </div>
           </h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-7 max-w-lg text-base leading-relaxed md:text-[17px]"
-            style={{ color: "rgba(249,244,241,0.85)" }}
+            initial={{ opacity: 0, y: 22, filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ delay: 1.35, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-7 max-w-lg border-l-2 pl-5 text-base leading-relaxed md:text-[17px]"
+            style={{
+              color: "rgba(249,244,241,0.92)",
+              borderColor: "rgba(168,196,205,0.55)",
+              textShadow: "0 1px 6px rgba(0,0,0,0.55), 0 1px 18px rgba(0,0,0,0.3)",
+            }}
           >
             Premium DTCP &amp; RERA-approved plots for families who demand
             clear titles, prime locations, and absolute transparency.
@@ -329,7 +354,7 @@ function HomePage() {
 
           <motion.div
             initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ delay: 1.55, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
             <Link
@@ -362,7 +387,7 @@ function HomePage() {
 
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            transition={{ delay: 1.35, duration: 0.8 }}
+            transition={{ delay: 1.75, duration: 0.8 }}
             className="mt-10 flex flex-wrap gap-2.5"
           >
             {["DTCP Approved", "RERA Certified", "100% Clear Title", "No Hidden Charges"].map((b) => (
@@ -384,7 +409,7 @@ function HomePage() {
 
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.6 }}
+          transition={{ delay: 2.2, duration: 0.6 }}
           className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 flex flex-col items-center gap-1.5"
         >
           <motion.div animate={{ y: [0, 9, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
@@ -397,42 +422,62 @@ function HomePage() {
       </section>
 
       {/* 2. STATS */}
-      <section
-        style={{
-          background: "#F9F4F1",
-          borderBottom: "1px solid rgba(15,34,53,0.12)",
-          backgroundImage: "radial-gradient(circle, rgba(15,34,53,0.08) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }}
-        className="py-20"
+      <motion.section
+        initial={{ opacity: 0, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, filter: "blur(0px)" }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        style={{ background: "#F9F4F1" }}
+        className="relative overflow-hidden py-24"
       >
-        <div className="mx-auto max-w-5xl px-6">
-          <Reveal className="mb-14 text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#1B3650" }}>
+       <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: "radial-gradient(circle, rgba(15,34,53,0.06) 3px, transparent 3px)",
+            backgroundSize: "26px 26px",
+          }}
+        />
+        <div className="relative mx-auto max-w-5xl px-6">
+          <Reveal className="mb-16 text-center">
+            <span className="text-xs font-semibold uppercase tracking-[0.35em]" style={{ color: "#E8C77E" }}>
               Our Track Record
             </span>
             <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl" style={{ color: "#0F2235" }}>
               Numbers That Speak Trust
             </h2>
           </Reveal>
+
           <div className="grid grid-cols-2 md:grid-cols-4">
             {statsData.map((s, i) => (
-              <div key={s.label} className="relative">
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="relative"
+              >
                 {i > 0 && (
                   <div
-                    className="absolute left-0 top-1/2 -translate-y-1/2 h-16 w-px hidden md:block"
-                    style={{ background: "rgba(15,34,53,0.15)" }}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 hidden h-12 w-px md:block"
+                    style={{ background: "rgba(15,34,53,0.1)" }}
                   />
                 )}
                 <StatItem {...s} index={i} dark={false} />
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
-
+      </motion.section>
       {/* 3. WHY CHOOSE */}
-      <section style={{ background: "#0F2235" }} className="py-24">
+      <motion.section
+        initial={{ opacity: 0, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, filter: "blur(0px)" }}
+        viewport={{ once: false, amount: 0.1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        style={{ background: "#0F2235" }}
+        className="py-24"
+      >
         <div className="mx-auto max-w-7xl px-6">
           <Reveal className="mb-14 text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#F9F4F1" }}>
@@ -440,7 +485,7 @@ function HomePage() {
             </span>
             <h2 className="mt-3 font-display text-4xl font-bold text-white md:text-5xl">
               Why Families Trust{" "}
-              <span style={{ color: "#F9F4F1" }}>Nila Promoters</span>
+              <span style={{ color: "#E8C77E" }}>Nila Promoters</span>
             </h2>
           </Reveal>
           <Stagger className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -504,19 +549,33 @@ function HomePage() {
             })}
           </Stagger>
         </div>
-      </section>
+      </motion.section>
 
       {/* 4. FEATURED PROJECTS */}
-      <section style={{ background: "#F9F4F1" }} className="py-24">
+      <motion.section
+        initial={{ opacity: 0, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, filter: "blur(0px)" }}
+        viewport={{ once: false, amount: 0.1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        style={{ background: "#F9F4F1" }}
+        className="py-24"
+      >
         <div className="mx-auto max-w-7xl px-6">
-          <Reveal className="mb-14 text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#1B3650" }}>
-              Portfolio
-            </span>
-            <h2 className="mt-3 font-display text-4xl font-bold md:text-5xl" style={{ color: "#0F2235" }}>
-              Our Signature Projects
+          <Reveal className="mb-16 text-center">
+            <div className="inline-flex items-center gap-3 mb-4">
+              <span className="h-px w-8" style={{ background: "#1B3650" }} />
+              <span className="text-xs font-semibold uppercase tracking-[0.35em]" style={{ color: "#1B3650" }}>
+                Portfolio
+              </span>
+              <span className="h-px w-8" style={{ background: "#1B3650" }} />
+            </div>
+            <h2 className="font-display text-4xl font-bold md:text-5xl" style={{ color: "#0F2235" }}>
+              Our Signature{" "}
+              <span className="italic" style={{ color: "#E8C77E" }}>Projects</span>
             </h2>
-            <div className="mx-auto mt-3 h-0.5 w-16" style={{ background: "#1B3650" }} />
+            <p className="mx-auto mt-4 max-w-xl text-sm" style={{ color: "rgba(15,34,53,0.55)" }}>
+              A curated selection of layouts that define quality, trust, and lasting value.
+            </p>
           </Reveal>
           <Stagger className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
             <ProjectCard p={{ ...COMPLETED[0], logo: mahalakshmilogo }} />
@@ -541,10 +600,16 @@ function HomePage() {
             </Link>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 5. TESTIMONIALS */}
-      <section className="relative overflow-hidden py-28" style={{ background: "#1B3650" }}>
+      <motion.section
+        initial={{ opacity: 0, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, filter: "blur(0px)" }}
+        viewport={{ once: false, amount: 0.1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="relative overflow-hidden py-28" style={{ background: "#1B3650" }}
+      >
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full blur-3xl" style={{ background: "rgba(249,244,241,0.10)" }} />
           <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full blur-3xl" style={{ background: "rgba(15,34,53,0.5)" }} />
@@ -561,15 +626,15 @@ function HomePage() {
         <div className="relative mx-auto max-w-7xl px-6">
           <Reveal className="mb-16 text-center">
             <div className="inline-flex items-center gap-3 mb-4">
-              <span className="h-px w-8" style={{ background: "#F9F4F1" }} />
-              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#F9F4F1" }}>
+              <span className="h-px w-8" style={{ background: "#E8C77E" }} />
+              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>
                 Voices of Trust
               </span>
-              <span className="h-px w-8" style={{ background: "#F9F4F1" }} />
+              <span className="h-px w-8" style={{ background: "#E8C77E" }} />
             </div>
             <h2 className="font-display text-4xl font-bold text-white md:text-5xl">
               What Our{" "}
-              <span className="italic" style={{ color: "#F9F4F1" }}>Families</span>{" "}
+              <span className="italic" style={{ color: "#E8C77E" }}>Families</span>{" "}
               Say
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-sm" style={{ color: "rgba(249,244,241,0.55)" }}>
@@ -617,7 +682,7 @@ function HomePage() {
                 </div>
                 <div className="flex gap-1 mb-5">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4" style={{ fill: "#F9F4F1", color: "#F9F4F1" }} />
+                    <Star key={i} className="h-4 w-4" style={{ fill: "#E8C77E", color: "#E8C77E" }} />
                   ))}
                 </div>
                 <p className="flex-1 text-sm leading-relaxed" style={{ color: "rgba(249,244,241,0.82)" }}>
@@ -674,31 +739,54 @@ function HomePage() {
             ))}
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 6. CTA BANNER */}
-      <section
-        className="relative overflow-hidden py-24"
-        style={{ background: "#F9F4F1", borderTop: "1px solid rgba(15,34,53,0.1)" }}
+      <motion.section
+        initial={{ opacity: 0, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, filter: "blur(0px)" }}
+        viewport={{ once: false, amount: 0.1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="relative overflow-hidden py-28"
       >
+        <div className="absolute inset-0">
+          <img
+            src={nilahero1}
+            alt="Nila Promoters plot layout"
+            className="h-full w-full object-cover object-center"
+          />
+          <div
+            className="absolute inset-0"
+            style={{ background: "linear-gradient(180deg, rgba(15,34,53,0.55) 0%, rgba(15,34,53,0.4) 45%, rgba(15,34,53,0.65) 100%)" }}
+          />
+        </div>
         <div
           className="absolute -left-32 -top-32 h-96 w-96 rounded-full blur-3xl pointer-events-none"
-          style={{ background: "rgba(27,54,80,0.12)" }}
+          style={{ background: "rgba(232,199,126,0.12)" }}
         />
         <div
           className="absolute -right-32 -bottom-32 h-96 w-96 rounded-full blur-3xl pointer-events-none"
-          style={{ background: "rgba(15,34,53,0.12)" }}
+          style={{ background: "rgba(249,244,241,0.08)" }}
         />
         <div className="relative mx-auto max-w-4xl px-6 text-center">
           <Reveal>
-            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#1B3650" }}>
+            <span
+              className="text-xs font-semibold uppercase tracking-[0.3em]"
+              style={{ color: "#E8C77E", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}
+            >
               Take the Next Step
             </span>
-            <h2 className="mt-4 font-display text-3xl font-bold md:text-5xl" style={{ color: "#0F2235" }}>
+            <h2
+              className="mt-4 font-display text-3xl font-bold text-white md:text-5xl"
+              style={{ textShadow: "0 2px 6px rgba(0,0,0,0.75), 0 4px 30px rgba(0,0,0,0.55)" }}
+            >
               Ready to Own Your Dream Plot in{" "}
-              <span className="italic" style={{ color: "#1B3650" }}>Kumbakonam?</span>
+              <span className="italic" style={{ color: "#E8C77E" }}>Kumbakonam?</span>
             </h2>
-            <p className="mx-auto mt-5 max-w-xl md:text-lg" style={{ color: "rgba(15,34,53,0.62)" }}>
+            <p
+              className="mx-auto mt-5 max-w-xl md:text-lg"
+              style={{ color: "rgba(249,244,241,0.95)", textShadow: "0 2px 6px rgba(0,0,0,0.7)" }}
+            >
               Schedule a complimentary site visit. Walk the land, ask every question,
               and decide with complete confidence.
             </p>
@@ -707,26 +795,24 @@ function HomePage() {
                 to="/contact"
                 className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold shadow-lg transition-all hover:scale-105"
                 style={{
-                  background: "linear-gradient(135deg, #0F2235 0%, #1B3650 100%)",
-                  color: "#F9F4F1",
-                  boxShadow: "0 8px 32px rgba(15,34,53,0.30)",
+                  background: "linear-gradient(135deg, #E8C77E 0%, #d4ad57 100%)",
+                  color: "#0F2235",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
                 }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(15,34,53,0.50)")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(15,34,53,0.30)")}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(232,199,126,0.5)")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.4)")}
               >
                 Book a Site Visit Today <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/projects"
-                className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold transition-all hover:scale-105"
-                style={{ border: "2px solid #1B3650", color: "#0F2235" }}
+                className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold backdrop-blur transition-all hover:scale-105"
+                style={{ border: "2px solid rgba(249,244,241,0.5)", color: "#F9F4F1" }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "#1B3650";
-                  (e.currentTarget as HTMLElement).style.color = "#F9F4F1";
+                  (e.currentTarget as HTMLElement).style.background = "rgba(249,244,241,0.12)";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLElement).style.background = "transparent";
-                  (e.currentTarget as HTMLElement).style.color = "#0F2235";
                 }}
               >
                 View All Projects
@@ -734,7 +820,16 @@ function HomePage() {
             </div>
           </Reveal>
         </div>
-      </section>
+      </motion.section>
+
+      {/* Gold divider between CTA and footer */}
+      <div
+        className="h-[5px] w-full"
+        style={{
+          background: "linear-gradient(90deg, #d4ad57 0%, #E8C77E 50%, #d4ad57 100%)",
+          boxShadow: "0 0 20px rgba(232,199,126,0.65), 0 0 4px rgba(232,199,126,0.9)",
+        }}
+      />
     </>
   );
 }

@@ -1,100 +1,182 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight } from "lucide-react";
+import { MapPin, ArrowUpRight } from "lucide-react";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import type { Project } from "@/data/projects";
 import { statusConfig } from "@/lib/feature-icons";
 
 export type { Project };
 
+const GOLD = "#E8C77E";
+const NAVY = "#0F2235";
+
+const statusDot: Record<string, string> = {
+  completed: "#4CAF82",
+  ongoing:   "#E8C77E",
+  upcoming:  "#6B9FD4",
+};
+
 export function ProjectCard({ p }: { p: Project }) {
   const cfg = statusConfig[p.status];
-  const { Icon } = cfg;
+  const dot = statusDot[p.status.toLowerCase()] ?? GOLD;
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative flex flex-col overflow-hidden bg-white border border-[#e8e3d8] transition-all duration-500 hover:border-[#C9A84C]/50 hover:shadow-[0_20px_60px_rgba(0,29,57,0.1)] hover:-translate-y-1"
-      style={{ borderRadius: "2px" }}
+      initial={{ opacity: 0, y: 48, filter: "blur(10px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: false, margin: "-60px" }}
+      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative flex flex-col overflow-hidden"
+      style={{
+        borderRadius: "20px",
+        background: "#fff",
+        border: "1px solid rgba(15,34,53,0.07)",
+        boxShadow: "0 2px 8px rgba(15,34,53,0.06)",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.boxShadow =
+          "0 20px 60px rgba(15,34,53,0.14), 0 0 0 1px rgba(232,199,126,0.3)";
+        (e.currentTarget as HTMLElement).style.borderColor = "rgba(232,199,126,0.35)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 8px rgba(15,34,53,0.06)";
+        (e.currentTarget as HTMLElement).style.borderColor = "rgba(15,34,53,0.07)";
+      }}
     >
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#F5F0E8]">
+      {/* ── IMAGE / LOGO AREA ── */}
+      <div
+        className="relative overflow-hidden"
+        style={{ aspectRatio: "4/3", background: "#F3F0EB" }}
+      >
+        {/* Subtle inner vignette */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 0%, transparent 60%, rgba(15,34,53,0.08) 100%)",
+          }}
+        />
+
         {p.logo ? (
-          <div className="absolute inset-0 flex items-center justify-center p-8">
-            <div
-              className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-              style={{ background: "radial-gradient(circle at 50% 50%, rgba(201,168,76,0.08), transparent 65%)" }}
-            />
-            <img
+          <div className="absolute inset-0 flex items-center justify-center p-10">
+            <motion.img
               src={p.logo}
               alt={`${p.name} logo`}
-              className="relative z-10 max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
+              className="relative z-10 max-h-full max-w-full object-contain"
+              whileHover={{ scale: 1.06 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             />
           </div>
         ) : (
           <ImagePlaceholder label={p.imageLabel} className="absolute inset-0 rounded-none" />
         )}
 
+        {/* Gold shimmer sweep on hover */}
+        <motion.div
+          initial={{ x: "-130%" }}
+          whileHover={{ x: "130%" }}
+          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+          className="pointer-events-none absolute inset-y-0 z-20 w-1/3 skew-x-[-18deg]"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, rgba(232,199,126,0.18), transparent)",
+          }}
+        />
+
+        {/* Status badge — top left, minimal */}
         <div
-          className="absolute left-4 top-4 z-20 inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-bold uppercase tracking-widest"
-          style={{ background: cfg.bg, color: cfg.text, border: `1px solid ${cfg.border}`, borderRadius: "2px" }}
+          className="absolute left-4 top-4 z-30 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] backdrop-blur-md"
+          style={{
+            background: "rgba(15,34,53,0.72)",
+            color: "#F9F4F1",
+            border: "1px solid rgba(255,255,255,0.12)",
+          }}
         >
-          <span className="h-1.5 w-1.5 rounded-full" style={{ background: cfg.dot }} />
+          <span
+            className="h-1.5 w-1.5 rounded-full"
+            style={{ background: dot, boxShadow: `0 0 6px ${dot}` }}
+          />
           {cfg.label}
         </div>
+      </div>
 
-        {p.highlight && (
-          <div
-            className="absolute bottom-0 left-0 right-0 z-20 px-4 py-2 text-center text-[11px] font-bold tracking-widest"
-            style={{ background: "#001D39", color: "#C9A84C" }}
+      {/* Gold underline that grows on hover */}
+      <div className="h-[2px] w-full overflow-hidden" style={{ background: "rgba(15,34,53,0.05)" }}>
+        <motion.div
+          className="h-full origin-left"
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 0 }}
+          style={{ background: `linear-gradient(90deg, ${GOLD}, rgba(232,199,126,0.3))` }}
+          whileHover={{ scaleX: 1 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </div>
+
+      {/* ── CARD BODY ── */}
+      <div className="flex flex-1 flex-col px-7 pt-6 pb-7">
+        {/* Location */}
+        <div className="mb-3 flex items-center gap-1.5">
+          <MapPin className="h-3 w-3 shrink-0" style={{ color: GOLD }} />
+          <span
+            className="text-[10px] font-bold uppercase tracking-[0.22em]"
+            style={{ color: "rgba(15,34,53,0.38)" }}
           >
-            {p.highlight}
-          </div>
-        )}
-      </div>
-
-      <div className="h-[2px] w-full bg-[#F5F0E8] overflow-hidden">
-        <div className="h-full w-0 transition-all duration-500 group-hover:w-full" style={{ background: "#C9A84C" }} />
-      </div>
-
-      <div className="flex flex-1 flex-col p-7">
-        <div className="mb-4 inline-flex w-fit items-center gap-1.5">
-          <MapPin className="h-3 w-3" style={{ color: "#C9A84C" }} />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.2em]" style={{ color: "rgba(0,29,57,0.4)" }}>
             {p.location}
           </span>
         </div>
 
-        <h3 className="font-display text-xl font-bold leading-snug" style={{ color: "#001D39" }}>
+        {/* Name */}
+        <h3
+          className="font-display text-[1.25rem] font-bold leading-snug"
+          style={{ color: NAVY }}
+        >
           {p.name}
         </h3>
 
-        <p className="mt-3 flex-1 text-sm leading-relaxed" style={{ color: "rgba(0,29,57,0.5)" }}>
+        {/* Divider */}
+        <div
+          className="my-4 h-px w-10 transition-all duration-500 group-hover:w-16"
+          style={{ background: GOLD }}
+        />
+
+        {/* Description */}
+        <p
+          className="flex-1 text-[0.8125rem] leading-relaxed"
+          style={{ color: "rgba(15,34,53,0.48)" }}
+        >
           {p.description}
         </p>
 
-        <div className="mt-6 flex items-center justify-between border-t pt-5" style={{ borderColor: "rgba(0,29,57,0.07)" }}>
-          {/* 🔽 this now opens the new Project Details page */}
+        {/* CTA */}
+        <div
+          className="mt-6 pt-5"
+          style={{ borderTop: "1px solid rgba(15,34,53,0.07)" }}
+        >
           <Link
             to="/projects/$slug"
             params={{ slug: p.slug }}
-            className="group/btn inline-flex items-center gap-2 text-sm font-bold transition-all duration-300"
-            style={{ color: "#001D39" }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#C9A84C")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "#001D39")}
+            className="group/btn inline-flex items-center gap-2.5 text-sm font-bold transition-all duration-300"
+            style={{ color: NAVY }}
+            onMouseEnter={(e) =>
+              ((e.currentTarget as HTMLElement).style.color = GOLD)
+            }
+            onMouseLeave={(e) =>
+              ((e.currentTarget as HTMLElement).style.color = NAVY)
+            }
           >
             {p.cta ?? "View Details"}
-            <span
-              className="flex h-7 w-7 items-center justify-center transition-all duration-300 group-hover/btn:scale-110"
-              style={{ background: "#F5F0E8", border: "1px solid rgba(0,29,57,0.12)", borderRadius: "2px" }}
+            <motion.span
+              className="flex h-8 w-8 items-center justify-center rounded-full transition-colors duration-300"
+              style={{
+                background: "rgba(232,199,126,0.12)",
+                border: "1px solid rgba(232,199,126,0.3)",
+              }}
+              whileHover={{ scale: 1.18, rotate: 12 }}
+              transition={{ duration: 0.3 }}
             >
-              <ArrowRight className="h-3.5 w-3.5" style={{ color: "#001D39" }} />
-            </span>
+              <ArrowUpRight className="h-3.5 w-3.5" style={{ color: GOLD }} />
+            </motion.span>
           </Link>
-
-          <div className="h-1.5 w-1.5 rounded-full" style={{ background: "#C9A84C", opacity: 0.4 }} />
         </div>
       </div>
     </motion.article>

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect, useCallback } from "react";
 import {
   ArrowLeft,
   MapPin,
@@ -8,9 +8,14 @@ import {
   Phone,
   Download,
   CheckCircle2,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ArrowRight,
 } from "lucide-react";
 import { PageBanner } from "./about";
-import { ProjectsCTA } from "@/components/site/ProjectsCTA";
+import { Reveal } from "@/components/site/Reveal";
+import nilahero1 from "@/assets/nila-hero1.jpg";
 import {
   ALL_PROJECTS,
   DEFAULT_FEATURES,
@@ -42,6 +47,8 @@ export const Route = createFileRoute("/projects/$slug")({
   component: ProjectDetailsPage,
 });
 
+/* FadeUp — replays its blur/opacity/translate animation every time it
+   re-enters the viewport (once: false), not just on first mount. */
 function FadeUp({
   children,
   delay = 0,
@@ -52,13 +59,17 @@ function FadeUp({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: false, margin: "-60px" });
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      initial={{ opacity: 0, y: 32, filter: "blur(10px)" }}
+      animate={
+        inView
+          ? { opacity: 1, y: 0, filter: "blur(0px)" }
+          : { opacity: 0, y: 32, filter: "blur(10px)" }
+      }
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
@@ -67,9 +78,212 @@ function FadeUp({
   );
 }
 
+function GalleryLightbox({
+  images,
+  index,
+  onClose,
+  onNavigate,
+}: {
+  images: string[];
+  index: number;
+  onClose: () => void;
+  onNavigate: (index: number) => void;
+}) {
+  const goPrev = useCallback(() => {
+    onNavigate((index - 1 + images.length) % images.length);
+  }, [index, images.length, onNavigate]);
+
+  const goNext = useCallback(() => {
+    onNavigate((index + 1) % images.length);
+  }, [index, images.length, onNavigate]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [goPrev, goNext, onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 sm:p-8"
+      onClick={onClose}
+    >
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close gallery"
+        className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center text-white/80 transition hover:text-white"
+      >
+        <X className="h-7 w-7" />
+      </button>
+
+      {images.length > 1 && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            goPrev();
+          }}
+          aria-label="Previous image"
+          className="absolute left-2 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-white/80 transition hover:text-white sm:left-6"
+        >
+          <ChevronLeft className="h-9 w-9" />
+        </button>
+      )}
+
+      <motion.img
+        key={images[index]}
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.2 }}
+        src={images[index]}
+        alt={`Gallery image ${index + 1} of ${images.length}`}
+        className="max-h-[88vh] max-w-[92vw] select-none object-contain"
+        onClick={(e) => e.stopPropagation()}
+      />
+
+      {images.length > 1 && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            goNext();
+          }}
+          aria-label="Next image"
+          className="absolute right-2 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-white/80 transition hover:text-white sm:right-6"
+        >
+          <ChevronRight className="h-9 w-9" />
+        </button>
+      )}
+
+      <div
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs font-bold tracking-widest text-white/70"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {index + 1} / {images.length}
+      </div>
+    </motion.div>
+  );
+}
+
+/* Shared CTA banner — identical to the homepage's "Ready to Own Your Dream
+   Plot" section, including its blur-on-scroll entrance (viewport once:
+   false), so it replays every time it's scrolled into view. */
+function SiteCTA() {
+  return (
+    <motion.section
+      initial={{ opacity: 0, filter: "blur(10px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      viewport={{ once: false, amount: 0.1 }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      className="relative overflow-hidden py-28"
+    >
+      <div className="absolute inset-0">
+        <img
+          src={nilahero1}
+          alt="Nila Promoters plot layout"
+          className="h-full w-full object-cover object-center"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(15,34,53,0.55) 0%, rgba(15,34,53,0.4) 45%, rgba(15,34,53,0.65) 100%)",
+          }}
+        />
+      </div>
+      <div
+        className="absolute -left-32 -top-32 h-96 w-96 rounded-full blur-3xl pointer-events-none"
+        style={{ background: "rgba(232,199,126,0.12)" }}
+      />
+      <div
+        className="absolute -right-32 -bottom-32 h-96 w-96 rounded-full blur-3xl pointer-events-none"
+        style={{ background: "rgba(249,244,241,0.08)" }}
+      />
+      <div className="relative mx-auto max-w-4xl px-6 text-center">
+        <Reveal>
+          <span
+            className="text-xs font-semibold uppercase tracking-[0.3em]"
+            style={{ color: "#E8C77E", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}
+          >
+            Take the Next Step
+          </span>
+          <h2
+            className="mt-4 font-display text-3xl font-bold text-white md:text-5xl"
+            style={{
+              textShadow: "0 2px 6px rgba(0,0,0,0.75), 0 4px 30px rgba(0,0,0,0.55)",
+            }}
+          >
+            Ready to Own Your Dream Plot in{" "}
+            <span className="italic" style={{ color: "#E8C77E" }}>
+              Kumbakonam?
+            </span>
+          </h2>
+          <p
+            className="mx-auto mt-5 max-w-xl md:text-lg"
+            style={{ color: "rgba(249,244,241,0.95)", textShadow: "0 2px 6px rgba(0,0,0,0.7)" }}
+          >
+            Schedule a complimentary site visit. Walk the land, ask every question,
+            and decide with complete confidence.
+          </p>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold shadow-lg transition-all hover:scale-105"
+              style={{
+                background: "linear-gradient(135deg, #E8C77E 0%, #d4ad57 100%)",
+                color: "#0F2235",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+              }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLElement).style.boxShadow =
+                  "0 8px 32px rgba(232,199,126,0.5)")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLElement).style.boxShadow =
+                  "0 8px 32px rgba(0,0,0,0.4)")
+              }
+            >
+              Book a Site Visit Today <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold backdrop-blur transition-all hover:scale-105"
+              style={{ border: "2px solid rgba(249,244,241,0.5)", color: "#F9F4F1" }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background =
+                  "rgba(249,244,241,0.12)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "transparent";
+              }}
+            >
+              View All Projects
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+    </motion.section>
+  );
+}
+
 function ProjectDetailsPage() {
   const { slug } = Route.useParams();
   const project = ALL_PROJECTS.find((p) => p.slug === slug);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   if (!project) {
     return (
@@ -100,6 +314,7 @@ function ProjectDetailsPage() {
   const features = project.features?.length ? project.features : DEFAULT_FEATURES;
   const phone = project.phone ?? COMPANY_PHONE;
   const whatsapp = project.whatsapp ?? COMPANY_WHATSAPP;
+  const gallery = project.gallery ?? [];
 
   return (
     <>
@@ -251,7 +466,7 @@ function ProjectDetailsPage() {
         </div>
       </section>
 
-      {!!project.gallery?.length && (
+      {!!gallery.length && (
         <section className="border-t border-[#e8e3d8] bg-white py-20">
           <div className="mx-auto max-w-7xl px-6">
             <FadeUp className="mb-10">
@@ -267,21 +482,37 @@ function ProjectDetailsPage() {
             </FadeUp>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {project.gallery.map((img, index) => (
+              {gallery.map((img, index) => (
                 <FadeUp key={img + index} delay={index * 0.05}>
-                  <div className="aspect-[4/3] overflow-hidden border border-[#e8e3d8]">
+                  <button
+                    type="button"
+                    onClick={() => setLightboxIndex(index)}
+                    aria-label={`View ${project.name} gallery image ${index + 1} full size`}
+                    className="group aspect-[4/3] w-full overflow-hidden border border-[#e8e3d8]"
+                  >
                     <img
                       src={img}
                       alt={`${project.name} gallery ${index + 1}`}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                     />
-                  </div>
+                  </button>
                 </FadeUp>
               ))}
             </div>
           </div>
         </section>
       )}
+
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <GalleryLightbox
+            images={gallery}
+            index={lightboxIndex}
+            onClose={() => setLightboxIndex(null)}
+            onNavigate={setLightboxIndex}
+          />
+        )}
+      </AnimatePresence>
 
       {project.layoutMapImage && (
         <section
@@ -326,7 +557,16 @@ function ProjectDetailsPage() {
         </section>
       )}
 
-      <ProjectsCTA />
+      <SiteCTA />
+
+      {/* Gold divider between CTA and footer */}
+      <div
+        className="h-[5px] w-full"
+        style={{
+          background: "linear-gradient(90deg, #d4ad57 0%, #E8C77E 50%, #d4ad57 100%)",
+          boxShadow: "0 0 20px rgba(232,199,126,0.65), 0 0 4px rgba(232,199,126,0.9)",
+        }}
+      />
     </>
   );
 }
