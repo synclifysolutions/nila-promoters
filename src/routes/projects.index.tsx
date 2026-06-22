@@ -77,7 +77,7 @@ function ProjectsPage() {
               { value: COMPLETED.length, label: "Completed"      },
               { value: ONGOING.length,   label: "Ongoing"        },
               { value: UPCOMING.length,  label: "Upcoming"       },
-              { value: "500+",           label: "Happy Families" },
+              { value: "2000+",           label: "Happy Families" },
             ].map((s, i) => (
               <motion.div
                 key={s.label}

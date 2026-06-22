@@ -152,3 +152,59 @@
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   border-bottom: 1px solid rgb(201 168 76 / 0.2);
 }
+
+/* ───────────────────────────────────────────────
+   Google Translate widget styling
+   Uses [id^="google_translate"] instead of the
+   exact #google_translate_element id, because the
+   Navbar renders TWO instances (desktop + mobile)
+   each with a unique dynamic id (via useId()).
+   This selector matches both.
+─────────────────────────────────────────────── */
+
+/* Hide Google Translate's injected top banner iframe */
+.goog-te-banner-frame,
+.skiptranslate {
+  display: none !important;
+}
+
+/* Google's script sets body.top to push content down for the banner;
+   force it back since we hide the banner anyway */
+body {
+  top: 0px !important;
+}
+
+/* Collapse the gadget's default text/branding, show only the dropdown */
+[id^="google_translate"] .goog-te-gadget {
+  font-size: 0 !important;
+  margin: 0 !important;
+  color: transparent !important;
+}
+
+/* Hide the "Powered by Google" branding span */
+[id^="google_translate"] .goog-te-gadget span {
+  display: none !important;
+}
+
+/* The actual <select> dropdown — styled as a pill to match the gold/navy theme */
+[id^="google_translate"] select.goog-te-combo {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 5px 10px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(232, 199, 126, 0.5) !important;
+  background: rgba(232, 199, 126, 0.12) !important;
+  color: #E8C77E !important;
+  cursor: pointer !important;
+  outline: none !important;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+[id^="google_translate"] select.goog-te-combo:hover {
+  background: rgba(232, 199, 126, 0.22) !important;
+  border-color: rgba(232, 199, 126, 0.8) !important;
+}
+
+[id^="google_translate"] select.goog-te-combo:focus {
+  border-color: rgba(232, 199, 126, 0.9) !important;
+}

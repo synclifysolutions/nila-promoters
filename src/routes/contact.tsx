@@ -37,8 +37,6 @@ export const Route = createFileRoute("/contact")({
    Navy:   #0F2235   Navy Soft: #1B3650   Ivory: #F9F4F1   Gold: #E8C77E
 */
 
-/* Replays its blur/opacity/translate animation every time it re-enters
-   the viewport — matches the homepage's "every visit" scroll behaviour. */
 function FadeIn({
   children,
   delay = 0,
@@ -75,7 +73,7 @@ function ContactPage() {
 
   return (
     <>
-      {/* 1. HERO — dark navy band, mirrors homepage CTA's gravity */}
+      {/* 1. HERO */}
       <section className="relative overflow-hidden py-28" style={{ background: "#0F2235" }}>
         <div
           className="absolute inset-0 pointer-events-none"
@@ -123,7 +121,7 @@ function ContactPage() {
           </FadeIn>
 
           {/* quick-contact strip */}
-          <FadeIn delay={0.15} className="mt-12 grid gap-px overflow-hidden rounded-2xl sm:grid-cols-3" >
+          <FadeIn delay={0.15} className="mt-12 grid gap-px overflow-hidden rounded-2xl sm:grid-cols-3">
             <div style={{ background: "rgba(249,244,241,0.06)" }}>
               <QuickLink
                 icon={Phone}
@@ -282,7 +280,7 @@ function ContactPage() {
             </div>
           </FadeIn>
 
-          {/* Hours + email card, dark accent for contrast */}
+          {/* Hours + trust card */}
           <FadeIn delay={0.1} className="lg:col-span-2" y={36}>
             <div className="flex h-full flex-col gap-5">
               <div
@@ -338,7 +336,7 @@ function ContactPage() {
         </div>
       </section>
 
-      {/* 3. OFFICES — signature section, treated like featured locations */}
+      {/* 3. OFFICES */}
       <section style={{ background: "#0F2235" }} className="relative overflow-hidden py-24">
         <div
           className="absolute inset-0 pointer-events-none"
@@ -375,7 +373,8 @@ function ContactPage() {
                   "OSJ Abdeen Nagar, Chennai Main Road,",
                   "Kumbakonam – 612002",
                 ],
-                mapQuery: "Smart Plaza OSJ Abdeen Nagar Kumbakonam",
+                // exact pin from the shared Google Maps link
+                directionsUrl: "https://maps.app.goo.gl/oQMZvGYL98pfAJSV8",
               },
               {
                 num: "02",
@@ -384,12 +383,13 @@ function ContactPage() {
                   "17, 18, Sarangapani South Road,",
                   "Kumbakonam – 612001",
                 ],
-                mapQuery: "Sarangapani South Road Kumbakonam",
+                directionsUrl:
+                  "https://maps.google.com/?q=Sarangapani+South+Road+Kumbakonam",
               },
             ].map((office, i) => (
               <FadeIn key={office.name} delay={i * 0.12} y={36}>
                 <a
-                  href={`https://maps.google.com/?q=${encodeURIComponent(office.mapQuery)}`}
+                  href={office.directionsUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="group relative block overflow-hidden rounded-3xl p-8 transition-all"
@@ -452,7 +452,7 @@ function ContactPage() {
         </div>
       </section>
 
-      {/* 4. MAP */}
+      {/* 4. MAP — two embedded maps side by side */}
       <section style={{ background: "#F9F4F1" }} className="py-24">
         <div className="mx-auto max-w-7xl px-6">
           <FadeIn className="mb-10 text-center">
@@ -466,29 +466,88 @@ function ContactPage() {
               On the map
             </h2>
           </FadeIn>
-          <FadeIn delay={0.1} y={36}>
-            <div
-              className="overflow-hidden rounded-3xl"
-              style={{
-                border: "1px solid rgba(15,34,53,0.1)",
-                boxShadow: "0 30px 60px -30px rgba(15,34,53,0.2)",
-              }}
-            >
-              <iframe
-                title="Nila Promoters office map"
-                src="https://maps.google.com/maps?q=Sarangapani%20South%20Road%20Kumbakonam&t=&z=14&ie=UTF8&iwloc=&output=embed"
-                width="100%"
-                height="440"
-                style={{ border: 0, display: "block" }}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
-          </FadeIn>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* Smart Plaza — exact pin via place_id embedded URL */}
+            <FadeIn delay={0} y={36}>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 shrink-0" style={{ color: "#C9A23E" }} />
+                  <span className="text-sm font-semibold" style={{ color: "#0F2235" }}>
+                    Smart Plaza Office
+                  </span>
+                </div>
+                <div
+                  className="overflow-hidden rounded-2xl"
+                  style={{
+                    border: "1px solid rgba(15,34,53,0.1)",
+                    boxShadow: "0 20px 40px -20px rgba(15,34,53,0.15)",
+                  }}
+                >
+                  <iframe
+                    title="Smart Plaza Office map"
+                    src="https://maps.google.com/maps?q=8/2038+A,+Smart+Plaza,+OSJ+Abdeen+Nagar,+Chennai+Main+Road,+Kumbakonam+612002&t=&z=17&ie=UTF8&iwloc=&output=embed"
+                    width="100%"
+                    height="340"
+                    style={{ border: 0, display: "block" }}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+                <a
+                  href="https://maps.app.goo.gl/oQMZvGYL98pfAJSV8"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest"
+                  style={{ color: "#C9A23E" }}
+                >
+                  Open in Google Maps <ArrowUpRight className="h-3.5 w-3.5" />
+                </a>
+              </div>
+            </FadeIn>
+
+            {/* Sarangapani Road */}
+            <FadeIn delay={0.1} y={36}>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 shrink-0" style={{ color: "#C9A23E" }} />
+                  <span className="text-sm font-semibold" style={{ color: "#0F2235" }}>
+                    Sarangapani Road Office
+                  </span>
+                </div>
+                <div
+                  className="overflow-hidden rounded-2xl"
+                  style={{
+                    border: "1px solid rgba(15,34,53,0.1)",
+                    boxShadow: "0 20px 40px -20px rgba(15,34,53,0.15)",
+                  }}
+                >
+                  <iframe
+                    title="Sarangapani Road Office map"
+                    src="https://maps.google.com/maps?q=Sarangapani%20South%20Road%20Kumbakonam&t=&z=17&ie=UTF8&iwloc=&output=embed"
+                    width="100%"
+                    height="340"
+                    style={{ border: 0, display: "block" }}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+                <a
+                  href="https://maps.google.com/?q=Sarangapani+South+Road+Kumbakonam"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest"
+                  style={{ color: "#C9A23E" }}
+                >
+                  Open in Google Maps <ArrowUpRight className="h-3.5 w-3.5" />
+                </a>
+              </div>
+            </FadeIn>
+          </div>
         </div>
       </section>
 
-      {/* Gold divider between content and footer */}
+      {/* Gold divider */}
       <div
         className="h-[5px] w-full"
         style={{

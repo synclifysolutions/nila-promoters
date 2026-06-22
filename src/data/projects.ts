@@ -16,6 +16,7 @@ import anugragha6 from "@/assets/logos/anugraha-6.jpg";
 import anugragha7 from "@/assets/logos/anugraha-7.jpg";
 import anugragha8 from "@/assets/logos/anugraha-8.jpg";
 import anugragha9 from "@/assets/logos/anugraha-9.jpg";
+import anugraghaLayout from "@/assets/anugragha-layout.jpg";
 
 export type ProjectStatus = "Completed" | "Ongoing" | "Upcoming";
 
@@ -175,7 +176,9 @@ export const ONGOING: Project[] = [
       "Arch Entrance & Well-Planned Infrastructure",
       "Close to Schools, Colleges & Hospitals",
     ],
-    gallery: [anugragha1, anugragha2, anugragha3, anugragha4, anugragha5, anugragha6, anugragha7, anugragha8, anugragha9]
+   gallery: [anugragha1, anugragha2, anugragha3, anugragha4, anugragha5, anugragha6, anugragha7, anugragha8, anugragha9],
+    layoutMapImage: anugraghaLayout,
+    layoutMapPdf: anugraghaLayout,
   },
 ];
 

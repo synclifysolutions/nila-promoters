@@ -47,8 +47,6 @@ export const Route = createFileRoute("/projects/$slug")({
   component: ProjectDetailsPage,
 });
 
-/* FadeUp — replays its blur/opacity/translate animation every time it
-   re-enters the viewport (once: false), not just on first mount. */
 function FadeUp({
   children,
   delay = 0,
@@ -179,9 +177,186 @@ function GalleryLightbox({
   );
 }
 
-/* Shared CTA banner — identical to the homepage's "Ready to Own Your Dream
-   Plot" section, including its blur-on-scroll entrance (viewport once:
-   false), so it replays every time it's scrolled into view. */
+/* ── Layout Map Viewer — fullscreen + zoom + pan ── */
+function LayoutMapViewer({ image, name }: { image: string; name: string }) {
+  const [open, setOpen] = useState(false);
+  const [scale, setScale] = useState(1);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const dragging = useRef(false);
+  const dragStart = useRef({ x: 0, y: 0 });
+  const posStart = useRef({ x: 0, y: 0 });
+
+  const zoomIn = () => setScale((s) => Math.min(s + 0.5, 5));
+  const zoomOut = () => setScale((s) => Math.max(s - 0.5, 1));
+  const reset = () => {
+    setScale(1);
+    setPos({ x: 0, y: 0 });
+  };
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    dragging.current = true;
+    dragStart.current = { x: e.clientX, y: e.clientY };
+    posStart.current = { ...pos };
+  };
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!dragging.current) return;
+    setPos({
+      x: posStart.current.x + (e.clientX - dragStart.current.x),
+      y: posStart.current.y + (e.clientY - dragStart.current.y),
+    });
+  };
+  const onMouseUp = () => {
+    dragging.current = false;
+  };
+
+  const onWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    setScale((s) => Math.min(Math.max(s - e.deltaY * 0.001, 1), 5));
+  };
+
+  useEffect(() => {
+    if (!open) reset();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", handleKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  return (
+    <>
+      {/* Thumbnail — click to open fullscreen */}
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label="View layout map fullscreen"
+        className="group relative block w-full overflow-hidden border-2 border-[#001D39]"
+        style={{ borderRadius: "2px" }}
+      >
+        <img
+          src={image}
+          alt={`${name} layout map`}
+          className="w-full transition duration-300 group-hover:scale-105"
+        />
+        <div
+          className="absolute inset-0 flex items-center justify-center opacity-0 transition duration-300 group-hover:opacity-100"
+          style={{ background: "rgba(0,29,57,0.5)" }}
+        >
+          <span
+            className="rounded-full px-6 py-2.5 text-sm font-bold text-white"
+            style={{ background: "rgba(201,168,76,0.95)" }}
+          >
+            🔍 Click to View Fullscreen
+          </span>
+        </div>
+      </button>
+
+      {/* Fullscreen lightbox */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[200] flex flex-col"
+            style={{ background: "rgba(0,0,0,0.95)" }}
+          >
+            {/* Top bar */}
+            <div
+              className="flex shrink-0 items-center justify-between px-6 py-4"
+              style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}
+            >
+              <span className="text-sm font-bold text-white/80">
+                {name} — Layout Map
+              </span>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={zoomOut}
+                  aria-label="Zoom out"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-lg font-bold text-white/80 transition hover:text-white"
+                  style={{ background: "rgba(255,255,255,0.1)" }}
+                >
+                  −
+                </button>
+                <span className="w-14 text-center text-xs font-bold text-white/60">
+                  {Math.round(scale * 100)}%
+                </span>
+                <button
+                  type="button"
+                  onClick={zoomIn}
+                  aria-label="Zoom in"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-lg font-bold text-white/80 transition hover:text-white"
+                  style={{ background: "rgba(255,255,255,0.1)" }}
+                >
+                  +
+                </button>
+                <button
+                  type="button"
+                  onClick={reset}
+                  className="rounded-full px-4 py-2 text-xs font-bold text-white/70 transition hover:text-white"
+                  style={{ background: "rgba(255,255,255,0.1)" }}
+                >
+                  Reset
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  aria-label="Close"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-white/80 transition hover:text-white"
+                  style={{ background: "rgba(255,255,255,0.1)" }}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Image pan/zoom area */}
+            <div
+              className="flex flex-1 items-center justify-center overflow-hidden"
+              style={{ cursor: scale > 1 ? "grab" : "default" }}
+              onMouseDown={onMouseDown}
+              onMouseMove={onMouseMove}
+              onMouseUp={onMouseUp}
+              onMouseLeave={onMouseUp}
+              onWheel={onWheel}
+            >
+              <img
+                src={image}
+                alt={`${name} layout map`}
+                draggable={false}
+                style={{
+                  transform: `scale(${scale}) translate(${pos.x / scale}px, ${pos.y / scale}px)`,
+                  transition: dragging.current ? "none" : "transform 0.2s ease",
+                  maxWidth: "95vw",
+                  maxHeight: "82vh",
+                  objectFit: "contain",
+                  userSelect: "none",
+                }}
+              />
+            </div>
+
+            {/* Bottom hint */}
+            <div className="shrink-0 py-3 text-center text-xs text-white/40">
+              Scroll to zoom · Drag to pan · Press Esc to close
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
 function SiteCTA() {
   return (
     <motion.section
@@ -297,7 +472,6 @@ function ProjectDetailsPage() {
         >
           Project Not Found
         </h1>
-
         <Link
           to="/projects"
           className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-white"
@@ -466,10 +640,12 @@ function ProjectDetailsPage() {
         </div>
       </section>
 
+      {/* ── Project Gallery ── */}
       {!!gallery.length && (
         <section className="border-t border-[#e8e3d8] bg-white py-20">
           <div className="mx-auto max-w-7xl px-6">
-            <FadeUp className="mb-10">
+            {/* CHANGE 1: added text-center to center the heading */}
+            <FadeUp className="mb-10 text-center">
               <h2
                 className="font-display text-3xl font-bold md:text-4xl"
                 style={{ color: "#001D39" }}
@@ -514,6 +690,7 @@ function ProjectDetailsPage() {
         )}
       </AnimatePresence>
 
+      {/* ── Layout Map — CHANGE 2: replaced static img with LayoutMapViewer ── */}
       {project.layoutMapImage && (
         <section
           style={{ background: "#FAFAF8" }}
@@ -533,13 +710,10 @@ function ProjectDetailsPage() {
             </FadeUp>
 
             <FadeUp delay={0.1}>
-              <div className="overflow-hidden border-2 border-[#001D39]">
-                <img
-                  src={project.layoutMapImage}
-                  alt={`${project.name} layout map`}
-                  className="w-full"
-                />
-              </div>
+              <LayoutMapViewer
+                image={project.layoutMapImage}
+                name={project.name}
+              />
             </FadeUp>
 
             <FadeUp delay={0.2} className="mt-8">

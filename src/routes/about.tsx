@@ -26,12 +26,13 @@ export const Route = createFileRoute("/about")({
 const GOLD = "#E8C77E";
 
 const milestones = [
-  { y: "2020", t: "Nila Promoters Founded", d: "First plotted layout launched in Kumbakonam." },
+  { y: "2020", t: "Kurunji Nagar", d: "First plotted layout launched in Kumbakonam." },
   { y: "2021", t: "Mahalakshmi Nagar & SPM Garden", d: "100+ families served across two landmark projects." },
-  { y: "2022", t: "Sanjana Nagar Launched", d: "Expanded to new micro-markets with Senchina." },
-  { y: "2023", t: "Salith Nagar Delivered", d: "300+ happy families milestone crossed." },
-  { y: "2024", t: "Anugragah Avenue Launched", d: "Our flagship ongoing flagship project." },
-  { y: "2025", t: "London City & Shanthi Nagar", d: "Scaling new heights across Kumbakonam." },
+  { y: "2022", t: "Mega City Launched", d: "Expanded to new micro-markets with Mega City." },
+  { y: "2023", t: "Saleh Nagar Delivered", d: "300+ happy families milestone crossed." },
+  { y: "2024", t: "PAM Nagar & Sanjeeena Nagar Launched", d: "Scaling new heights across Kumbakonam." },
+  { y: "2025", t: "SPM Gardern Launched", d: "Scaling new heights across Kumbakonam." },
+  { y: "2026", t: "Anugraha Avenue Launched", d: "Our flagship ongoing flagship project." },
 ];
 
 const values = [

@@ -1,7 +1,21 @@
 import type { Project } from "@/components/site/ProjectCard";
+import anugraghaLayout from "@/assets/anugragha-layout.jpg";
+
+export const COMPANY_PHONE = "+919876543210";       // ← replace with your real number
+export const COMPANY_WHATSAPP = "919876543210";     // ← replace with your real number (no +)
+
+export const DEFAULT_FEATURES = [
+  "DTCP Approved",
+  "Clear Title",
+  "Blacktop Roads",
+  "Drainage System",
+  "Electricity",
+  "Vastu Compliant",
+];
 
 export const COMPLETED: Project[] = [
   {
+    slug: "mahalakshmi-nagar",
     name: "Mahalakshmi Nagar",
     location: "Kumbakonam",
     status: "Completed",
@@ -10,6 +24,7 @@ export const COMPLETED: Project[] = [
     imageLabel: "Upload Mahalakshmi Nagar photo",
   },
   {
+    slug: "spm-garden",
     name: "SPM Garden",
     location: "Kumbakonam",
     status: "Completed",
@@ -18,6 +33,7 @@ export const COMPLETED: Project[] = [
     imageLabel: "Upload SPM Garden photo",
   },
   {
+    slug: "sanjana-nagar",
     name: "Sanjana Nagar",
     location: "Senchina, Kumbakonam",
     status: "Completed",
@@ -26,6 +42,7 @@ export const COMPLETED: Project[] = [
     imageLabel: "Upload Sanjana Nagar photo",
   },
   {
+    slug: "salith-nagar",
     name: "Salith Nagar",
     location: "Kumbakonam",
     status: "Completed",
@@ -37,6 +54,7 @@ export const COMPLETED: Project[] = [
 
 export const ONGOING: Project[] = [
   {
+    slug: "anugragha-avenue",
     name: "Anugragah Avenue",
     location: "Kumbakonam",
     status: "Ongoing",
@@ -44,11 +62,14 @@ export const ONGOING: Project[] = [
       "Anugragah Avenue is Nila Promoters' current flagship project — a DTCP approved premium plotted layout in a prime Kumbakonam location. Offering plots for families seeking the best of connectivity, green surroundings, and strong investment value.",
     imageLabel: "Upload Anugragah Avenue site photo",
     cta: "Enquire Now",
+    layoutMapImage: anugraghaLayout,   // ← shows the layout image on the detail page
+    layoutMapPdf: anugraghaLayout,     // ← used for the Download button
   },
 ];
 
 export const UPCOMING: Project[] = [
   {
+    slug: "london-city",
     name: "London City",
     location: "Kumbakonam Region",
     status: "Upcoming",
@@ -58,6 +79,7 @@ export const UPCOMING: Project[] = [
     cta: "Register Interest",
   },
   {
+    slug: "shanthi-nagar-virivakkam",
     name: "Shanthi Nagar Virivakkam",
     location: "Analagragharam, Kumbakonam",
     status: "Upcoming",
