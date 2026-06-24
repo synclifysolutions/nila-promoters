@@ -45,59 +45,48 @@ const projects = [
 ];
 
 const socials = [
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/nila_promoters_kumbakonam?utm_source=qr",
-    Icon: IconInstagram,
-  },
-  {
-    label: "YouTube",
-    href: "https://youtube.com/@nilapromoters?si=lGuXMvbRfKOodl05",
-    Icon: IconYouTube,
-  },
-  {
-    label: "Facebook",
-    href: "https://www.facebook.com/share/1BSfPhPc4L/?mibextid=wwXIfr",
-    Icon: IconFacebook,
-  },
+  { label: "Instagram", href: "https://www.instagram.com/nila_promoters_kumbakonam?utm_source=qr", Icon: IconInstagram },
+  { label: "YouTube",   href: "https://youtube.com/@nilapromoters?si=lGuXMvbRfKOodl05",           Icon: IconYouTube   },
+  { label: "Facebook",  href: "https://www.facebook.com/share/1BSfPhPc4L/?mibextid=wwXIfr",        Icon: IconFacebook  },
 ];
 
 export function Footer() {
   return (
     <footer style={{ background: "#0F2235" }}>
-
-      {/* thin gold top line */}
       <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(232,199,126,0.4), transparent)" }} />
 
-      {/* main grid */}
-      <div className="mx-auto max-w-7xl px-6 pt-16 pb-12">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-12">
+        {/*
+          Mobile:  2-column grid (Brand+Contact top, Navigate+Projects below)
+          Desktop: 4-column grid
+          Using grid-cols-2 on mobile with brand spanning full width via col-span-2
+        */}
+        <div className="grid grid-cols-2 gap-8 sm:gap-10 md:grid-cols-4">
 
-          {/* Brand */}
+          {/* Brand — full width on mobile, 1 col on md */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="md:col-span-1"
+            className="col-span-2 md:col-span-1"
           >
             <Link to="/">
               <img
                 src={nilaLogo}
                 alt="Nila Promoters"
-                className="h-20 w-auto object-contain"
+                className="h-16 sm:h-20 w-auto object-contain"
                 style={{ filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.7))" }}
               />
             </Link>
             <p
-              className="mt-5 text-sm leading-relaxed"
-              style={{ color: "rgba(249,244,241,0.4)", maxWidth: "220px" }}
+              className="mt-4 text-sm leading-relaxed"
+              style={{ color: "rgba(249,244,241,0.4)", maxWidth: "260px" }}
             >
               Premium DTCP &amp; RERA‑approved plots in Kumbakonam since 2020.
             </p>
 
-            {/* Social icons */}
-            <div className="mt-6 flex items-center gap-3">
+            <div className="mt-5 flex items-center gap-3">
               {socials.map(({ label, href, Icon }) => (
                 <a
                   key={label}
@@ -135,10 +124,10 @@ export function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>
               Navigate
             </p>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {navLinks.map((l) => (
                 <li key={l.to}>
                   <Link
@@ -162,10 +151,10 @@ export function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>
               Projects
             </p>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {projects.map((name) => (
                 <li key={name} className="text-sm" style={{ color: "rgba(249,244,241,0.45)" }}>
                   {name}
@@ -174,21 +163,22 @@ export function Footer() {
             </ul>
             <Link
               to="/projects"
-              className="mt-6 inline-flex items-center gap-1.5 text-xs font-medium transition-opacity duration-200 hover:opacity-70"
+              className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium transition-opacity duration-200 hover:opacity-70"
               style={{ color: "#E8C77E" }}
             >
-              Explore all projects <ArrowUpRight className="h-3.5 w-3.5" />
+              Explore all <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           </motion.div>
 
-          {/* Contact */}
+          {/* Contact — full width on mobile */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="col-span-2 md:col-span-1"
           >
-            <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>
               Contact
             </p>
             <ul className="space-y-4">
@@ -201,7 +191,8 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="h-3.5 w-3.5 shrink-0" style={{ color: "rgba(232,199,126,0.5)" }} />
-                <div className="flex gap-3">
+                {/* Stack phone numbers on mobile if needed */}
+                <div className="flex flex-wrap gap-x-3 gap-y-1">
                   {["9629688133", "8220651747"].map((n) => (
                     <a
                       key={n}
@@ -222,9 +213,8 @@ export function Footer() {
         </div>
       </div>
 
-      {/* bottom bar */}
       <div style={{ borderTop: "1px solid rgba(249,244,241,0.07)" }}>
-        <div className="mx-auto max-w-7xl px-6 py-5 flex flex-col items-center gap-1 text-center">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 py-4 sm:py-5 flex flex-col items-center gap-1 text-center">
           <p className="text-[11px]" style={{ color: "rgba(249,244,241,0.25)" }}>
             © 2025 Nila Promoters. All rights reserved.
           </p>
@@ -244,7 +234,6 @@ export function Footer() {
           </p>
         </div>
       </div>
-
     </footer>
   );
 }
