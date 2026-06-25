@@ -3,9 +3,10 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import nilaMd from '@/assets/nila-md.png';
 import nilaHero3 from '@/assets/nila-hero3.jpg';
+import nilaPromoVideo from '@/assets/nila-promo.mp4';
 import {
   Award,
-  Sparkles, Heart, Scale, Users, Leaf, ArrowRight,
+  Sparkles, Heart, Scale, Users, Leaf, ArrowRight, Play, Pause, Volume2, VolumeX,
 } from "lucide-react";
 import nilaLogo from "@/assets/nila-logo.png";
 import nilahero1 from "@/assets/nila-hero1.jpg";
@@ -74,6 +75,166 @@ function ParallaxBg() {
         <div className="h-full w-full opacity-20" style={{ backgroundImage: "radial-gradient(ellipse at 30% 50%, rgba(249,244,241,0.35) 0%, transparent 60%)" }} />
       </motion.div>
     </div>
+  );
+}
+
+/* ─── MD Video Section ─── */
+function MDVideoSection() {
+  const { t } = useLanguage();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (playing) {
+      videoRef.current.pause();
+      setPlaying(false);
+    } else {
+      videoRef.current.play();
+      setPlaying(true);
+      setHasStarted(true);
+    }
+  };
+
+  const toggleMute = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = !muted;
+    setMuted(!muted);
+  };
+
+  return (
+    <section className="relative overflow-hidden bg-[#0A1C2E] py-16 sm:py-20 md:py-24">
+      {/* Subtle dot grid */}
+      <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: `radial-gradient(circle, rgba(232,199,126,0.10) 1.5px, transparent 1.5px)`, backgroundSize: "30px 30px" }} />
+      {/* Gold gradient glow top */}
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${GOLD}60, transparent)` }} />
+
+      <div className="relative mx-auto max-w-5xl px-5 sm:px-6">
+        {/* Section label */}
+        <FadeUp className="text-center mb-8 sm:mb-10">
+          <span className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.35em]" style={{ color: GOLD }}>
+            <span className="h-px w-8 sm:w-10" style={{ background: GOLD }} />
+            In His Own Words
+            <span className="h-px w-8 sm:w-10" style={{ background: GOLD }} />
+          </span>
+          <h2 className="mt-4 font-display text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+            A Message From Our{" "}
+            <span style={{ color: GOLD }}>Managing Director</span>
+          </h2>
+        </FadeUp>
+
+        {/* Video card */}
+        <FadeUp delay={0.15}>
+          <div
+            className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
+            style={{ border: `1px solid ${GOLD}30` }}
+          >
+            {/* Gold corner accents */}
+            <div className="absolute top-0 left-0 h-10 w-10 border-t-2 border-l-2 rounded-tl-2xl z-20 pointer-events-none" style={{ borderColor: `${GOLD}90` }} />
+            <div className="absolute top-0 right-0 h-10 w-10 border-t-2 border-r-2 rounded-tr-2xl z-20 pointer-events-none" style={{ borderColor: `${GOLD}90` }} />
+            <div className="absolute bottom-0 left-0 h-10 w-10 border-b-2 border-l-2 rounded-bl-2xl z-20 pointer-events-none" style={{ borderColor: `${GOLD}90` }} />
+            <div className="absolute bottom-0 right-0 h-10 w-10 border-b-2 border-r-2 rounded-br-2xl z-20 pointer-events-none" style={{ borderColor: `${GOLD}90` }} />
+
+            {/* Video */}
+            <div className="relative aspect-video bg-[#060F18]">
+              <video
+                ref={videoRef}
+                src={nilaPromoVideo}
+                className="h-full w-full object-cover"
+                playsInline
+                onEnded={() => { setPlaying(false); setHasStarted(false); }}
+              />
+
+              {/* Overlay gradient (fades out once playing) */}
+              <motion.div
+                className="absolute inset-0 pointer-events-none"
+                animate={{ opacity: hasStarted ? 0 : 1 }}
+                transition={{ duration: 0.6 }}
+                style={{ background: "linear-gradient(180deg, rgba(10,28,46,0.25) 0%, rgba(10,28,46,0.55) 100%)" }}
+              />
+
+              {/* Big play button — shown before first play */}
+              {!hasStarted && (
+                <motion.button
+                  onClick={togglePlay}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="absolute inset-0 flex items-center justify-center group z-10"
+                  aria-label="Play video"
+                >
+                  <div
+                    className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full shadow-[0_8px_40px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:shadow-[0_8px_60px_rgba(232,199,126,0.35)]"
+                    style={{ background: `linear-gradient(135deg, ${GOLD} 0%, #d4ad57 100%)` }}
+                  >
+                    <Play className="h-6 w-6 sm:h-8 sm:w-8 translate-x-0.5" style={{ color: "#0F2235" }} fill="#0F2235" />
+                  </div>
+                </motion.button>
+              )}
+
+              {/* Bottom controls bar — shown after first play */}
+              {hasStarted && (
+                <div className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3" style={{ background: "linear-gradient(0deg, rgba(10,28,46,0.85) 0%, transparent 100%)" }}>
+                  <button
+                    onClick={togglePlay}
+                    className="flex h-9 w-9 items-center justify-center rounded-full transition-all hover:scale-110"
+                    style={{ background: `${GOLD}22`, border: `1px solid ${GOLD}55` }}
+                    aria-label={playing ? "Pause" : "Play"}
+                  >
+                    {playing
+                      ? <Pause className="h-4 w-4" style={{ color: GOLD }} />
+                      : <Play className="h-4 w-4 translate-x-px" style={{ color: GOLD }} fill={GOLD} />
+                    }
+                  </button>
+
+                  <button
+                    onClick={toggleMute}
+                    className="flex h-9 w-9 items-center justify-center rounded-full transition-all hover:scale-110"
+                    style={{ background: `${GOLD}22`, border: `1px solid ${GOLD}55` }}
+                    aria-label={muted ? "Unmute" : "Mute"}
+                  >
+                    {muted
+                      ? <VolumeX className="h-4 w-4" style={{ color: GOLD }} />
+                      : <Volume2 className="h-4 w-4" style={{ color: GOLD }} />
+                    }
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </FadeUp>
+
+        {/* Caption row */}
+        <FadeUp delay={0.3}>
+          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 px-1">
+            {/* Left — name + role */}
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-0.5 rounded-full" style={{ background: GOLD }} />
+              <div>
+                <p className="font-display text-base sm:text-lg font-bold text-white leading-tight">
+                  Mr. R. Mahesh
+                </p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.25em]" style={{ color: `${GOLD}B3` }}>
+                  Managing Director, Nila Promoters
+                </p>
+              </div>
+            </div>
+
+            {/* Right — caption text */}
+            <p className="text-xs sm:text-sm text-white/45 text-center sm:text-right max-w-xs leading-relaxed italic">
+              Hear directly from Mr. Mahesh on our vision, values, and the future of Nila Promoters.
+            </p>
+          </div>
+        </FadeUp>
+      </div>
+
+      {/* Gold gradient glow bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${GOLD}40, transparent)` }} />
+    </section>
   );
 }
 
@@ -217,6 +378,9 @@ function AboutPage() {
         </div>
       </section>
 
+      {/* ── MD VIDEO ── */}
+      <MDVideoSection />
+
       {/* ── TIMELINE ── */}
       <section className="relative overflow-hidden bg-white py-20 sm:py-28">
         <div className="mx-auto max-w-5xl px-5 sm:px-6">
@@ -232,7 +396,7 @@ function AboutPage() {
           <div className="relative">
             <div className="absolute left-4 top-0 h-full w-px bg-gradient-to-b from-[#1B3650] via-[#1B3650]/30 to-transparent md:left-1/2 md:-translate-x-1/2" />
             <div className="space-y-10 sm:space-y-14">
-              ={milestones.map((m, i) => {
+              {milestones.map((m, i) => {
                 const left = i % 2 === 0;
                 return (
                   <motion.div
