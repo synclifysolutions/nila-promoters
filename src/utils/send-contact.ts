@@ -19,7 +19,7 @@ export const sendContact = createServerFn({ method: "POST" })
       from: "onboarding@resend.dev",
 
       to: [
-        "synclifysolutions@gmail.com"
+        "harishaabitheen7904@gmail.com"
       ],
 
       subject: `New enquiry from ${name}`,
