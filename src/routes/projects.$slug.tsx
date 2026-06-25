@@ -22,7 +22,8 @@ import {
   COMPANY_PHONE,
   COMPANY_WHATSAPP,
 } from "@/data/projects";
-import { statusConfig } from "@/lib/feature-icons";
+
+import { useLanguage } from "./__root";
 
 export const Route = createFileRoute("/projects/$slug")({
   head: ({ params }) => {
@@ -46,6 +47,14 @@ export const Route = createFileRoute("/projects/$slug")({
   },
   component: ProjectDetailsPage,
 });
+
+const GOLD = "#E8C77E";
+
+const statusDot: Record<string, string> = {
+  completed: "#4CAF82",
+  ongoing:   "#E8C77E",
+  upcoming:  "#6B9FD4",
+};
 
 function FadeUp({
   children,
@@ -177,8 +186,9 @@ function GalleryLightbox({
   );
 }
 
-/* ── Layout Map Viewer — fullscreen + zoom + pan ── */
+/* ── Layout Map Viewer ── */
 function LayoutMapViewer({ image, name }: { image: string; name: string }) {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [scale, setScale] = useState(1);
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -234,7 +244,6 @@ function LayoutMapViewer({ image, name }: { image: string; name: string }) {
 
   return (
     <>
-      {/* Thumbnail — click to open fullscreen */}
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -255,12 +264,11 @@ function LayoutMapViewer({ image, name }: { image: string; name: string }) {
             className="rounded-full px-6 py-2.5 text-sm font-bold text-white"
             style={{ background: "rgba(201,168,76,0.95)" }}
           >
-            🔍 Click to View Fullscreen
+            {t("details.mapClick")}
           </span>
         </div>
       </button>
 
-      {/* Fullscreen lightbox */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -277,7 +285,7 @@ function LayoutMapViewer({ image, name }: { image: string; name: string }) {
               style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}
             >
               <span className="text-sm font-bold text-white/80">
-                {name} — Layout Map
+                {name} — {t("details.mapHeader")}
               </span>
               <div className="flex items-center gap-3">
                 <button
@@ -307,7 +315,7 @@ function LayoutMapViewer({ image, name }: { image: string; name: string }) {
                   className="rounded-full px-4 py-2 text-xs font-bold text-white/70 transition hover:text-white"
                   style={{ background: "rgba(255,255,255,0.1)" }}
                 >
-                  Reset
+                  {t("details.mapReset")}
                 </button>
                 <button
                   type="button"
@@ -321,7 +329,7 @@ function LayoutMapViewer({ image, name }: { image: string; name: string }) {
               </div>
             </div>
 
-            {/* Image pan/zoom area */}
+            {/* Image area */}
             <div
               className="flex flex-1 items-center justify-center overflow-hidden"
               style={{ cursor: scale > 1 ? "grab" : "default" }}
@@ -346,9 +354,8 @@ function LayoutMapViewer({ image, name }: { image: string; name: string }) {
               />
             </div>
 
-            {/* Bottom hint */}
             <div className="shrink-0 py-3 text-center text-xs text-white/40">
-              Scroll to zoom · Drag to pan · Press Esc to close
+              {t("details.mapHint")}
             </div>
           </motion.div>
         )}
@@ -358,6 +365,7 @@ function LayoutMapViewer({ image, name }: { image: string; name: string }) {
 }
 
 function SiteCTA() {
+  const { t } = useLanguage();
   return (
     <motion.section
       initial={{ opacity: 0, filter: "blur(10px)" }}
@@ -394,7 +402,7 @@ function SiteCTA() {
             className="text-xs font-semibold uppercase tracking-[0.3em]"
             style={{ color: "#E8C77E", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}
           >
-            Take the Next Step
+            {t("cta.sub")}
           </span>
           <h2
             className="mt-4 font-display text-3xl font-bold text-white md:text-5xl"
@@ -402,17 +410,16 @@ function SiteCTA() {
               textShadow: "0 2px 6px rgba(0,0,0,0.75), 0 4px 30px rgba(0,0,0,0.55)",
             }}
           >
-            Ready to Own Your Dream Plot in{" "}
+            {t("cta.title1")}{" "}
             <span className="italic" style={{ color: "#E8C77E" }}>
-              Kumbakonam?
+              {t("cta.title2")}
             </span>
           </h2>
           <p
             className="mx-auto mt-5 max-w-xl md:text-lg"
             style={{ color: "rgba(249,244,241,0.95)", textShadow: "0 2px 6px rgba(0,0,0,0.7)" }}
           >
-            Schedule a complimentary site visit. Walk the land, ask every question,
-            and decide with complete confidence.
+            {t("cta.desc")}
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link
@@ -423,30 +430,15 @@ function SiteCTA() {
                 color: "#0F2235",
                 boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
               }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLElement).style.boxShadow =
-                  "0 8px 32px rgba(232,199,126,0.5)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLElement).style.boxShadow =
-                  "0 8px 32px rgba(0,0,0,0.4)")
-              }
             >
-              Book a Site Visit Today <ArrowRight className="h-4 w-4" />
+              {t("cta.btnVisit")} <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               to="/projects"
               className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold backdrop-blur transition-all hover:scale-105"
               style={{ border: "2px solid rgba(249,244,241,0.5)", color: "#F9F4F1" }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background =
-                  "rgba(249,244,241,0.12)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "transparent";
-              }}
             >
-              View All Projects
+              {t("cta.btnView")}
             </Link>
           </div>
         </Reveal>
@@ -456,6 +448,7 @@ function SiteCTA() {
 }
 
 function ProjectDetailsPage() {
+  const { t, language } = useLanguage();
   const { slug } = Route.useParams();
   const project = ALL_PROJECTS.find((p) => p.slug === slug);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -470,7 +463,7 @@ function ProjectDetailsPage() {
           className="font-display text-4xl font-bold"
           style={{ color: "#001D39" }}
         >
-          Project Not Found
+          {t("details.notFound")}
         </h1>
         <Link
           to="/projects"
@@ -478,21 +471,36 @@ function ProjectDetailsPage() {
           style={{ background: "#001D39", borderRadius: "2px" }}
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Projects
+          {t("details.backBtn")}
         </Link>
       </section>
     );
   }
 
-  const cfg = statusConfig[project.status];
-  const features = project.features?.length ? project.features : DEFAULT_FEATURES;
+  // Resolve dynamic names & text nodes based on the current language
+  const localizedName = language === "ta" && project.nameTa ? project.nameTa : project.name;
+  const localizedAddress = language === "ta" && project.addressTa ? project.addressTa : (project.address ?? project.location);
+  const localizedDescription = language === "ta" && project.descriptionTa ? project.descriptionTa : project.description;
+  const localizedHighlight = language === "ta" && project.highlightTa ? project.highlightTa : project.highlight;
+
+  const dot = statusDot[project.status.toLowerCase()] ?? GOLD;
+  const statusLabel = t(`projects.tab${project.status.charAt(0).toUpperCase() + project.status.slice(1).toLowerCase()}`);
+
+  const features = language === "ta" && project.featuresTa?.length 
+    ? project.featuresTa 
+    : (project.features?.length ? project.features : DEFAULT_FEATURES);
+
   const phone = project.phone ?? COMPANY_PHONE;
   const whatsapp = project.whatsapp ?? COMPANY_WHATSAPP;
   const gallery = project.gallery ?? [];
 
   return (
     <>
-      <PageBanner title={project.name} crumbs={["Home", "Projects", project.name]} />
+      <PageBanner 
+  title={localizedName} 
+  description={localizedDescription} 
+  crumbs={[t("nav.home"), t("nav.projects"), localizedName]} 
+/>
 
       <section style={{ background: "#FAFAF8" }} className="py-20">
         <div className="mx-auto max-w-7xl px-6">
@@ -503,7 +511,7 @@ function ProjectDetailsPage() {
               style={{ color: "#001D39" }}
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Projects
+              {t("details.backBtn")}
             </Link>
           </FadeUp>
 
@@ -517,7 +525,7 @@ function ProjectDetailsPage() {
                   <div className="absolute inset-0 flex items-center justify-center p-10">
                     <img
                       src={project.logo}
-                      alt={`${project.name} logo`}
+                      alt={`${localizedName} logo`}
                       className="max-h-full max-w-full object-contain"
                     />
                   </div>
@@ -530,112 +538,116 @@ function ProjectDetailsPage() {
                 <div
                   className="absolute left-5 top-5 inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-bold uppercase tracking-widest"
                   style={{
-                    background: cfg.bg,
-                    color: cfg.text,
-                    border: `1px solid ${cfg.border}`,
+                    background: "rgba(15,34,53,0.72)",
+                    color: "#F9F4F1",
+                    border: "1px solid rgba(255,255,255,0.12)",
                     borderRadius: "2px",
                   }}
                 >
                   <span
                     className="h-1.5 w-1.5 rounded-full"
-                    style={{ background: cfg.dot }}
+                    style={{ background: dot, boxShadow: `0 0 6px ${dot}` }}
                   />
-                  {cfg.label}
+                  {statusLabel}
                 </div>
 
-                {project.highlight && (
+                {localizedHighlight && (
                   <div
                     className="absolute bottom-0 left-0 right-0 px-4 py-3 text-center text-xs font-bold tracking-widest"
                     style={{ background: "#001D39", color: "#C9A84C" }}
                   >
-                    {project.highlight}
+                    {localizedHighlight}
                   </div>
                 )}
               </div>
             </FadeUp>
 
-            <FadeUp delay={0.1}>
-              <div className="mb-4 flex items-center gap-3">
-                <div className="h-px w-8" style={{ background: "#C9A84C" }} />
-                <span
-                  className="text-[11px] font-bold uppercase tracking-[0.38em]"
-                  style={{ color: "#8B6914" }}
+            <div className="flex flex-col justify-center">
+              <FadeUp delay={0.1}>
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="h-px w-8" style={{ background: "#C9A84C" }} />
+                  <span
+                    className="text-[11px] font-bold uppercase tracking-[0.38em]"
+                    style={{ color: "#8B6914" }}
+                  >
+                    {t("details.subHeader")}
+                  </span>
+                </div>
+
+                <h1
+                  className="font-display text-4xl font-bold leading-tight md:text-5xl"
+                  style={{ color: "#001D39" }}
                 >
-                  Project Details
-                </span>
-              </div>
+                  {localizedName}
+                </h1>
 
-              <h1
-                className="font-display text-4xl font-bold leading-tight md:text-5xl"
-                style={{ color: "#001D39" }}
-              >
-                {project.name}
-              </h1>
+                <div className="mt-4 inline-flex items-start gap-2">
+                  <MapPin className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "#C9A84C" }} />
+                  <span
+                    className="text-sm font-semibold leading-relaxed"
+                    style={{ color: "rgba(0,29,57,0.55)" }}
+                  >
+                    {localizedAddress}
+                  </span>
+                </div>
 
-              <div className="mt-4 inline-flex items-center gap-2">
-                <MapPin className="h-4 w-4" style={{ color: "#C9A84C" }} />
-                <span
-                  className="text-sm font-semibold"
+                <p
+                  className="mt-5 text-sm leading-relaxed"
                   style={{ color: "rgba(0,29,57,0.55)" }}
                 >
-                  {project.address ?? project.location}
-                </span>
-              </div>
+                  {localizedDescription}
+                </p>
 
-              <p
-                className="mt-5 text-sm leading-relaxed"
-                style={{ color: "rgba(0,29,57,0.55)" }}
-              >
-                {project.description}
-              </p>
+                <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {features.map((feature: string) => (
+  <div
+    key={feature}
+    className="flex items-center gap-3 border border-[#e8e3d8] bg-white px-4 py-3"
+    style={{ borderRadius: "2px" }}
+  >
+    <span
+      className="flex h-8 w-8 items-center justify-center shrink-0"
+      style={{ background: "#F5F0E8", borderRadius: "2px" }}
+    >
+      <CheckCircle2 className="h-4 w-4 text-[#8B6914]" />
+    </span>
+    <span
+      className="text-sm font-semibold"
+      style={{ color: "#001D39" }}
+    >
+      {feature}
+    </span>
+  </div>
+))}
+                </div>
 
-              <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {features.map((feature) => (
-                  <div
-                    key={feature}
-                    className="flex items-center gap-3 border border-[#e8e3d8] bg-white px-4 py-3"
-                    style={{ borderRadius: "2px" }}
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a
+                    href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(
+                      language === "en" 
+                        ? `Hi, I'm interested in ${project.name}` 
+                        : `வணக்கம், நான் ${localizedName} திட்டத்தை பற்றி அறிய விரும்புகிறேன்.`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
+                    style={{ background: "#1EA952", borderRadius: "2px" }}
                   >
-                    <span
-                      className="flex h-8 w-8 items-center justify-center"
-                      style={{ background: "#F5F0E8", borderRadius: "2px" }}
-                    >
-                      <CheckCircle2 className="h-4 w-4 text-[#8B6914]" />
-                    </span>
-                    <span
-                      className="text-sm font-semibold"
-                      style={{ color: "#001D39" }}
-                    >
-                      {feature}
-                    </span>
-                  </div>
-                ))}
-              </div>
+                    <MessageCircle className="h-4 w-4" />
+                    {language === "en" ? "WhatsApp" : "வாட்ஸ்அப்"}
+                  </a>
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(
-                    `Hi, I'm interested in ${project.name}`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white"
-                  style={{ background: "#1EA952", borderRadius: "2px" }}
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  WhatsApp
-                </a>
-
-                <a
-                  href={`tel:${phone}`}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white"
-                  style={{ background: "#001D39", borderRadius: "2px" }}
-                >
-                  <Phone className="h-4 w-4" />
-                  Call Now
-                </a>
-              </div>
-            </FadeUp>
+                  <a
+                    href={`tel:${phone}`}
+                    className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
+                    style={{ background: "#001D39", borderRadius: "2px" }}
+                  >
+                    <Phone className="h-4 w-4" />
+                    {t("contact.linkCall")}
+                  </a>
+                </div>
+              </FadeUp>
+            </div>
           </div>
         </div>
       </section>
@@ -644,15 +656,14 @@ function ProjectDetailsPage() {
       {!!gallery.length && (
         <section className="border-t border-[#e8e3d8] bg-white py-20">
           <div className="mx-auto max-w-7xl px-6">
-            {/* CHANGE 1: added text-center to center the heading */}
             <FadeUp className="mb-10 text-center">
               <h2
                 className="font-display text-3xl font-bold md:text-4xl"
                 style={{ color: "#001D39" }}
               >
-                Project{" "}
+                {t("gallery.sub")}{" "}
                 <span className="italic" style={{ color: "#8B6914" }}>
-                  Gallery
+                  {t("gallery.title2")}
                 </span>
               </h2>
             </FadeUp>
@@ -663,12 +674,12 @@ function ProjectDetailsPage() {
                   <button
                     type="button"
                     onClick={() => setLightboxIndex(index)}
-                    aria-label={`View ${project.name} gallery image ${index + 1} full size`}
+                    aria-label={`View ${localizedName} gallery image ${index + 1} full size`}
                     className="group aspect-[4/3] w-full overflow-hidden border border-[#e8e3d8]"
                   >
                     <img
                       src={img}
-                      alt={`${project.name} gallery ${index + 1}`}
+                      alt={`${localizedName} gallery ${index + 1}`}
                       className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                     />
                   </button>
@@ -690,7 +701,7 @@ function ProjectDetailsPage() {
         )}
       </AnimatePresence>
 
-      {/* ── Layout Map — CHANGE 2: replaced static img with LayoutMapViewer ── */}
+      {/* ── Layout Map ── */}
       {project.layoutMapImage && (
         <section
           style={{ background: "#FAFAF8" }}
@@ -702,9 +713,9 @@ function ProjectDetailsPage() {
                 className="font-display text-3xl font-bold md:text-4xl"
                 style={{ color: "#001D39" }}
               >
-                Layout{" "}
+                {t("details.mapTitle1")}{" "}
                 <span className="italic" style={{ color: "#8B6914" }}>
-                  Map
+                  {t("details.mapTitle2")}
                 </span>
               </h2>
             </FadeUp>
@@ -712,7 +723,7 @@ function ProjectDetailsPage() {
             <FadeUp delay={0.1}>
               <LayoutMapViewer
                 image={project.layoutMapImage}
-                name={project.name}
+                name={localizedName}
               />
             </FadeUp>
 
@@ -720,11 +731,11 @@ function ProjectDetailsPage() {
               <a
                 href={project.layoutMapPdf ?? project.layoutMapImage}
                 download
-                className="inline-flex items-center gap-2 px-8 py-4 text-sm font-bold text-white"
+                className="inline-flex items-center gap-2 px-8 py-4 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
                 style={{ background: "#001D39", borderRadius: "2px" }}
               >
                 <Download className="h-4 w-4" />
-                Download Layout Map
+                {t("details.mapDownload")}
               </a>
             </FadeUp>
           </div>
@@ -733,7 +744,6 @@ function ProjectDetailsPage() {
 
       <SiteCTA />
 
-      {/* Gold divider between CTA and footer */}
       <div
         className="h-[5px] w-full"
         style={{

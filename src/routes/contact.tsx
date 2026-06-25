@@ -2,9 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import {
-  Phone, MessageCircle, MapPin, Clock, Mail, Send, ArrowRight, ArrowUpRight,
+  Phone, MessageCircle, MapPin, Clock, Mail, Send, ArrowRight, ArrowUpRight, Loader2, CheckCircle, AlertCircle
 } from "lucide-react";
-import { ALL_PROJECTS } from "@/lib/projects";
+import { ALL_PROJECTS } from "@/data/projects";
+
+import { useLanguage } from "./__root";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -36,7 +38,48 @@ function FadeIn({ children, delay = 0, className = "", y = 28 }: { children: Rea
 }
 
 function ContactPage() {
-  const [sent, setSent] = useState(false);
+  const { t, language } = useLanguage();
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!formRef.current) return;
+
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+
+    // Capture all named form fields into a key-value data structure automatically
+    const formData = new FormData(formRef.current);
+
+    try {
+      // Formspree endpoint from image_ddf440.png
+      const FORMSPREE_ENDPOINT = "https://formspree.io/f/xbdvdwrp";
+
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        formRef.current.reset(); // Clear input elements securely
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Formspree submission failed:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -49,28 +92,28 @@ function ContactPage() {
           <FadeIn className="text-center">
             <div className="flex items-center justify-center gap-3">
               <span className="h-px w-8 sm:w-10" style={{ background: "#E8C77E" }} />
-              <span className="text-xs font-semibold uppercase tracking-[0.32em]" style={{ color: "#E8C77E" }}>Let's Talk Land</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.32em]" style={{ color: "#E8C77E" }}>{t("contact.heroSub")}</span>
               <span className="h-px w-8 sm:w-10" style={{ background: "#E8C77E" }} />
             </div>
             <h1 className="mt-5 sm:mt-6 mx-auto max-w-3xl font-display text-3xl sm:text-4xl md:text-6xl font-bold leading-tight text-white px-2 sm:px-0">
-              Every great plot starts with{" "}
-              <span className="italic" style={{ color: "#E8C77E" }}>one conversation.</span>
+              {t("contact.heroTitle1")}{" "}
+              <span className="italic" style={{ color: "#E8C77E" }}>{t("contact.heroTitle2")}</span>
             </h1>
             <p className="mt-4 sm:mt-6 mx-auto max-w-xl text-sm sm:text-base leading-relaxed md:text-lg px-3 sm:px-0" style={{ color: "rgba(249,244,241,0.65)" }}>
-              Call, message, or walk into either of our Kumbakonam offices.
+              {t("contact.heroDesc")}
             </p>
           </FadeIn>
 
-          {/* Quick-contact strip — stack on mobile */}
+          {/* Quick-contact strip */}
           <FadeIn delay={0.15} className="mt-8 sm:mt-12 grid gap-px overflow-hidden rounded-xl sm:rounded-2xl grid-cols-1 sm:grid-cols-3">
             <div style={{ background: "rgba(249,244,241,0.06)" }}>
-              <QuickLink icon={Phone}         label="Call Us"   value="96296 88133"                 href="tel:9629688133" />
+              <QuickLink icon={Phone}         label={t("contact.linkCall")}   value="96296 88133"   href="tel:9629688133" />
             </div>
             <div style={{ background: "rgba(249,244,241,0.06)" }}>
-              <QuickLink icon={MessageCircle} label="WhatsApp"  value="82206 51747"                 href="https://wa.me/918220651747" external />
+              <QuickLink icon={MessageCircle} label={t("contact.linkWa")}   value="82206 51747"   href="https://wa.me/918220651747" external />
             </div>
             <div style={{ background: "rgba(249,244,241,0.06)" }}>
-              <QuickLink icon={Mail}          label="Email"     value="contact@nilapromoters.com"   href="mailto:contact@nilapromoters.com" />
+              <QuickLink icon={Mail}          label={t("contact.linkMail")}     value="contact@nilapromoters.com"   href="mailto:contact@nilapromoters.com" />
             </div>
           </FadeIn>
         </div>
@@ -85,37 +128,39 @@ function ContactPage() {
               className="rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12"
               style={{ background: "#fff", border: "1px solid rgba(15,34,53,0.08)", boxShadow: "0 30px 60px -30px rgba(15,34,53,0.18)" }}
             >
-              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#C9A23E" }}>Send an Enquiry</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#C9A23E" }}>{t("contact.formSub")}</span>
               <h2 className="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "#0F2235" }}>
-                Tell us what you're{" "}<span className="italic" style={{ color: "#0F2235" }}>looking for</span>
+                {t("contact.formTitle1")}{" "}<span className="italic" style={{ color: "#0F2235" }}>{t("contact.formTitle2")}</span>
               </h2>
               <p className="mt-3 text-sm leading-relaxed" style={{ color: "rgba(15,34,53,0.55)" }}>
-                Share a few details and our team will respond within 24 hours.
+                {t("contact.formDesc")}
               </p>
 
-              <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className="mt-7 sm:mt-9 grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2">
-                <Field label="Full Name"    name="name"  required />
-                <Field label="Phone Number" name="phone" type="tel" required />
-                <Field label="Email"        name="email" type="email" className="sm:col-span-2" />
+              <form ref={formRef} onSubmit={handleFormSubmit} className="mt-7 sm:mt-9 grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2">
+                <Field label={t("contact.fName")}    name="Name"  required />
+                <Field label={t("contact.fPhone")} name="Phone" type="tel" required />
+                <Field label={t("contact.fEmail")}        name="Email Address" type="email" className="sm:col-span-2" />
 
                 <div className="sm:col-span-2 flex flex-col gap-1.5">
-                  <label className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(15,34,53,0.5)" }}>Interested In</label>
+                  <label className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(15,34,53,0.5)" }}>{t("contact.fInterest")}</label>
                   <select
+                    name="Project Interest"
                     className="rounded-xl px-4 py-3.5 text-sm outline-none transition-colors"
                     style={{ border: "1px solid rgba(15,34,53,0.14)", background: "#fff", color: "#0F2235" }}
                     onFocus={(e) => (e.currentTarget.style.borderColor = "#1B3650")}
                     onBlur={(e)  => (e.currentTarget.style.borderColor = "rgba(15,34,53,0.14)")}
                   >
-                    <option>General Enquiry</option>
-                    {ALL_PROJECTS.map((p) => <option key={p.name}>{p.name}</option>)}
+                    <option value="General Inquiry">{t("contact.optGeneral")}</option>
+                    {ALL_PROJECTS.map((p) => <option key={p.name} value={p.name}>{p.name}</option>)}
                   </select>
                 </div>
 
                 <div className="sm:col-span-2 flex flex-col gap-1.5">
-                  <label className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(15,34,53,0.5)" }}>Message</label>
+                  <label className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(15,34,53,0.5)" }}>{t("contact.fMsg")}</label>
                   <textarea
+                    name="Message Content"
                     rows={4}
-                    placeholder="Tell us about your plot requirements..."
+                    placeholder={t("contact.fMsgPlaceholder")}
                     className="rounded-xl px-4 py-3.5 text-sm outline-none transition-colors"
                     style={{ border: "1px solid rgba(15,34,53,0.14)", background: "#fff", color: "#0F2235" }}
                     onFocus={(e) => (e.currentTarget.style.borderColor = "#1B3650")}
@@ -126,10 +171,20 @@ function ContactPage() {
                 <div className="sm:col-span-2 flex flex-col gap-3 sm:flex-row">
                   <button
                     type="submit"
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 sm:py-4 text-sm font-semibold transition-all hover:scale-[1.02]"
+                    disabled={isSubmitting}
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 sm:py-4 text-sm font-semibold transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none"
                     style={{ background: "linear-gradient(135deg, #0F2235 0%, #1B3650 100%)", color: "#F9F4F1", boxShadow: "0 10px 28px rgba(15,34,53,0.35)" }}
                   >
-                    <Send className="h-4 w-4" /> Send Enquiry
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" /> 
+                        {language === "en" ? "Sending..." : "அனுப்பப்படுகிறது..."}
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" /> {t("contact.btnSubmit")}
+                      </>
+                    )}
                   </button>
                   <a
                     href="https://wa.me/918220651747"
@@ -138,14 +193,27 @@ function ContactPage() {
                     className="inline-flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 sm:py-4 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
                     style={{ background: "#1EA952", boxShadow: "0 10px 28px rgba(30,169,82,0.3)" }}
                   >
-                    <MessageCircle className="h-4 w-4" /> WhatsApp
+                    <MessageCircle className="h-4 w-4" /> {language === "en" ? "WhatsApp" : "வாட்ஸ்அப்"}
                   </a>
                 </div>
 
-                {sent && (
-                  <p className="sm:col-span-2 rounded-xl px-4 py-3.5 text-sm font-medium" style={{ background: "rgba(232,199,126,0.16)", color: "#8B6914", border: "1px solid rgba(232,199,126,0.35)" }}>
-                    Thank you! Your enquiry has been received. We'll be in touch shortly.
-                  </p>
+                {/* Status Banners */}
+                {submitStatus === "success" && (
+                  <div className="sm:col-span-2 inline-flex items-start gap-3 rounded-xl px-4 py-3.5 text-sm font-medium animate-fadeIn" style={{ background: "rgba(30,169,82,0.1)", color: "#166534", border: "1px solid rgba(30,169,82,0.25)" }}>
+                    <CheckCircle className="h-5 w-5 mt-0.5 shrink-0 text-[#1EA952]" />
+                    <p>{t("contact.formSuccess")}</p>
+                  </div>
+                )}
+
+                {submitStatus === "error" && (
+                  <div className="sm:col-span-2 inline-flex items-start gap-3 rounded-xl px-4 py-3.5 text-sm font-medium animate-fadeIn" style={{ background: "rgba(220,38,38,0.1)", color: "#991B1B", border: "1px solid rgba(220,38,38,0.25)" }}>
+                    <AlertCircle className="h-5 w-5 mt-0.5 shrink-0 text-red-600" />
+                    <p>
+                      {language === "en" 
+                        ? "Something went wrong. Please try calling or messaging us via WhatsApp directly." 
+                        : "தகவலை அனுப்புவதில் பிழை ஏற்பட்டுள்ளது. தயவுசெய்து எங்களை நேரடியாக தொலைபேசி அல்லது வாட்ஸ்அப் மூலம் தொடர்பு கொள்ளவும்."}
+                    </p>
+                  </div>
                 )}
               </form>
             </div>
@@ -158,23 +226,23 @@ function ContactPage() {
                 <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl" style={{ background: "rgba(232,199,126,0.16)" }}>
                   <Clock className="h-5 w-5" style={{ color: "#E8C77E" }} />
                 </div>
-                <h3 className="mt-4 sm:mt-5 font-display text-xl font-bold text-white">Working Hours</h3>
+                <h3 className="mt-4 sm:mt-5 font-display text-xl font-bold text-white">{t("contact.hoursTitle")}</h3>
                 <div className="mt-4 space-y-2.5 text-sm" style={{ color: "rgba(249,244,241,0.7)" }}>
                   <div className="flex items-center justify-between border-b pb-2.5" style={{ borderColor: "rgba(249,244,241,0.1)" }}>
-                    <span>Monday – Saturday</span>
+                    <span>{t("contact.hoursWeekdays")}</span>
                     <span className="font-semibold text-white">9 AM – 6 PM</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>Sunday</span>
-                    <span className="font-semibold" style={{ color: "#E8C77E" }}>By Appointment</span>
+                    <span>{t("contact.hoursSunday")}</span>
+                    <span className="font-semibold" style={{ color: "#E8C77E" }}>{t("contact.hoursAppointment")}</span>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-1 flex-col justify-center rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center" style={{ background: "rgba(232,199,126,0.10)", border: "1px solid rgba(232,199,126,0.25)" }}>
                 <span className="font-display text-4xl sm:text-5xl font-bold" style={{ color: "#0F2235" }}>5★</span>
-                <span className="mt-2 text-xs font-semibold uppercase tracking-[0.25em]" style={{ color: "#8B6914" }}>Trusted by 500+ families</span>
-                <p className="mt-3 text-sm leading-relaxed" style={{ color: "rgba(15,34,53,0.55)" }}>Five years of clear titles and on-the-ground transparency.</p>
+                <span className="mt-2 text-xs font-semibold uppercase tracking-[0.25em]" style={{ color: "#8B6914" }}>{t("reviews.avg")}</span>
+                <p className="mt-3 text-sm leading-relaxed" style={{ color: "rgba(15,34,53,0.55)" }}>{t("contact.trustDesc")}</p>
               </div>
             </div>
           </FadeIn>
@@ -188,11 +256,11 @@ function ContactPage() {
           <FadeIn className="mb-10 sm:mb-14 text-center">
             <div className="inline-flex items-center gap-3">
               <span className="h-px w-8" style={{ background: "#E8C77E" }} />
-              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>Visit Us</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>{t("footer.hContact")}</span>
               <span className="h-px w-8" style={{ background: "#E8C77E" }} />
             </div>
             <h2 className="mt-4 font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white">
-              Two doors, <span className="italic" style={{ color: "#E8C77E" }}>always open</span>
+              {t("contact.officesTitle1")}{" "}<span className="italic" style={{ color: "#E8C77E" }}>{t("contact.officesTitle2")}</span>
             </h2>
           </FadeIn>
 
@@ -200,13 +268,13 @@ function ContactPage() {
             {[
               {
                 num: "01",
-                name: "Smart Plaza Office",
-                lines: ["8/2038 A, Smart Plaza,", "OSJ Abdeen Nagar, Chennai Main Road,", "Kumbakonam – 612002"],
+                name: t("contact.office1Name"),
+                lines: [t("footer.addressLine1"), t("footer.addressLine2")],
                 directionsUrl: "https://maps.app.goo.gl/oQMZvGYL98pfAJSV8",
               },
               {
                 num: "02",
-                name: "Sarangapani Road Office",
+                name: t("contact.office2Name"),
                 lines: ["17, 18, Sarangapani South Road,", "Kumbakonam – 612001"],
                 directionsUrl: "https://maps.google.com/?q=Sarangapani+South+Road+Kumbakonam",
               },
@@ -235,7 +303,7 @@ function ContactPage() {
                     </p>
                   </div>
                   <div className="mt-5 sm:mt-6 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest" style={{ color: "#E8C77E" }}>
-                    Get Directions <ArrowRight className="h-3.5 w-3.5" />
+                    {t("contact.btnDirections")} <ArrowRight className="h-3.5 w-3.5" />
                   </div>
                 </a>
               </FadeIn>
@@ -244,12 +312,12 @@ function ContactPage() {
         </div>
       </section>
 
-      {/* 4. MAPS — stack on mobile */}
+      {/* 4. MAPS */}
       <section style={{ background: "#F9F4F1" }} className="py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-6">
           <FadeIn className="mb-8 sm:mb-10 text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#C9A23E" }}>Find Us</span>
-            <h2 className="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "#0F2235" }}>On the map</h2>
+            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#C9A23E" }}>{t("contact.mapSub")}</span>
+            <h2 className="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "#0F2235" }}>{t("contact.mapTitle")}</h2>
           </FadeIn>
 
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
@@ -257,7 +325,7 @@ function ContactPage() {
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 shrink-0" style={{ color: "#C9A23E" }} />
-                  <span className="text-sm font-semibold" style={{ color: "#0F2235" }}>Smart Plaza Office</span>
+                  <span className="text-sm font-semibold" style={{ color: "#0F2235" }}>{t("contact.office1Name")}</span>
                 </div>
                 <div className="overflow-hidden rounded-xl sm:rounded-2xl" style={{ border: "1px solid rgba(15,34,53,0.1)", boxShadow: "0 20px 40px -20px rgba(15,34,53,0.15)" }}>
                   <iframe
@@ -271,7 +339,7 @@ function ContactPage() {
                   />
                 </div>
                 <a href="https://maps.app.goo.gl/oQMZvGYL98pfAJSV8" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest" style={{ color: "#C9A23E" }}>
-                  Open in Google Maps <ArrowUpRight className="h-3.5 w-3.5" />
+                  {t("contact.btnMapOpen")} <ArrowUpRight className="h-3.5 w-3.5" />
                 </a>
               </div>
             </FadeIn>
@@ -280,7 +348,7 @@ function ContactPage() {
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 shrink-0" style={{ color: "#C9A23E" }} />
-                  <span className="text-sm font-semibold" style={{ color: "#0F2235" }}>Sarangapani Road Office</span>
+                  <span className="text-sm font-semibold" style={{ color: "#0F2235" }}>{t("contact.office2Name")}</span>
                 </div>
                 <div className="overflow-hidden rounded-xl sm:rounded-2xl" style={{ border: "1px solid rgba(15,34,53,0.1)", boxShadow: "0 20px 40px -20px rgba(15,34,53,0.15)" }}>
                   <iframe
@@ -294,7 +362,7 @@ function ContactPage() {
                   />
                 </div>
                 <a href="https://maps.google.com/?q=Sarangapani+South+Road+Kumbakonam" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest" style={{ color: "#C9A23E" }}>
-                  Open in Google Maps <ArrowUpRight className="h-3.5 w-3.5" />
+                  {t("contact.btnMapOpen")} <ArrowUpRight className="h-3.5 w-3.5" />
                 </a>
               </div>
             </FadeIn>

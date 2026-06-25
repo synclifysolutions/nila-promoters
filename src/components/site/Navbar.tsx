@@ -3,14 +3,7 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import nilaLogo from "@/assets/nila-logo.png";
-import GoogleTranslate from "@/components/GoogleTranslate";
-
-const links = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/projects", label: "Projects" },
-  { to: "/contact", label: "Contact" },
-];
+import { useLanguage } from "../../routes/__root";
 
 export function Navbar() {
   const { scrollY } = useScroll();
@@ -18,40 +11,20 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 40));
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  
+  // Connect to our native language setup
+  const { language, toggleLanguage, t } = useLanguage();
+
+  // Dynamically pull translated labels
+  const links = [
+    { to: "/", label: t("nav.home") },
+    { to: "/about", label: t("nav.about") },
+    { to: "/projects", label: t("nav.projects") },
+    { to: "/contact", label: t("nav.contact") },
+  ];
 
   return (
     <>
-      <style>{`
-        .goog-te-banner-frame,
-        .skiptranslate { display: none !important; }
-        body { top: 0px !important; }
-
-        #google_translate_element .goog-te-gadget {
-          font-size: 0 !important;
-          margin: 0 !important;
-        }
-
-        #google_translate_element select.goog-te-combo {
-          font-size: 12px !important;
-          font-weight: 600 !important;
-          padding: 5px 10px !important;
-          border-radius: 999px !important;
-          border: 1px solid rgba(232,199,126,0.5) !important;
-          background: rgba(232,199,126,0.12) !important;
-          color: #E8C77E !important;
-          cursor: pointer !important;
-          outline: none !important;
-          transition: background 0.2s, border-color 0.2s;
-        }
-
-        #google_translate_element select.goog-te-combo:hover {
-          background: rgba(232,199,126,0.22) !important;
-          border-color: rgba(232,199,126,0.8) !important;
-        }
-
-        #google_translate_element .goog-te-gadget span { display: none !important; }
-      `}</style>
-
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -115,12 +88,20 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right side: Translate + CTA — desktop */}
-          <div className="hidden shrink-0 items-center gap-3 md:flex">
-            <GoogleTranslate />
+          {/* Right side: Translate Button + CTA — desktop */}
+          <div className="hidden shrink-0 items-center gap-4 md:flex">
+            {/* Custom Language Switcher Option */}
+            <button
+              onClick={toggleLanguage}
+              className="text-[12px] font-semibold px-3 py-1.5 rounded-full border border-[rgba(232,199,126,0.5)] bg-[rgba(232,199,126,0.12)] text-[#E8C77E] hover:bg-[rgba(232,199,126,0.22)] hover:border-[rgba(232,199,126,0.8)] transition-all duration-200"
+              aria-label="Toggle Language"
+            >
+              {language === "en" ? "தமிழ்" : "English"}
+            </button>
+
             <Link to="/contact">
               <motion.div
-                className="rounded-full px-5 py-2 text-[13px] font-semibold"
+                className="rounded-full px-5 py-2 text-[13px] font-semibold text-center min-w-[110px]"
                 style={{
                   background: "linear-gradient(135deg, #E8C77E, #c9a84c)",
                   color: "#0F2235",
@@ -130,7 +111,7 @@ export function Navbar() {
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: "spring", stiffness: 400, damping: 28 }}
               >
-                Book a Visit
+                {t("nav.bookVisit")}
               </motion.div>
             </Link>
           </div>
@@ -140,7 +121,7 @@ export function Navbar() {
             {/* Compact CTA on mobile */}
             <Link to="/contact">
               <motion.div
-                className="rounded-full px-3 py-1.5 text-[11px] font-semibold"
+                className="rounded-full px-3 py-1.5 text-[11px] font-semibold text-center min-w-[75px]"
                 style={{
                   background: "linear-gradient(135deg, #E8C77E, #c9a84c)",
                   color: "#0F2235",
@@ -148,7 +129,7 @@ export function Navbar() {
                 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Book Visit
+                {t("nav.bookVisitMobile")}
               </motion.div>
             </Link>
 
@@ -212,15 +193,21 @@ export function Navbar() {
                   );
                 })}
 
-                {/* Translate row */}
+                {/* Translate row — mobile */}
                 <motion.div
-                  className="rounded-xl px-4 py-2 mt-0.5"
-                  style={{ border: "1px solid rgba(232,199,126,0.14)" }}
+                  className="flex items-center justify-between rounded-xl px-4 py-2.5 mt-0.5 text-[14px]"
+                  style={{ border: "1px solid rgba(232,199,126,0.14)", color: "rgba(249,244,241,0.6)" }}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: links.length * 0.05, duration: 0.22 }}
                 >
-                  <GoogleTranslate />
+                  <span>Language / மொழி</span>
+                  <button
+                    onClick={toggleLanguage}
+                    className="text-[12px] font-semibold px-3 py-1 rounded-full border border-[rgba(232,199,126,0.5)] bg-[rgba(232,199,126,0.12)] text-[#E8C77E]"
+                  >
+                    {language === "en" ? "தமிழ்" : "English"}
+                  </button>
                 </motion.div>
               </div>
             </motion.div>

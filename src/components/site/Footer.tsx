@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Phone, MapPin, ArrowUpRight } from "lucide-react";
 import nilaLogo from "@/assets/nila-logo.png";
+import { useLanguage } from "../../routes/__root";
 
 function IconInstagram({ className }: { className?: string }) {
   return (
@@ -29,21 +30,6 @@ function IconFacebook({ className }: { className?: string }) {
   );
 }
 
-const navLinks = [
-  { to: "/",         label: "Home"     },
-  { to: "/about",    label: "About"    },
-  { to: "/projects", label: "Projects" },
-  { to: "/contact",  label: "Contact"  },
-];
-
-const projects = [
-  "Mahalakshmi Nagar",
-  "SPM Garden",
-  "Sanjana Nagar",
-  "Anugragah Avenue",
-  "London City",
-];
-
 const socials = [
   { label: "Instagram", href: "https://www.instagram.com/nila_promoters_kumbakonam?utm_source=qr", Icon: IconInstagram },
   { label: "YouTube",   href: "https://youtube.com/@nilapromoters?si=lGuXMvbRfKOodl05",           Icon: IconYouTube   },
@@ -51,19 +37,31 @@ const socials = [
 ];
 
 export function Footer() {
+  const { t } = useLanguage();
+
+  const navLinks = [
+    { to: "/",         label: t("nav.home") },
+    { to: "/about",    label: t("nav.about") },
+    { to: "/projects", label: t("nav.projects") },
+    { to: "/contact",  label: t("nav.contact") },
+  ];
+
+  const projects = [
+    t("footer.p1"),
+    t("footer.p2"),
+    t("footer.p3"),
+    t("footer.p4"),
+    t("footer.p5"),
+  ];
+
   return (
     <footer style={{ background: "#0F2235" }}>
       <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(232,199,126,0.4), transparent)" }} />
 
       <div className="mx-auto max-w-7xl px-5 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-12">
-        {/*
-          Mobile:  2-column grid (Brand+Contact top, Navigate+Projects below)
-          Desktop: 4-column grid
-          Using grid-cols-2 on mobile with brand spanning full width via col-span-2
-        */}
         <div className="grid grid-cols-2 gap-8 sm:gap-10 md:grid-cols-4">
 
-          {/* Brand — full width on mobile, 1 col on md */}
+          {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -83,7 +81,7 @@ export function Footer() {
               className="mt-4 text-sm leading-relaxed"
               style={{ color: "rgba(249,244,241,0.4)", maxWidth: "260px" }}
             >
-              Premium DTCP &amp; RERA‑approved plots in Kumbakonam since 2020.
+              {t("footer.brandDesc")}
             </p>
 
             <div className="mt-5 flex items-center gap-3">
@@ -125,7 +123,7 @@ export function Footer() {
             transition={{ duration: 0.6, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>
-              Navigate
+              {t("footer.hNavigate")}
             </p>
             <ul className="space-y-2.5">
               {navLinks.map((l) => (
@@ -152,7 +150,7 @@ export function Footer() {
             transition={{ duration: 0.6, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>
-              Projects
+              {t("footer.hProjects")}
             </p>
             <ul className="space-y-2.5">
               {projects.map((name) => (
@@ -166,11 +164,11 @@ export function Footer() {
               className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium transition-opacity duration-200 hover:opacity-70"
               style={{ color: "#E8C77E" }}
             >
-              Explore all <ArrowUpRight className="h-3.5 w-3.5" />
+              {t("footer.exploreAll")} <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           </motion.div>
 
-          {/* Contact — full width on mobile */}
+          {/* Contact */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -179,19 +177,18 @@ export function Footer() {
             className="col-span-2 md:col-span-1"
           >
             <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>
-              Contact
+              {t("footer.hContact")}
             </p>
             <ul className="space-y-4">
               <li className="flex items-start gap-2.5">
                 <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "rgba(232,199,126,0.5)" }} />
                 <span className="text-xs leading-relaxed" style={{ color: "rgba(249,244,241,0.4)" }}>
-                  Smart Plaza, OSJ Abdeen Nagar,<br />
-                  Chennai Main Rd, Kumbakonam – 612002
+                  {t("footer.addressLine1")}<br />
+                  {t("footer.addressLine2")}
                 </span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="h-3.5 w-3.5 shrink-0" style={{ color: "rgba(232,199,126,0.5)" }} />
-                {/* Stack phone numbers on mobile if needed */}
                 <div className="flex flex-wrap gap-x-3 gap-y-1">
                   {["9629688133", "8220651747"].map((n) => (
                     <a
@@ -216,10 +213,10 @@ export function Footer() {
       <div style={{ borderTop: "1px solid rgba(249,244,241,0.07)" }}>
         <div className="mx-auto max-w-7xl px-5 sm:px-6 py-4 sm:py-5 flex flex-col items-center gap-1 text-center">
           <p className="text-[11px]" style={{ color: "rgba(249,244,241,0.25)" }}>
-            © 2025 Nila Promoters. All rights reserved.
+            © 2026 Nila Promoters. {t("footer.rights")}
           </p>
           <p className="text-[11px]" style={{ color: "rgba(249,244,241,0.2)" }}>
-            Developed by{" "}
+            {t("footer.devBy")}{" "}
             <a
               href="https://synclifysolutions.in/"
               target="_blank"

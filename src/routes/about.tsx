@@ -10,6 +10,8 @@ import {
 import nilaLogo from "@/assets/nila-logo.png";
 import nilahero1 from "@/assets/nila-hero1.jpg";
 
+import { useLanguage } from "./__root";
+
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
@@ -24,25 +26,6 @@ export const Route = createFileRoute("/about")({
 });
 
 const GOLD = "#E8C77E";
-
-const milestones = [
-  { y: "2020", t: "Kurunji Nagar", d: "First plotted layout launched in Kumbakonam." },
-  { y: "2021", t: "Mahalakshmi Nagar & SPM Garden", d: "100+ families served across two landmark projects." },
-  { y: "2022", t: "Mega City Launched", d: "Expanded to new micro-markets with Mega City." },
-  { y: "2023", t: "Saleh Nagar Delivered", d: "300+ happy families milestone crossed." },
-  { y: "2024", t: "PAM Nagar & Sanjeeena Nagar Launched", d: "Scaling new heights across Kumbakonam." },
-  { y: "2025", t: "SPM Garden Launched", d: "Scaling new heights across Kumbakonam." },
-  { y: "2026", t: "Anugraha Avenue Launched", d: "Our flagship ongoing project." },
-];
-
-const values = [
-  { Icon: Sparkles, t: "Transparency", d: "Every transaction is open, honest, and documented." },
-  { Icon: Heart,    t: "Integrity",    d: "We do what we say, always." },
-  { Icon: Award,    t: "Quality",      d: "Premium plots with zero compromise on standards." },
-  { Icon: Users,    t: "Customer First", d: "Your trust is the foundation we build on." },
-  { Icon: Scale,    t: "Legal Compliance", d: "100% DTCP & RERA approved, every time." },
-  { Icon: Leaf,     t: "Community Growth", d: "Building neighbourhoods, not just plots." },
-];
 
 function SplitReveal({ text, className = "", delay = 0 }: { text: string; className?: string; delay?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -95,9 +78,30 @@ function ParallaxBg() {
 }
 
 function AboutPage() {
+  const { t } = useLanguage();
+
+  const milestones = [
+    { y: "2020", t: t("about.m1.t"), d: t("about.m1.d") },
+    { y: "2021", t: t("about.m2.t"), d: t("about.m2.d") },
+    { y: "2022", t: t("about.m3.t"), d: t("about.m3.d") },
+    { y: "2023", t: t("about.m4.t"), d: t("about.m4.d") },
+    { y: "2024", t: t("about.m5.t"), d: t("about.m5.d") },
+    { y: "2025", t: t("about.m6.t"), d: t("about.m6.d") },
+    { y: "2026", t: t("about.m7.t"), d: t("about.m7.d") },
+  ];
+
+  const values = [
+    { Icon: Sparkles, t: t("about.v1.t"), d: t("about.v1.d") },
+    { Icon: Heart,    t: t("about.v2.t"), d: t("about.v2.d") },
+    { Icon: Award,    t: t("about.v3.t"), d: t("about.v3.d") },
+    { Icon: Users,    t: t("about.v4.t"), d: t("about.v4.d") },
+    { Icon: Scale,    t: t("about.v5.t"), d: t("about.v5.d") },
+    { Icon: Leaf,     t: t("about.v6.t"), d: t("about.v6.d") },
+  ];
+
   return (
     <>
-      <PageBanner />
+      <PageBanner title={t("about.bannerTitle")} description={t("about.bannerDesc")} crumbs={[t("nav.home"), t("nav.about")]} />
 
       {/* ── OUR STORY ── */}
       <section className="relative overflow-hidden py-0" style={{ minHeight: "420px" }}>
@@ -106,7 +110,6 @@ function AboutPage() {
           <div className="absolute inset-0" style={{ background: "linear-gradient(100deg, rgba(15,34,53,0.88) 0%, rgba(15,34,53,0.70) 50%, rgba(15,34,53,0.25) 80%, rgba(15,34,53,0.08) 100%)" }} />
         </div>
 
-        {/* Logo — smaller on mobile, hidden on very small */}
         <motion.div
           className="absolute top-6 right-5 z-20 sm:top-8 sm:right-8 md:top-10 md:right-12"
           initial={{ opacity: 0, scale: 0.8 }}
@@ -125,28 +128,28 @@ function AboutPage() {
           <div className="max-w-xl">
             <FadeUp delay={0.05}>
               <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.35em]" style={{ color: GOLD }}>
-                <span className="h-px w-8" style={{ background: GOLD }} /> Our Story
+                <span className="h-px w-8" style={{ background: GOLD }} /> {t("about.storySub")}
               </span>
             </FadeUp>
 
             <h2 className="mt-4 sm:mt-5 font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight">
-              <SplitReveal text="A Promise Rooted in Kumbakonam" delay={0.15} />
+              <SplitReveal text={t("about.storyTitle")} delay={0.15} />
             </h2>
 
             <div className="mt-3 sm:mt-4 h-1 w-16 sm:w-20 rounded-full" style={{ background: `linear-gradient(90deg, ${GOLD}, transparent)` }} />
 
             <FadeUp delay={0.4}>
               <p className="mt-5 sm:mt-6 text-sm sm:text-base leading-relaxed text-white/75">
-                <span style={{ color: GOLD, fontWeight: 700 }}>Nila Promoters</span> was founded in 2020 with a single, powerful commitment — to make land ownership in Kumbakonam transparent, accessible, and truly valuable.
-              </p>
+  <span style={{ color: GOLD, fontWeight: 700 }}>Nila Promoters</span> {t("about.storyP1")}
+</p>
               <p className="mt-3 sm:mt-4 text-sm leading-relaxed text-white/60">
-                Every plot we sell carries a clear legal title, government approvals, and the promise of long-term investment growth — backed by five years of unwavering trust.
+                {t("about.storyP2")}
               </p>
             </FadeUp>
 
             <FadeUp delay={0.55}>
               <div className="mt-6 sm:mt-8 flex flex-wrap gap-2 sm:gap-3">
-                {["DTCP Approved", "RERA Registered", "Clear Title", "Est. 2020"].map((badge) => (
+                {[t("trust.dtcp"), t("trust.rera"), t("trust.title"), t("about.est")].map((badge) => (
                   <span
                     key={badge}
                     className="rounded-full px-3 sm:px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest"
@@ -173,34 +176,31 @@ function AboutPage() {
         <div className="relative mx-auto max-w-6xl px-5 sm:px-6">
           <FadeUp className="text-center mb-8 sm:mb-10">
             <span className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.35em]" style={{ color: GOLD }}>
-              <span className="h-px w-8 sm:w-10" style={{ background: GOLD }} /> Leadership <span className="h-px w-8 sm:w-10" style={{ background: GOLD }} />
+              <span className="h-px w-8 sm:w-10" style={{ background: GOLD }} /> {t("about.leadSub")} <span className="h-px w-8 sm:w-10" style={{ background: GOLD }} />
             </span>
             <h2 className="mt-4 font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white">
-              The Vision Behind <span style={{ color: GOLD }}>Nila Promoters</span>
+              {t("about.leadTitle1")} <span style={{ color: GOLD }}>Nila Promoters</span>
             </h2>
           </FadeUp>
 
-          {/* Stack on mobile, side-by-side on md */}
           <div className="flex flex-col md:flex-row items-center gap-8 sm:gap-10 lg:gap-16">
-            {/* Text first on mobile */}
             <FadeUp className="flex-1 flex flex-col justify-center order-2 md:order-1">
               <div className="w-12 h-0.5" style={{ background: GOLD }} />
-              <h3 className="mt-4 sm:mt-5 font-display text-4xl sm:text-5xl font-bold text-white leading-tight">
-                Mr.R. Mahesh
+              <h3 className="mt-4 sm:mt-5 font-display text-4xl sm:text-5xl font-bold text-white Gold-tight">
+                {t("about.mdName")}
               </h3>
               <p className="mt-2 sm:mt-3 text-sm font-semibold uppercase tracking-[0.25em]" style={{ color: `${GOLD}B3` }}>
-                Managing Director, Nila Promoters
+                {t("about.mdTitle")}
               </p>
               <div className="flex items-center gap-4 mt-4 mb-4">
                 <div className="h-px w-16 bg-[#F9F4F1]/40" />
                 <div className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
               </div>
               <blockquote className="font-display text-lg sm:text-xl md:text-2xl italic leading-relaxed text-white/80 max-w-lg">
-                "At <span style={{ color: GOLD }}>Nila Promoters</span>, we don't just sell land — we build futures, one plot at a time."
+                "{t("about.mdQuote1")} <span style={{ color: GOLD }}>Nila Promoters</span>, {t("about.mdQuote2")}"
               </blockquote>
             </FadeUp>
 
-            {/* Photo — order 1 on mobile so it's at top */}
             <FadeUp delay={0.2} className="w-48 sm:w-64 md:w-80 lg:w-96 flex-shrink-0 order-1 md:order-2">
               <div className="relative">
                 <div className="absolute -inset-4 rounded-3xl blur-2xl" style={{ background: `${GOLD}14` }} />
@@ -222,18 +222,17 @@ function AboutPage() {
         <div className="mx-auto max-w-5xl px-5 sm:px-6">
           <FadeUp className="mb-14 sm:mb-20 text-center">
             <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.35em] text-[#1B3650]">
-              <span className="h-px w-8 bg-[#1B3650]" /> Our Journey <span className="h-px w-8 bg-[#1B3650]" />
+              <span className="h-px w-8 bg-[#1B3650]" /> {t("about.journeySub")} <span className="h-px w-8 bg-[#1B3650]" />
             </span>
             <h2 className="mt-4 font-display text-3xl sm:text-4xl md:text-5xl font-bold text-[#0F2235]">
-              Five Years. One Promise.
+              {t("about.journeyTitle")}
             </h2>
           </FadeUp>
 
           <div className="relative">
-            {/* Timeline line — always on left (mobile), centered on md */}
             <div className="absolute left-4 top-0 h-full w-px bg-gradient-to-b from-[#1B3650] via-[#1B3650]/30 to-transparent md:left-1/2 md:-translate-x-1/2" />
             <div className="space-y-10 sm:space-y-14">
-              {milestones.map((m, i) => {
+              ={milestones.map((m, i) => {
                 const left = i % 2 === 0;
                 return (
                   <motion.div
@@ -242,7 +241,6 @@ function AboutPage() {
                     whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                     viewport={{ once: false, margin: "-80px" }}
                     transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    /* Mobile: always left-aligned with pl-14. Desktop: alternate sides */
                     className={`relative flex flex-col gap-4 pl-14 md:pl-0 ${left ? "md:pr-[53%]" : "md:pl-[53%]"}`}
                   >
                     <div className="absolute left-[10px] top-5 h-4 w-4 sm:h-5 sm:w-5 -translate-x-1/2 rounded-full bg-[#1B3650] shadow-[0_0_0_4px_rgba(27,54,80,0.2)] md:left-1/2" />
@@ -267,15 +265,14 @@ function AboutPage() {
         <div className="relative mx-auto max-w-6xl px-5 sm:px-6">
           <FadeUp className="mb-10 sm:mb-14 text-center">
             <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.35em]" style={{ color: GOLD }}>
-              <span className="h-px w-8" style={{ background: GOLD }} /> What Drives Us <span className="h-px w-8" style={{ background: GOLD }} />
+              <span className="h-px w-8" style={{ background: GOLD }} /> {t("about.driveSub")} <span className="h-px w-8" style={{ background: GOLD }} />
             </span>
           </FadeUp>
 
-          {/* Stack on mobile, 2-col on md */}
           <div className="grid gap-px overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 grid-cols-1 md:grid-cols-2" style={{ background: "rgba(255,255,255,0.06)" }}>
             {[
-              { n: "01", t: "Our Vision", d: "To be Kumbakonam's most trusted land developer — where every plot is a promise of prosperity, legal clarity, and lifelong value." },
-              { n: "02", t: "Our Mission", d: "To deliver DTCP & RERA approved plots at prime locations across Kumbakonam with complete transparency, fair pricing, and unwavering customer support." },
+              { n: "01", t: t("about.visTitle"), d: t("about.visDesc") },
+              { n: "02", t: t("about.misTitle"), d: t("about.misDesc") },
             ].map((v, i) => (
               <FadeUp key={v.t} delay={i * 0.15} className="h-full">
                 <div className="group relative h-full bg-[#0F2235] p-6 sm:p-7 md:p-8 transition-colors duration-500 hover:bg-[#13283e]">
@@ -299,17 +296,16 @@ function AboutPage() {
         <div className="relative mx-auto max-w-7xl px-5 sm:px-6">
           <FadeUp className="mb-12 sm:mb-16 flex flex-col items-center text-center">
             <span className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em]" style={{ color: GOLD }}>
-              <span className="h-px w-8 sm:w-10" style={{ background: GOLD }} /> What Guides Us <span className="h-px w-8 sm:w-10" style={{ background: GOLD }} />
+              <span className="h-px w-8 sm:w-10" style={{ background: GOLD }} /> {t("about.valuesSub")} <span className="h-px w-8 sm:w-10" style={{ background: GOLD }} />
             </span>
             <h2 className="mt-5 font-display text-3xl sm:text-4xl md:text-6xl font-bold text-[#0F2235] leading-tight">
-              Our Core <span style={{ color: GOLD }}>Values</span>
+              {t("about.valuesTitle1")} <span style={{ color: GOLD }}>{t("about.valuesTitle2")}</span>
             </h2>
             <p className="mt-4 max-w-md text-sm text-[#0F2235]/50 leading-relaxed">
-              Six principles that shape every decision we make.
+              {t("about.valuesDesc")}
             </p>
           </FadeUp>
 
-          {/* 1 col on mobile, 2 on sm, 3 on lg */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {values.map(({ Icon, t, d }, i) => (
               <motion.div
@@ -337,7 +333,7 @@ function AboutPage() {
           <FadeUp delay={0.5} className="mt-10 sm:mt-14 flex justify-center">
             <div className="inline-flex items-center gap-4 rounded-full px-5 sm:px-6 py-3" style={{ background: "rgba(15,34,53,0.04)", border: "1px solid rgba(15,34,53,0.10)" }}>
               <div className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
-              <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#0F2235]/40">Nila Promoters — Est. 2020</span>
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#0F2235]/40">{t("about.footerTag")}</span>
               <div className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
             </div>
           </FadeUp>
@@ -357,20 +353,20 @@ function AboutPage() {
           <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(15,34,53,0.55) 0%, rgba(15,34,53,0.4) 45%, rgba(15,34,53,0.65) 100%)" }} />
         </div>
         <div className="relative mx-auto max-w-4xl px-5 sm:px-6 text-center">
-          <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}>Take the Next Step</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}>{t("cta.sub")}</span>
           <h2 className="mt-4 font-display text-2xl sm:text-3xl md:text-5xl font-bold text-white" style={{ textShadow: "0 2px 6px rgba(0,0,0,0.75)" }}>
-            Ready to Own Your Dream Plot in{" "}
-            <span className="italic" style={{ color: "#E8C77E" }}>Kumbakonam?</span>
+            {t("cta.title1")}{" "}
+            <span className="italic" style={{ color: "#E8C77E" }}>{t("cta.title2")}</span>
           </h2>
           <p className="mx-auto mt-4 sm:mt-5 max-w-xl text-sm sm:text-base md:text-lg" style={{ color: "rgba(249,244,241,0.95)", textShadow: "0 2px 6px rgba(0,0,0,0.7)" }}>
-            Schedule a complimentary site visit. Walk the land, ask every question, and decide with complete confidence.
+            {t("cta.desc")}
           </p>
           <div className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <Link to="/contact" className="inline-flex items-center gap-2 rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-semibold shadow-lg transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #E8C77E 0%, #d4ad57 100%)", color: "#0F2235" }}>
-              Book a Site Visit Today <ArrowRight className="h-4 w-4" />
+              {t("cta.btnVisit")} <ArrowRight className="h-4 w-4" />
             </Link>
             <Link to="/projects" className="inline-flex items-center gap-2 rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-semibold backdrop-blur transition-all hover:scale-105" style={{ border: "2px solid rgba(249,244,241,0.5)", color: "#F9F4F1" }}>
-              View All Projects
+              {t("cta.btnView")}
             </Link>
           </div>
         </div>
@@ -382,10 +378,8 @@ function AboutPage() {
 }
 
 /* ─── Page Banner ─── */
-export function PageBanner({ title, crumbs }: { title?: string; crumbs?: string[] }) {
-  const _title = title ?? "About Nila Promoters";
-  const _crumbs = crumbs ?? ["Home", "About"];
-  const words = _title.split(" ");
+export function PageBanner({ title, description, crumbs }: { title: string; description: string; crumbs: string[] }) {
+  const words = title.split(" ");
 
   return (
     <section className="relative min-h-[46vh] sm:min-h-[52vh] overflow-hidden bg-[#0F2235] flex items-end pb-14 sm:pb-20 pt-28 sm:pt-36">
@@ -400,14 +394,14 @@ export function PageBanner({ title, crumbs }: { title?: string; crumbs?: string[
           transition={{ duration: 0.6 }}
           className="mb-5 sm:mb-6 flex items-center justify-center gap-2 text-xs uppercase tracking-widest text-white/40"
         >
-          {_crumbs.map((c, i) => (
+          {crumbs.map((c, i) => (
             <span key={c} className="flex items-center gap-2">
               {i === 0 ? (
                 <Link to="/" className="hover:text-[#F9F4F1] transition-colors">{c}</Link>
               ) : (
                 <span className="text-[#F9F4F1]">{c}</span>
               )}
-              {i < _crumbs.length - 1 && <span className="text-white/20">›</span>}
+              {i < crumbs.length - 1 && <span className="text-white/20">›</span>}
             </span>
           ))}
         </motion.nav>
@@ -423,7 +417,7 @@ export function PageBanner({ title, crumbs }: { title?: string; crumbs?: string[
         </motion.div>
 
         {/* Responsive heading */}
-        <h1 className="font-display text-3xl sm:text-5xl md:text-7xl font-bold text-white leading-tight" aria-label={_title}>
+        <h1 className="font-display text-3xl sm:text-5xl md:text-7xl font-bold text-white leading-tight" aria-label={title}>
           {words.map((word, i) => {
             const isBrand = word === "Nila" || word === "Promoters";
             return (
@@ -455,7 +449,7 @@ export function PageBanner({ title, crumbs }: { title?: string; crumbs?: string[
           transition={{ duration: 0.8, delay: 1.1 }}
           className="mt-4 sm:mt-5 max-w-md text-sm sm:text-base text-white/50 px-4"
         >
-          Kumbakonam's most trusted DTCP & RERA approved plot developer since 2020.
+          {description}
         </motion.p>
       </div>
     </section>

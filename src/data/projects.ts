@@ -23,28 +23,35 @@ export type ProjectStatus = "Completed" | "Ongoing" | "Upcoming";
 export interface Project {
   slug: string;            // used in the URL: /projects/<slug>
   name: string;
+  nameTa?: string;         // Localized Tamil Name
   location: string;
+  locationTa?: string;     // Localized Tamil Location
   description: string;
+  descriptionTa?: string;  // Localized Tamil Description
   status: ProjectStatus;
   imageLabel: string;
-  highlight?: string;
+  highlight: string;
+  highlightTa?: string;    // Localized Tamil Highlight
   cta?: string;
+  ctaTa?: string;          // Localized Tamil CTA Label
   logo?: string;
 
-  // ---- Detail-page-only fields (all optional, page falls back gracefully) ----
+  // ---- Detail-page-only fields ----
   address?: string;
-  phone?: string;          // overrides COMPANY_PHONE for this project
-  whatsapp?: string;       // overrides COMPANY_WHATSAPP for this project
-  features?: string[];     // shown as an icon grid on the detail page
-  gallery?: string[];      // imported images for the "Project Gallery" section
-  layoutMapImage?: string; // imported image for the "Layout Map" section
-  layoutMapPdf?: string;   // optional path/link for "Download Layout Map"
+  addressTa?: string;      // Localized Tamil Address
+  phone?: string;          
+  whatsapp?: string;       
+  features?: string[];     
+  featuresTa?: string[];   // Localized Tamil Features
+  gallery?: string[];      
+  layoutMapImage?: string; 
+  layoutMapPdf?: string;   
 }
 
-// Company-wide contact defaults — change these once, used everywhere
 export const COMPANY_PHONE = "+919876543210";
-export const COMPANY_WHATSAPP = "919876543210"; // digits only, with country code
+export const COMPANY_WHATSAPP = "919876543210";
 
+// --- Fallback default feature modules to clear ts(2305) compilation errors ---
 export const DEFAULT_FEATURES = [
   "DTCP & RERA Approved Layout",
   "100% Clear & Marketable Title",
@@ -54,18 +61,33 @@ export const DEFAULT_FEATURES = [
   "24-Hour Security",
 ];
 
+export const DEFAULT_FEATURES_TA = [
+  "DTCP & RERA அங்கீகரிக்கப்பட்ட உள்கட்டமைப்பு",
+  "100% வில்லங்கமற்ற பட்டா",
+  "அகலமான தார் சாலைகள்",
+  "பூமிக்கடியில் வடிகால் வசதி",
+  "தனிநபர் மின்சார இணைப்பு (EB)",
+  "24 மணி நேர பாதுகாப்பு வசதி",
+];
+
 export const COMPLETED: Project[] = [
   {
     slug: "sri-mahalakshmi-nagar",
     name: "Sri Mahalakshmi Nagar",
+    nameTa: "ஸ்ரீ மகாலட்சுமி நகர்",
     location: "Kumbakonam",
+    locationTa: "கும்பகோணம்",
     description: "A premium DTCP approved plotted layout delivering well-planned residential plots to families seeking peaceful living.",
+    descriptionTa: "அமைதியான வாழ்க்கையை விரும்பும் குடும்பங்களுக்காக நன்கு திட்டமிடப்பட்ட, DTCP அங்கீகாரம் பெற்ற பிரீமியம் குடியிருப்பு மனைகள்.",
     status: "Completed",
     imageLabel: "Mahalakshmi Nagar",
     highlight: "100% Plots Sold",
+    highlightTa: "100% மனைகள் விற்கப்பட்டன",
     cta: "View Details",
+    ctaTa: "விவரங்களை காண்க",
     logo: mahalakshmilogo,
     address: "Neelamangalam Main Road, Pattukottai Road, Kumbakonam, Tamil Nadu",
+    addressTa: "நீலமங்கலம் மெயின் ரோடு, பட்டுக்கோட்டை ரோடு, கும்பகோணம், தமிழ்நாடு",
     features: [
       "DTCP & RERA Approved Gated Layout",
       "30ft & 23ft Wide Black-top Roads",
@@ -76,75 +98,115 @@ export const COMPLETED: Project[] = [
       "Near Neelamangalam Main Road",
       "Arch Entrance & Street Lights",
     ],
-    // gallery: [img1, img2, img3],          // add image imports when ready
-    // layoutMapImage: layoutMapMahalakshmi, // add when ready
+    featuresTa: [
+      "DTCP & RERA அங்கீகரிக்கப்பட்ட பாதுகாப்பான கதவடைப்பு மனைப்பிரிவு",
+      "30 அடி மற்றும் 23 அடி அகல தார் சாலைகள்",
+      "24 மணி நேர பாதுகாப்பு வசதி",
+      "தனிநபர் மின்சார இணைப்பு (EB)",
+      "குடிநீர் வசதி",
+      "நன்கு வளர்ச்சியடைந்த குடியிருப்புப் பகுதி",
+      "நீலமங்கலம் பிரதான சாலை அருகில்",
+      "வடிவமைக்கப்பட்ட நுழைவு வளைவு & தெரு விளக்குகள்",
+    ],
   },
   {
     slug: "spm-garden",
     name: "SPM Garden",
+    nameTa: "SPM கார்டன்",
     location: "Kumbakonam",
+    locationTa: "கும்பகோணம்",
     description: "Thoughtfully designed layout with wide roads, greenery, and all essential amenities for comfortable community living.",
+    descriptionTa: "அகலமான சாலைகள், பசுமையான சூழல் மற்றும் வசதியான சமூக வாழ்க்கைக்குத் தேவையான அனைத்து அத்தியாவசிய வசதிகளுடன் வடிவமைக்கப்பட்ட மனைப்பிரிவு.",
     status: "Completed",
     imageLabel: "SPM Garden",
     highlight: "Fully Handed Over",
+    highlightTa: "முழுமையாக ஒப்படைக்கப்பட்டது",
     cta: "View Details",
+    ctaTa: "விவரங்களை காண்க",
     logo: spmLogo,
     address: "Pulavarnathan, Valangaiman Taluk, Kumbakonam, Tamil Nadu",
+    addressTa: "புலவர்நத்தம், வலங்கைமான் தாலுகா, கும்பகோணம், தமிழ்நாடு",
   },
   {
     slug: "sanjeeena-nagar",
     name: "Sanjeeena Nagar",
+    nameTa: "சஞ்சீனா நகர்",
     location: "Kumbakonam",
+    locationTa: "கும்பகோணம்",
     description: "DTCP approved residential plots in a prime location, offering families a secure and value-driven investment.",
+    descriptionTa: "முக்கிய இருப்பிடத்தில் அமைந்துள்ள DTCP அங்கீகரிக்கப்பட்ட குடியிருப்பு மனைகள், குடும்பங்களுக்கு பாதுகாப்பான மற்றும் மதிப்புமிக்க முதலீடு.",
     status: "Completed",
     imageLabel: "Sanjeeena Nagar",
     highlight: "100% Plots Sold",
+    highlightTa: "100% மனைகள் விற்கப்பட்டன",
     cta: "View Details",
+    ctaTa: "விவரங்களை காண்க",
     logo: senchinalogo,
     address: "Annalakshmipuram, Kumbakonam, Tamil Nadu",
+    addressTa: "அன்னலக்ஷ்மிபுரம், கும்பகோணம், தமிழ்நாடு",
   },
   {
     slug: "salith-nagar",
     name: "Salith Nagar",
+    nameTa: "ஸாலித் நகர்",
     location: "Kumbakonam",
+    locationTa: "கும்பகோணம்",
     description: "A serene plotted community offering excellent connectivity and clear legal title for every plot owner.",
+    descriptionTa: "சிறந்த போக்குவரத்து இணைப்பு மற்றும் ஒவ்வொரு மனை உரிமையாளருக்கும் தெளிவான சட்டப்பூர்வ ஆவணங்களை வழங்கும் அமைதியான குடியிருப்புப் பகுதி.",
     status: "Completed",
     imageLabel: "Salith Nagar",
     highlight: "Fully Handed Over",
+    highlightTa: "முழுமையாக ஒப்படைக்கப்பட்டது",
     cta: "View Details",
+    ctaTa: "விவரங்களை காண்க",
     logo: salith,
   },
   {
     slug: "kurinji-nagar",
     name: "Kurinji Nagar",
+    nameTa: "குறிஞ்சி நகர்",
     location: "Kumbakonam",
+    locationTa: "கும்பகோணம்",
     description: "A serene plotted community offering excellent connectivity and clear legal title for every plot owner.",
+    descriptionTa: "சிறந்த போக்குவரத்து இணைப்பு மற்றும் ஒவ்வொரு மனை உரிமையாளருக்கும் தெளிவான சட்டப்பூர்வ ஆவணங்களை வழங்கும் அமைதியான குடியிருப்புப் பகுதி.",
     status: "Completed",
     imageLabel: "Kurinji Nagar",
     highlight: "Fully Handed Over",
+    highlightTa: "முழுமையாக ஒப்படைக்கப்பட்டது",
     cta: "View Details",
+    ctaTa: "விவரங்களை காண்க",
     logo: kurinjilogo,
   },
   {
     slug: "pam-nagar",
     name: "PAM Nagar",
+    nameTa: "PAM நகர்",
     location: "Kumbakonam",
+    locationTa: "கும்பகோணம்",
     description: "A serene plotted community offering excellent connectivity and clear legal title for every plot owner.",
+    descriptionTa: "சிறந்த போக்குவரத்து இணைப்பு மற்றும் ஒவ்வொரு மனை உரிமையாளருக்கும் தெளிவான சட்டப்பூர்வ ஆவணங்களை வழங்கும் அமைதியான குடியிருப்புப் பகுதி.",
     status: "Completed",
     imageLabel: "PAM Nagar",
     highlight: "Fully Handed Over",
+    highlightTa: "முழுமையாக ஒப்படைக்கப்பட்டது",
     cta: "View Details",
+    ctaTa: "விவரங்களை காண்க",
     logo: pamlogo,
   },
   {
     slug: "mega-city",
     name: "Mega City",
+    nameTa: "மெகா சிட்டி",
     location: "Kumbakonam",
+    locationTa: "கும்பகோணம்",
     description: "A serene plotted community offering excellent connectivity and clear legal title for every plot owner.",
+    descriptionTa: "சிறந்த போக்குவரத்து இணைப்பு மற்றும் ஒவ்வொரு மனை உரிமையாளருக்கும் தெளிவான சட்டப்பூர்வ ஆவணங்களை வழங்கும் அமைதியான குடியிருப்புப் பகுதி.",
     status: "Completed",
     imageLabel: "Mega City",
     highlight: "Fully Handed Over",
+    highlightTa: "முழுமையாக ஒப்படைக்கப்பட்டது",
     cta: "View Details",
+    ctaTa: "விவரங்களை காண்க",
     logo: megacitylogo,
   },
 ];
@@ -153,15 +215,20 @@ export const ONGOING: Project[] = [
   {
     slug: "anugraha-avenue",
     name: "Anugraha Avenue",
+    nameTa: "அனுக்கிரஹா அவென்யூ",
     location: "Pudukkottai Main Road, Thanjavur",
-    description:
-      "DTCP & RERA approved premium gated community strategically located on the Thanjavur–Pudukkottai NH Road. Residential plots with modern infrastructure, water facilities, security, and excellent connectivity to educational institutions and hospitals.",
+    locationTa: "புதுக்கோட்டை மெயின் ரோடு, தஞ்சாவூர்",
+    description: "DTCP & RERA approved premium gated community strategically located on the Thanjavur–Pudukkottai NH Road. Residential plots with modern infrastructure, water facilities, security, and excellent connectivity to educational institutions and hospitals.",
+    descriptionTa: "தஞ்சாவூர்-புதுக்கோட்டை தேசிய நெடுஞ்சாலையில் மூலோபாய ரீதியாக அமைந்துள்ள DTCP & RERA அங்கீகரிக்கப்பட்ட பிரீமியம் கதவடைப்பு மனைப்பிரிவு. நவீன உள்கட்டமைப்பு, குடிநீர் வசதி, பாதுகாப்பு மற்றும் கல்வி நிறுவனங்கள் மற்றும் மருத்துவமனைகளுக்கு சிறந்த போக்குவரத்து இணைப்பு கொண்ட குடியிருப்பு மனைகள்.",
     status: "Ongoing",
     imageLabel: "Anugraha Avenue",
     highlight: "DTCP & RERA Approved Plots Available",
+    highlightTa: "DTCP & RERA அங்கீகரிக்கப்பட்ட மனைகள் விற்பனைக்கு உள்ளன",
     cta: "Enquire Now",
+    ctaTa: "இப்போதே விசாரிக்கவும்",
     logo: anugraghalogo,
     address: "Anugraha Avenue, Thanjavur–Pudukkottai Main Road, Tamil Nadu",
+    addressTa: "அனுக்கிரஹா அவென்யூ, தஞ்சாவூர்-புதுக்கோட்டை மெயின் ரோடு, தமிழ்நாடு",
     features: [
       "DTCP & RERA Approved Layout",
       "Located on Thanjavur–Pudukkottai NH Road",
@@ -176,7 +243,21 @@ export const ONGOING: Project[] = [
       "Arch Entrance & Well-Planned Infrastructure",
       "Close to Schools, Colleges & Hospitals",
     ],
-   gallery: [anugragha1, anugragha2, anugragha3, anugragha4, anugragha5, anugragha6, anugragha7, anugragha8, anugragha9],
+    featuresTa: [
+      "DTCP & RERA அங்கீகரிக்கப்பட்ட உள்கட்டமைப்பு",
+      "தஞ்சாவூர்-புதுக்கோட்டை தேசிய நெடுஞ்சாலையில் அமைந்துள்ளது",
+      "கிங்ஸ் கல்லூரி & முக்கிய கல்வி நிறுவனங்களுக்கு அருகில்",
+      "24 அடி, 30 அடி & 33 அடி அகல சாலைகள்",
+      "ஏற்கனவே வீடுகள் உள்ள சிறந்த குடியிருப்பு பகுதி",
+      "60,000 லிட்டர் கொள்ளளவு கொண்ட குடிநீர் வசதி",
+      "ஒவ்வொரு மனைக்கும் தனிநபர் மின்சார இணைப்பு (EB)",
+      "24×7 சுழற்சி முறை பாதுகாப்பு சேவை",
+      "முழு மனைப்பிரிவிலும் CCTV கேமரா கண்காணிப்பு",
+      "தண்ணீர் தேங்காத உயர்தர மேட்டு நிலம்",
+      "நுழைவு வளைவு & நன்கு திட்டமிடப்பட்ட கட்டமைப்பு",
+      "பள்ளிகள், கல்லூரிகள் & மருத்துவமனைகளுக்கு மிக அருகில்",
+    ],
+    gallery: [anugragha1, anugragha2, anugragha3, anugragha4, anugragha5, anugragha6, anugragha7, anugragha8, anugragha9],
     layoutMapImage: anugraghaLayout,
     layoutMapPdf: anugraghaLayout,
   },
@@ -186,23 +267,33 @@ export const UPCOMING: Project[] = [
   {
     slug: "london-city",
     name: "London City",
+    nameTa: "லண்டன் சிட்டி",
     location: "Kumbakonam",
+    locationTa: "கும்பகோணம்",
     description: "A landmark pre-launch development inspired by world-class planning, offering premium plots at early-bird pricing.",
+    descriptionTa: "உலகத்தரம் வாய்ந்த உள்கட்டமைப்பு திட்டமிடலால் ஈர்க்கப்பட்டு, ஆரம்பகால சலுகை விலையில் பிரீமியம் மனைகளை வழங்கும் ஒரு வரலாற்றுச் சிறப்புமிக்க புதிய மனைப்பிரிவு.",
     status: "Upcoming",
     imageLabel: "London City",
     highlight: "Pre-Launch — Register Interest",
+    highlightTa: "முன்பதிவு தொடங்குகிறது — உங்கள் விருப்பத்தை பதிவு செய்யவும்",
     cta: "Register Interest",
+    ctaTa: "விருப்பத்தை பதிவு செய்க",
     logo: megalogo,
   },
   {
     slug: "shanthi-nagar-virivakkam",
     name: "Shanthi Nagar Virivakkam",
+    nameTa: "சாந்தி நகர் விரிவாக்கம்",
     location: "Analagragharam, Kumbakonam",
+    locationTa: "அனலாக்ரஹாரம், கும்பகோணம்",
     description: "A peaceful upcoming layout in the growing Analagragharam belt — ideal for families and long-term investors.",
+    descriptionTa: "வளர்ந்து வரும் அனலாக்ரஹாரம் பகுதியில் அமையவிருக்கும் ஒரு அமைதியான குடியிருப்பு மனைப்பிரிவு — குடும்பங்களுக்கும் நீண்ட கால முதலீட்டாளர்களுக்கும் ஏற்றது.",
     status: "Upcoming",
     imageLabel: "Shanthi Nagar Virivakkam",
     highlight: "Coming Soon",
+    highlightTa: "விரைவில் வருகிறது",
     cta: "Register Interest",
+    ctaTa: "விருப்பத்தை பதிவு செய்க",
     logo: senchinalogo,
   },
 ];

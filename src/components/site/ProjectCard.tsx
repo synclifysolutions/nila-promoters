@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { MapPin, ArrowUpRight } from "lucide-react";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import type { Project } from "@/data/projects";
-import { statusConfig } from "@/lib/feature-icons";
+import { useLanguage } from "../../routes/__root";
 
 export type { Project };
 
@@ -17,8 +17,16 @@ const statusDot: Record<string, string> = {
 };
 
 export function ProjectCard({ p }: { p: Project }) {
-  const cfg = statusConfig[p.status];
+  const { t, language } = useLanguage();
   const dot = statusDot[p.status.toLowerCase()] ?? GOLD;
+
+  // Resolve dynamic content checking if localized properties exist in the data model
+  const localizedName = language === "ta" && p.nameTa ? p.nameTa : p.name;
+  const localizedLocation = language === "ta" && p.locationTa ? p.locationTa : p.location;
+  const localizedDescription = language === "ta" && p.descriptionTa ? p.descriptionTa : p.description;
+
+  // Resolve status dictionary configurations
+  const statusLabel = t(`projects.tab${p.status.charAt(0).toUpperCase() + p.status.slice(1).toLowerCase()}`);
 
   return (
     <motion.article
@@ -48,7 +56,6 @@ export function ProjectCard({ p }: { p: Project }) {
         className="relative overflow-hidden"
         style={{ aspectRatio: "4/3", background: "#F3F0EB" }}
       >
-        {/* Subtle inner vignette */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
@@ -61,7 +68,7 @@ export function ProjectCard({ p }: { p: Project }) {
           <div className="absolute inset-0 flex items-center justify-center p-10">
             <motion.img
               src={p.logo}
-              alt={`${p.name} logo`}
+              alt={`${localizedName} logo`}
               className="relative z-10 max-h-full max-w-full object-contain"
               whileHover={{ scale: 1.06 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -71,7 +78,7 @@ export function ProjectCard({ p }: { p: Project }) {
           <ImagePlaceholder label={p.imageLabel} className="absolute inset-0 rounded-none" />
         )}
 
-        {/* Gold shimmer sweep on hover */}
+        {/* Shimmer sweep */}
         <motion.div
           initial={{ x: "-130%" }}
           whileHover={{ x: "130%" }}
@@ -83,7 +90,7 @@ export function ProjectCard({ p }: { p: Project }) {
           }}
         />
 
-        {/* Status badge — top left, minimal */}
+        {/* Status badge */}
         <div
           className="absolute left-4 top-4 z-30 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] backdrop-blur-md"
           style={{
@@ -96,11 +103,11 @@ export function ProjectCard({ p }: { p: Project }) {
             className="h-1.5 w-1.5 rounded-full"
             style={{ background: dot, boxShadow: `0 0 6px ${dot}` }}
           />
-          {cfg.label}
+          {statusLabel}
         </div>
       </div>
 
-      {/* Gold underline that grows on hover */}
+      {/* Underline grow effect */}
       <div className="h-[2px] w-full overflow-hidden" style={{ background: "rgba(15,34,53,0.05)" }}>
         <motion.div
           className="h-full origin-left"
@@ -121,7 +128,7 @@ export function ProjectCard({ p }: { p: Project }) {
             className="text-[10px] font-bold uppercase tracking-[0.22em]"
             style={{ color: "rgba(15,34,53,0.38)" }}
           >
-            {p.location}
+            {localizedLocation}
           </span>
         </div>
 
@@ -130,7 +137,7 @@ export function ProjectCard({ p }: { p: Project }) {
           className="font-display text-[1.25rem] font-bold leading-snug"
           style={{ color: NAVY }}
         >
-          {p.name}
+          {localizedName}
         </h3>
 
         {/* Divider */}
@@ -144,7 +151,7 @@ export function ProjectCard({ p }: { p: Project }) {
           className="flex-1 text-[0.8125rem] leading-relaxed"
           style={{ color: "rgba(15,34,53,0.48)" }}
         >
-          {p.description}
+          {localizedDescription}
         </p>
 
         {/* CTA */}
@@ -164,7 +171,7 @@ export function ProjectCard({ p }: { p: Project }) {
               ((e.currentTarget as HTMLElement).style.color = NAVY)
             }
           >
-            {p.cta ?? "View Details"}
+            {language === "en" ? (p.cta ?? "View Details") : (p.ctaTa ?? "விவரங்களை காண்க")}
             <motion.span
               className="flex h-8 w-8 items-center justify-center rounded-full transition-colors duration-300"
               style={{

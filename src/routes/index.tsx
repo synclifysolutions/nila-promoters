@@ -26,6 +26,8 @@ import anugraha7 from "@/assets/logos/anugraha-7.jpg";
 import anugraha8 from "@/assets/logos/anugraha-8.jpg";
 import anugraha9 from "@/assets/logos/anugraha-9.jpg";
 
+import { useLanguage } from "./__root";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -71,6 +73,7 @@ type Particle = {
 
 /* ─── Popup Ad Component ─── */
 function AdPopup() {
+  const { t } = useLanguage();
   const [visible, setVisible] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
@@ -189,7 +192,6 @@ function AdPopup() {
               <X className="h-4 w-4" />
             </button>
 
-            {/* MOBILE: stack images vertically; DESKTOP: side by side */}
             <div className="flex flex-col sm:flex-row w-full" style={{ background: "#fff" }}>
               <motion.div
                 initial={{ x: 0, y: -40, opacity: 0 }} animate={{ x: 0, y: 0, opacity: 1 }}
@@ -214,10 +216,10 @@ function AdPopup() {
               className="flex gap-3 justify-center px-4 py-3"
               style={{ background: "#0F2235" }}
             >
-              <a href="tel:9629688133" className="flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all hover:scale-105" style={{ background: "#F9F4F1", color: "#0F2235" }}>📞 Call Now</a>
-              <a href="https://wa.me/919629688133" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all hover:scale-105" style={{ background: "#F9F4F1", color: "#0F2235" }}>💬 WhatsApp</a>
+              <a href="tel:9629688133" className="flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all hover:scale-105" style={{ background: "#F9F4F1", color: "#0F2235" }}>{t("ad.call")}</a>
+              <a href="https://wa.me/919629688133" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all hover:scale-105" style={{ background: "#F9F4F1", color: "#0F2235" }}>{t("ad.whatsapp")}</a>
             </motion.div>
-            <div onClick={close} className="py-2 text-center text-xs cursor-pointer select-none" style={{ background: "#fff", color: "#999" }}>Close</div>
+            <div onClick={close} className="py-2 text-center text-xs cursor-pointer select-none" style={{ background: "#fff", color: "#999" }}>{t("ad.close")}</div>
           </motion.div>
         </motion.div>
       )}
@@ -227,6 +229,7 @@ function AdPopup() {
 
 /* ─── Fullscreen Lightbox ─── */
 function Lightbox({ images, startIndex, onClose }: { images: typeof GALLERY_IMAGES; startIndex: number; onClose: () => void }) {
+  const { t } = useLanguage();
   const [current, setCurrent] = useState(startIndex);
 
   const prev = useCallback(() => setCurrent((c) => (c - 1 + images.length) % images.length), [images.length]);
@@ -265,7 +268,6 @@ function Lightbox({ images, startIndex, onClose }: { images: typeof GALLERY_IMAG
           {current + 1} / {images.length}
         </div>
 
-        {/* Smaller nav buttons on mobile */}
         <button
           onClick={(e) => { e.stopPropagation(); prev(); }}
           className="absolute left-2 sm:left-8 flex h-10 w-10 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-all hover:scale-110 z-10"
@@ -323,12 +325,11 @@ function Lightbox({ images, startIndex, onClose }: { images: typeof GALLERY_IMAG
           ))}
         </div>
 
-        {/* Hide keyboard hint on mobile */}
         <div
           className="absolute bottom-6 right-6 text-xs font-medium px-3 py-1.5 rounded-full hidden sm:block"
           style={{ background: "rgba(249,244,241,0.08)", color: "rgba(249,244,241,0.4)", border: "1px solid rgba(249,244,241,0.12)" }}
         >
-          ← → keys to navigate · Esc to close
+          {t("gallery.hint")}
         </div>
       </motion.div>
     </AnimatePresence>
@@ -337,6 +338,7 @@ function Lightbox({ images, startIndex, onClose }: { images: typeof GALLERY_IMAG
 
 /* ─── Infinite Scroll Gallery ─── */
 function InfiniteGallery() {
+  const { t } = useLanguage();
   const [paused, setPaused] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -386,10 +388,10 @@ function InfiniteGallery() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-3 left-1/2 -translate-x-1/2 z-20 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-widest pointer-events-none"
+              className="absolute top-3 left-1/2 -translate-x-1/2 z-20 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] pointer-events-none text-center"
               style={{ background: "rgba(15,34,53,0.80)", color: "#E8C77E", backdropFilter: "blur(8px)", border: "1px solid rgba(232,199,126,0.25)" }}
             >
-              Click to open · Arrow keys to navigate
+              {t("gallery.pausedHint")}
             </motion.div>
           )}
         </AnimatePresence>
@@ -405,7 +407,6 @@ function InfiniteGallery() {
                 onClick={() => setLightboxIndex(realIndex)}
                 className="relative overflow-hidden rounded-xl sm:rounded-2xl shrink-0"
                 style={{
-                  /* Smaller on mobile: 260px vs 380px on desktop */
                   width: "clamp(220px, 45vw, 380px)",
                   height: "clamp(155px, 32vw, 270px)",
                   border: "1px solid rgba(15,34,53,0.12)",
@@ -466,14 +467,8 @@ function useCountUp(target: number, duration = 2000) {
   return { count, ref };
 }
 
-const statsData = [
-  { value: 2000, suffix: "+", label: "Happy Families"     },
-  { value: 10,  suffix: "+", label: "Projects Delivered" },
-  { value: 5,   suffix: "+", label: "Years of Trust"     },
-  { value: 100, suffix: "%", label: "Clear Title Plots"  },
-];
-
-function StatItem({ value, suffix, label, index, dark }: (typeof statsData)[0] & { index: number; dark?: boolean }) {
+function StatItem({ value, suffix, labelKey, index, dark }: { value: number; suffix: string; labelKey: string; index: number; dark?: boolean }) {
+  const { t } = useLanguage();
   const { count, ref } = useCountUp(value, 2000 + index * 150);
   return (
     <motion.div
@@ -485,25 +480,47 @@ function StatItem({ value, suffix, label, index, dark }: (typeof statsData)[0] &
       className="flex flex-col items-center gap-2 text-center py-5 sm:py-6"
     >
       <div className="flex items-end leading-none">
-        {/* Responsive font size: smaller on mobile */}
         <span className="font-display text-4xl sm:text-6xl md:text-7xl font-bold tabular-nums" style={{ color: dark ? "#F9F4F1" : "#0F2235" }}>{count}</span>
         <span className="font-display text-2xl sm:text-4xl md:text-5xl font-bold mb-1" style={{ color: "#1B3650" }}>{suffix}</span>
       </div>
-      <span className="text-[10px] sm:text-sm font-semibold uppercase tracking-[0.18em] sm:tracking-[0.2em]" style={{ color: dark ? "rgba(249,244,241,0.5)" : "rgba(15,34,53,0.45)" }}>{label}</span>
+      <span className="text-[10px] sm:text-sm font-semibold uppercase tracking-[0.18em] sm:tracking-[0.2em]" style={{ color: dark ? "rgba(249,244,241,0.5)" : "rgba(15,34,53,0.45)" }}>{t(labelKey)}</span>
     </motion.div>
   );
 }
 
 /* ═══════════════════════════════════════════
-   PAGE
+    MAIN HOME PAGE COMPONENT
 ═══════════════════════════════════════════ */
 function HomePage() {
+  const { t } = useLanguage();
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   const heroY       = useTransform(scrollY, [0, 700], [0, 140]);
   const heroScale   = useTransform(scrollY, [0, 700], [1, 1.1]);
   const heroOpacity = useTransform(scrollY, [0, 500], [1, 0.25]);
   const textY       = useTransform(scrollY, [0, 400], [0, 55]);
+
+  const statsData = [
+    { value: 2000, suffix: "+", labelKey: "stats.families" },
+    { value: 10,   suffix: "+", labelKey: "stats.projects" },
+    { value: 5,    suffix: "+", labelKey: "stats.years" },
+    { value: 100,  suffix: "%", labelKey: "stats.titles" },
+  ];
+
+  const features = [
+    { Icon: ShieldCheck, titleKey: "why.f1.title", descKey: "why.f1.desc" },
+    { Icon: FileCheck2,  titleKey: "why.f2.title", descKey: "why.f2.desc" },
+    { Icon: MapPin,      titleKey: "why.f3.title", descKey: "why.f3.desc" },
+    { Icon: Wallet,      titleKey: "why.f4.title", descKey: "why.f4.desc" },
+    { Icon: Award,       titleKey: "why.f5.title", descKey: "why.f5.desc" },
+    { Icon: Eye,         titleKey: "why.f6.title", descKey: "why.f6.desc" },
+  ];
+
+  const testimonials = [
+    { n: t("reviews.r1.name"), l: t("reviews.r1.loc"), q: t("reviews.r1.quote"), rating: 5 },
+    { n: t("reviews.r2.name"), l: t("reviews.r2.loc"), q: t("reviews.r2.quote"), rating: 5 },
+    { n: t("reviews.r3.name"), l: t("reviews.r3.loc"), q: t("reviews.r3.quote"), rating: 5 },
+  ];
 
   return (
     <>
@@ -534,11 +551,11 @@ function HomePage() {
           >
             <span className="h-px w-6 sm:w-10" style={{ background: "#F9F4F1" }} />
             <span className="rounded-full px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.22em] sm:tracking-[0.28em] backdrop-blur-md" style={{ border: "1px solid rgba(232,199,126,0.55)", background: "rgba(15,34,53,0.55)", color: "#F9F4F1", boxShadow: "0 4px 20px rgba(0,0,0,0.45)" }}>
-              DTCP · RERA Approved · Est. 2020
+              {t("hero.badge")}
             </span>
           </motion.div>
 
-          {/* Hero heading — tighter on mobile */}
+          {/* Hero heading */}
           <h1 className="font-hero font-bold leading-[1.02] text-white">
             <div className="overflow-visible">
               <motion.div
@@ -547,7 +564,7 @@ function HomePage() {
                 className="text-[34px] sm:text-5xl md:text-7xl lg:text-[82px] leading-tight"
                 style={{ textShadow: "0 2px 8px rgba(0,0,0,0.55)" }}
               >
-                Where Your Dream Begins with
+                {t("hero.title")}
               </motion.div>
             </div>
             <div className="overflow-visible">
@@ -570,7 +587,7 @@ function HomePage() {
             className="mt-5 sm:mt-7 max-w-lg border-l-2 pl-4 sm:pl-5 text-sm sm:text-base leading-relaxed md:text-[17px]"
             style={{ color: "rgba(249,244,241,0.92)", borderColor: "rgba(168,196,205,0.55)", textShadow: "0 1px 6px rgba(0,0,0,0.55)" }}
           >
-            Premium DTCP &amp; RERA-approved plots for families who demand clear titles, prime locations, and absolute transparency.
+            {t("hero.desc")}
           </motion.p>
 
           <motion.div
@@ -579,20 +596,19 @@ function HomePage() {
             className="mt-7 sm:mt-10 flex flex-wrap items-center gap-3 sm:gap-4"
           >
             <Link to="/projects" className="group flex items-center gap-2 rounded-full px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold text-white shadow-lg transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #0F2235 0%, #1B3650 100%)", boxShadow: "0 4px 24px rgba(15,34,53,0.5)" }}>
-              Explore Projects <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              {t("hero.btnExplore")} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link to="/contact" className="flex items-center gap-2 rounded-full px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold backdrop-blur transition-all hover:scale-105" style={{ border: "1px solid rgba(249,244,241,0.45)", background: "rgba(249,244,241,0.10)", color: "#F9F4F1" }}>
-              Book a Site Visit
+              {t("hero.btnVisit")}
             </Link>
           </motion.div>
 
-          {/* Trust badges — wrap to 2 per row on mobile */}
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ delay: 1.75, duration: 0.8 }}
             className="mt-6 sm:mt-10 flex flex-wrap gap-2"
           >
-            {["DTCP Approved", "RERA Certified", "100% Clear Title", "No Hidden Charges"].map((b) => (
+            {[t("trust.dtcp"), t("trust.rera"), t("trust.title"), t("trust.charges")].map((b) => (
               <span key={b} className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] sm:text-xs font-medium backdrop-blur" style={{ border: "1px solid rgba(249,244,241,0.22)", background: "rgba(249,244,241,0.08)", color: "rgba(249,244,241,0.78)" }}>
                 <span className="h-1.5 w-1.5 rounded-full" style={{ background: "#F9F4F1" }} />
                 {b}
@@ -605,7 +621,7 @@ function HomePage() {
           <motion.div animate={{ y: [0, 9, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
             <ChevronDown className="h-6 w-6" style={{ color: "rgba(249,244,241,0.5)" }} />
           </motion.div>
-          <span className="text-[10px] font-medium uppercase tracking-[0.28em]" style={{ color: "rgba(249,244,241,0.4)" }}>Scroll</span>
+          <span className="text-[10px] font-medium uppercase tracking-[0.28em]" style={{ color: "rgba(249,244,241,0.4)" }}>{t("hero.scroll")}</span>
         </motion.div>
       </section>
 
@@ -621,21 +637,19 @@ function HomePage() {
         <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(15,34,53,0.06) 3px, transparent 3px)", backgroundSize: "26px 26px" }} />
         <div className="relative mx-auto max-w-5xl px-5 sm:px-6">
           <Reveal className="mb-10 sm:mb-16 text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.35em]" style={{ color: "#E8C77E" }}>Our Track Record</span>
-            <h2 className="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "#0F2235" }}>Numbers That Speak Trust</h2>
+            <span className="text-xs font-semibold uppercase tracking-[0.35em]" style={{ color: "#E8C77E" }}>{t("stats.sub")}</span>
+            <h2 className="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "#0F2235" }}>{t("stats.title")}</h2>
           </Reveal>
-          {/* 2x2 on mobile, 4 across on md+ */}
           <div className="grid grid-cols-2 md:grid-cols-4">
             {statsData.map((s, i) => (
-              <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }} className="relative">
-                {/* Vertical divider: after col 1 on mobile (every 2nd), after col 1/2/3 on md */}
+              <motion.div key={s.labelKey} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }} className="relative">
                 {(i === 1 || i === 3) && (
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 h-10 w-px md:hidden" style={{ background: "rgba(15,34,53,0.1)" }} />
                 )}
                 {i > 0 && (
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 hidden h-12 w-px md:block" style={{ background: "rgba(15,34,53,0.1)" }} />
                 )}
-                <StatItem {...s} index={i} dark={false} />
+                <StatItem value={s.value} suffix={s.suffix} labelKey={s.labelKey} index={i} dark={false} />
               </motion.div>
             ))}
           </div>
@@ -653,25 +667,17 @@ function HomePage() {
       >
         <div className="mx-auto max-w-7xl px-5 sm:px-6">
           <Reveal className="mb-10 sm:mb-14 text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#F9F4F1" }}>Our Promise</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#F9F4F1" }}>{t("why.sub")}</span>
             <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white">
-              Why Families Trust{" "}<span style={{ color: "#E8C77E" }}>Nila Promoters</span>
+              {t("why.title1")}{" "}<span style={{ color: "#E8C77E" }}>Nila Promoters</span>
             </h2>
           </Reveal>
-          {/* 1 col on mobile, 2 on sm, 3 on lg */}
           <Stagger className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { Icon: ShieldCheck, t: "DTCP & RERA Approved",   d: "Every layout cleared by Tamil Nadu's town planning and real-estate regulators." },
-              { Icon: FileCheck2,  t: "100% Clear Title",        d: "Legally verified, encumbrance-free documents on every single plot we sell." },
-              { Icon: MapPin,      t: "Prime Locations",         d: "Hand-picked micro-markets across Kumbakonam with the strongest growth fundamentals." },
-              { Icon: Wallet,      t: "Flexible Payment Plans",  d: "Tailored installment structures that fit family budgets — no hidden charges." },
-              { Icon: Award,       t: "Trusted Since 2020",      d: "Five years of consistent delivery and 500+ families who chose us as their partner." },
-              { Icon: Eye,         t: "Transparent Dealings",    d: "What we promise on paper is exactly what we deliver on the ground." },
-            ].map(({ Icon, t, d }, i) => {
+            {features.map(({ Icon, titleKey, descKey }, i) => {
               const isDark = i % 2 === 0;
               return (
                 <motion.div
-                  key={t}
+                  key={titleKey}
                   variants={itemVariants}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -684,8 +690,8 @@ function HomePage() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: isDark ? "rgba(249,244,241,0.14)" : "rgba(249,244,241,0.12)", color: "#F9F4F1" }}>
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-4 font-display text-lg sm:text-xl font-bold" style={{ color: "#ffffff" }}>{t}</h3>
-                  <p className="mt-2 text-sm leading-relaxed" style={{ color: isDark ? "rgba(249,244,241,0.58)" : "rgba(249,244,241,0.45)" }}>{d}</p>
+                  <h3 className="mt-4 font-display text-lg sm:text-xl font-bold" style={{ color: "#ffffff" }}>{t(titleKey)}</h3>
+                  <p className="mt-2 text-sm leading-relaxed" style={{ color: isDark ? "rgba(249,244,241,0.58)" : "rgba(249,244,241,0.45)" }}>{t(descKey)}</p>
                 </motion.div>
               );
             })}
@@ -706,17 +712,16 @@ function HomePage() {
           <Reveal className="mb-10 sm:mb-16 text-center">
             <div className="inline-flex items-center gap-3 mb-4">
               <span className="h-px w-8" style={{ background: "#1B3650" }} />
-              <span className="text-xs font-semibold uppercase tracking-[0.35em]" style={{ color: "#1B3650" }}>Portfolio</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.35em]" style={{ color: "#1B3650" }}>{t("portfolio.sub")}</span>
               <span className="h-px w-8" style={{ background: "#1B3650" }} />
             </div>
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold" style={{ color: "#0F2235" }}>
-              Our Signature{" "}<span className="italic" style={{ color: "#E8C77E" }}>Projects</span>
+              {t("portfolio.title1")}{" "}<span className="italic" style={{ color: "#E8C77E" }}>{t("portfolio.title2")}</span>
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-sm" style={{ color: "rgba(15,34,53,0.55)" }}>
-              A curated selection of layouts that define quality, trust, and lasting value.
+              {t("portfolio.desc")}
             </p>
           </Reveal>
-          {/* 1 col on mobile, 2 on sm, 3 on lg */}
           <Stagger className="grid gap-5 sm:gap-7 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <ProjectCard p={{ ...COMPLETED[0], logo: mahalakshmilogo }} />
             <ProjectCard p={{ ...ONGOING[0],   logo: anugraghalogo }} />
@@ -728,7 +733,7 @@ function HomePage() {
               className="inline-flex items-center gap-2 rounded-full px-6 sm:px-7 py-3 text-sm font-semibold transition-all hover:scale-105"
               style={{ border: "2px solid #1B3650", color: "#0F2235" }}
             >
-              View All Projects <ArrowRight className="h-4 w-4" />
+              {t("portfolio.btnViewAll")} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -747,14 +752,14 @@ function HomePage() {
           <Reveal className="text-center">
             <div className="inline-flex items-center gap-3 mb-4">
               <span className="h-px w-8" style={{ background: "#1B3650" }} />
-              <span className="text-xs font-semibold uppercase tracking-[0.35em]" style={{ color: "#1B3650" }}>Site Gallery</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.35em]" style={{ color: "#1B3650" }}>{t("gallery.sub")}</span>
               <span className="h-px w-8" style={{ background: "#1B3650" }} />
             </div>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "#0F2235" }}>
-              Glimpses from the{" "}<span className="italic" style={{ color: "#E8C77E" }}>Ground</span>
+              {t("gallery.title1")}{" "}<span className="italic" style={{ color: "#E8C77E" }}>{t("gallery.title2")}</span>
             </h2>
             <p className="mx-auto mt-3 max-w-md text-xs sm:text-sm" style={{ color: "rgba(15,34,53,0.5)" }}>
-              Hover to pause · Click any photo to view fullscreen
+              {t("gallery.desc")}
             </p>
           </Reveal>
         </div>
@@ -779,22 +784,17 @@ function HomePage() {
           <Reveal className="mb-12 sm:mb-16 text-center">
             <div className="inline-flex items-center gap-3 mb-4">
               <span className="h-px w-8" style={{ background: "#E8C77E" }} />
-              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>Voices of Trust</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E" }}>{t("reviews.sub")}</span>
               <span className="h-px w-8" style={{ background: "#E8C77E" }} />
             </div>
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white">
-              What Our{" "}<span className="italic" style={{ color: "#E8C77E" }}>Families</span>{" "}Say
+              {t("reviews.title1")}{" "}<span className="italic" style={{ color: "#E8C77E" }}>{t("reviews.title2")}</span>{" "}{t("reviews.title3")}
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-sm" style={{ color: "rgba(249,244,241,0.55)" }}>Over 500 families have trusted us with their most important investment.</p>
+            <p className="mx-auto mt-4 max-w-xl text-sm" style={{ color: "rgba(249,244,241,0.55)" }}>{t("reviews.desc")}</p>
           </Reveal>
 
-          {/* 1 col on mobile, 3 on md */}
           <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">
-            {[
-              { n: "Ramesh Kumar", l: "Kumbakonam", q: "From documentation to registration, Nila Promoters made the entire process effortless. My plot in Mahalakshmi Nagar was the best decision for my family.", rating: 5 },
-              { n: "Lakshmi Priya", l: "Senchina",  q: "True to their word on every commitment. The Sanjana Nagar layout is exactly as promised — clear titles, wide roads, peaceful location.", rating: 5 },
-              { n: "Suresh Babu",  l: "Thanjavur",  q: "I evaluated five developers before choosing Nila. Their transparency and DTCP approvals stood out. Couldn't be happier.", rating: 5 },
-            ].map((t, i) => (
+            {testimonials.map((t, i) => (
               <motion.div
                 key={t.n}
                 initial={{ opacity: 0, y: 40 }}
@@ -824,7 +824,7 @@ function HomePage() {
                     </div>
                   </div>
                   <div className="ml-auto shrink-0">
-                    <div className="text-xs font-semibold px-2 sm:px-2.5 py-1 rounded-full" style={{ background: "rgba(249,244,241,0.12)", color: "#F9F4F1", border: "1px solid rgba(249,244,241,0.25)" }}>Verified</div>
+                    <div className="text-xs font-semibold px-2 sm:px-2.5 py-1 rounded-full" style={{ background: "rgba(249,244,241,0.12)", color: "#F9F4F1", border: "1px solid rgba(249,244,241,0.25)" }}>{useLanguage().language === "en" ? "Verified" : "சரிபார்க்கப்பட்டது"}</div>
                   </div>
                 </div>
               </motion.div>
@@ -838,10 +838,10 @@ function HomePage() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-10 sm:mt-14 flex flex-wrap items-center justify-center gap-6 sm:gap-8"
           >
-            {[{ value: "500+", label: "Happy Families" }, { value: "5★", label: "Average Rating" }, { value: "100%", label: "Verified Reviews" }].map((s) => (
-              <div key={s.label} className="flex items-center gap-3">
+            {[{ value: "500+", labelKey: "stats.families" }, { value: "5★", labelKey: "reviews.avg" }, { value: "100%", labelKey: "reviews.verified" }].map((s) => (
+              <div key={s.labelKey} className="flex items-center gap-3">
                 <div className="text-xl sm:text-2xl font-bold font-display" style={{ color: "#F9F4F1" }}>{s.value}</div>
-                <div className="text-[10px] sm:text-xs uppercase tracking-widest" style={{ color: "rgba(249,244,241,0.4)" }}>{s.label}</div>
+                <div className="text-[10px] sm:text-xs uppercase tracking-widest" style={{ color: "rgba(249,244,241,0.4)" }}>{t(s.labelKey)}</div>
               </div>
             ))}
           </motion.div>
@@ -862,19 +862,19 @@ function HomePage() {
         </div>
         <div className="relative mx-auto max-w-4xl px-5 sm:px-6 text-center">
           <Reveal>
-            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}>Take the Next Step</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "#E8C77E", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}>{t("cta.sub")}</span>
             <h2 className="mt-4 font-display text-2xl sm:text-3xl md:text-5xl font-bold text-white" style={{ textShadow: "0 2px 6px rgba(0,0,0,0.75)" }}>
-              Ready to Own Your Dream Plot in{" "}<span className="italic" style={{ color: "#E8C77E" }}>Kumbakonam?</span>
+              {t("cta.title1")}{" "}<span className="italic" style={{ color: "#E8C77E" }}>{t("cta.title2")}</span>
             </h2>
             <p className="mx-auto mt-4 sm:mt-5 max-w-xl text-sm sm:text-base md:text-lg" style={{ color: "rgba(249,244,241,0.95)", textShadow: "0 2px 6px rgba(0,0,0,0.7)" }}>
-              Schedule a complimentary site visit. Walk the land, ask every question, and decide with complete confidence.
+              {t("cta.desc")}
             </p>
             <div className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
               <Link to="/contact" className="inline-flex items-center gap-2 rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-semibold shadow-lg transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #E8C77E 0%, #d4ad57 100%)", color: "#0F2235", boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}>
-                Book a Site Visit Today <ArrowRight className="h-4 w-4" />
+                {t("cta.btnVisit")} <ArrowRight className="h-4 w-4" />
               </Link>
               <Link to="/projects" className="inline-flex items-center gap-2 rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-semibold backdrop-blur transition-all hover:scale-105" style={{ border: "2px solid rgba(249,244,241,0.5)", color: "#F9F4F1" }}>
-                View All Projects
+                {t("cta.btnView")}
               </Link>
             </div>
           </Reveal>
