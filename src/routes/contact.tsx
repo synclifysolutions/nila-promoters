@@ -5,6 +5,7 @@ import {
   Phone, MessageCircle, MapPin, Clock, Mail, Send, ArrowRight, ArrowUpRight, Loader2, CheckCircle, AlertCircle
 } from "lucide-react";
 import { ALL_PROJECTS } from "@/data/projects";
+import { sendContact } from "@/utils/send-contact";
 
 import { useLanguage } from "./__root";
 
@@ -53,32 +54,40 @@ function ContactPage() {
     setSubmitStatus("idle");
 
     // Capture all named form fields into a key-value data structure automatically
-    const formData = new FormData(formRef.current);
+   try {
 
-    try {
-      // Formspree endpoint from image_ddf440.png
-      const FORMSPREE_ENDPOINT = "https://formspree.io/f/xbdvdwrp";
+const formData = new FormData(formRef.current);
 
-      const response = await fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
+await sendContact({
+  data: {
+    name: String(formData.get("Name")),
+    phone: String(formData.get("Phone")),
+    email: String(formData.get("Email Address") || ""),
+    project: String(formData.get("Project Interest")),
+    message: String(formData.get("Message Content") || ""),
+  },
+});
 
-      if (response.ok) {
-        setSubmitStatus("success");
-        formRef.current.reset(); // Clear input elements securely
-      } else {
-        setSubmitStatus("error");
-      }
-    } catch (error) {
-      console.error("Formspree submission failed:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
+
+setSubmitStatus("success");
+
+
+formRef.current.reset();
+
+
+}
+catch(error){
+
+console.error(error);
+
+setSubmitStatus("error");
+
+}
+finally{
+
+setIsSubmitting(false);
+
+}
   };
 
   return (
