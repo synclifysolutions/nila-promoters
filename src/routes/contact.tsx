@@ -127,7 +127,7 @@ function ContactPage() {
               <QuickLink icon={MessageCircle} label={t("contact.linkWa")}   value="82206 51747"   href="https://wa.me/918220651747" external />
             </div>
             <div style={{ background: "rgba(249,244,241,0.06)" }}>
-              <QuickLink icon={Mail}          label={t("contact.linkMail")}     value="contact@nilapromoters.com"   href="mailto:contact@nilapromoters.com" />
+              <QuickLink icon={Mail}          label={t("contact.linkMail")}     value="nilapromoters2020@gmail.com"   href="mailto:nilapromoters2020@gmail.com" />
             </div>
           </FadeIn>
         </div>
