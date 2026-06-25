@@ -7,8 +7,8 @@ import {
 } from "lucide-react";
 import nilahero4 from "@/assets/nila-hero4.jpg";
 import nilahero1 from "@/assets/nila-hero1.jpg";
-import nilaAd1 from "@/assets/nila_ad_1.png";
-import nilaAd2 from "@/assets/nila_ad_2.png";
+import nilaAd1 from "@/assets/nila_ad_1.webp";
+import nilaAd2 from "@/assets/nila_ad_2.webp";
 import { Reveal, Stagger, itemVariants } from "@/components/site/Reveal";
 import { ProjectCard } from "@/components/site/ProjectCard";
 import { COMPLETED, ONGOING, UPCOMING } from "@/lib/projects";

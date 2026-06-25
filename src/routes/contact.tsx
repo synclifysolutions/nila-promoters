@@ -5,7 +5,6 @@ import {
   Phone, MessageCircle, MapPin, Clock, Mail, Send, ArrowRight, ArrowUpRight, Loader2, CheckCircle, AlertCircle
 } from "lucide-react";
 import { ALL_PROJECTS } from "@/data/projects";
-import { sendContact } from "@/utils/send-contact";
 
 import { useLanguage } from "./__root";
 
@@ -53,41 +52,47 @@ function ContactPage() {
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
-    // Capture all named form fields into a key-value data structure automatically
-   try {
+    // Gather text parameter elements cleanly by reference
+    const formEl = formRef.current;
+    const nameVal = (formEl.elements.namedItem("customer_name") as HTMLInputElement)?.value;
+    const phoneVal = (formEl.elements.namedItem("customer_phone") as HTMLInputElement)?.value;
+    const emailVal = (formEl.elements.namedItem("customer_email") as HTMLInputElement)?.value;
+    const projectVal = (formEl.elements.namedItem("customer_project") as HTMLSelectElement)?.value;
+    const messageVal = (formEl.elements.namedItem("customer_message") as HTMLTextAreaElement)?.value;
 
-const formData = new FormData(formRef.current);
+    const formData = new FormData();
+    // Trim keys to remove any possible copy-paste trailing spaces securely
+    formData.append("access_key", "e42d5b88-63b6-4a56-9e72-35eadbf30ffe".trim());
+    formData.append("name", nameVal || "Anonymous");
+    formData.append("phone", phoneVal || "Not provided");
+    formData.append("email", emailVal || "");
+    formData.append("project_interest", projectVal || "General Inquiry");
+    formData.append("message", messageVal || "No requirements left");
+    
+    formData.append("subject", "New Plot Enquiry - Nila Promoters Website");
+    formData.append("from_name", "Nila Promoters Automated System");
 
-await sendContact({
-  data: {
-    name: String(formData.get("Name")),
-    phone: String(formData.get("Phone")),
-    email: String(formData.get("Email Address") || ""),
-    project: String(formData.get("Project Interest")),
-    message: String(formData.get("Message Content") || ""),
-  },
-});
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
 
+      const data = await response.json();
 
-setSubmitStatus("success");
-
-
-formRef.current.reset();
-
-
-}
-catch(error){
-
-console.error(error);
-
-setSubmitStatus("error");
-
-}
-finally{
-
-setIsSubmitting(false);
-
-}
+      if (data.success) {
+        setSubmitStatus("success");
+        formEl.reset();
+      } else {
+        console.error("Web3Forms API Response Flagged Error:", data);
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Network request failed:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -122,7 +127,7 @@ setIsSubmitting(false);
               <QuickLink icon={MessageCircle} label={t("contact.linkWa")}   value="82206 51747"   href="https://wa.me/918220651747" external />
             </div>
             <div style={{ background: "rgba(249,244,241,0.06)" }}>
-              <QuickLink icon={Mail}          label={t("contact.linkMail")}     value="nilapromoters2020@gmail.com"   href="mailto:nilapromoters2020@gmail.com" />
+              <QuickLink icon={Mail}          label={t("contact.linkMail")}     value="contact@nilapromoters.com"   href="mailto:contact@nilapromoters.com" />
             </div>
           </FadeIn>
         </div>
@@ -146,20 +151,20 @@ setIsSubmitting(false);
               </p>
 
               <form ref={formRef} onSubmit={handleFormSubmit} className="mt-7 sm:mt-9 grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2">
-                <Field label={t("contact.fName")}    name="Name"  required />
-                <Field label={t("contact.fPhone")} name="Phone" type="tel" required />
-                <Field label={t("contact.fEmail")}        name="Email Address" type="email" className="sm:col-span-2" />
+                <Field label={t("contact.fName")}    name="customer_name"  required />
+                <Field label={t("contact.fPhone")} name="customer_phone" type="tel" required />
+                <Field label={t("contact.fEmail")}        name="customer_email" type="email" className="sm:col-span-2" />
 
                 <div className="sm:col-span-2 flex flex-col gap-1.5">
                   <label className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(15,34,53,0.5)" }}>{t("contact.fInterest")}</label>
                   <select
-                    name="Project Interest"
+                    name="customer_project"
                     className="rounded-xl px-4 py-3.5 text-sm outline-none transition-colors"
                     style={{ border: "1px solid rgba(15,34,53,0.14)", background: "#fff", color: "#0F2235" }}
                     onFocus={(e) => (e.currentTarget.style.borderColor = "#1B3650")}
                     onBlur={(e)  => (e.currentTarget.style.borderColor = "rgba(15,34,53,0.14)")}
                   >
-                    <option value="General Inquiry">{t("contact.optGeneral")}</option>
+                    <option value="General Consultation">{t("contact.optGeneral")}</option>
                     {ALL_PROJECTS.map((p) => <option key={p.name} value={p.name}>{p.name}</option>)}
                   </select>
                 </div>
@@ -167,7 +172,7 @@ setIsSubmitting(false);
                 <div className="sm:col-span-2 flex flex-col gap-1.5">
                   <label className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(15,34,53,0.5)" }}>{t("contact.fMsg")}</label>
                   <textarea
-                    name="Message Content"
+                    name="customer_message"
                     rows={4}
                     placeholder={t("contact.fMsgPlaceholder")}
                     className="rounded-xl px-4 py-3.5 text-sm outline-none transition-colors"

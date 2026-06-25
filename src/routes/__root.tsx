@@ -427,23 +427,32 @@ const translations: Record<Language, Record<string, string>> = {
 };
 
 function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('site_lang');
-      return (saved === 'en' || saved === 'ta') ? saved : 'en';
+  // 1. Keep the initialization simple to match the server baseline
+  const [language, setLanguage] = useState<Language>('en');
+  const [mounted, setMounted] = useState(false);
+
+  // 2. Synchronize your localStorage values securely safely after mount
+  useEffect(() => {
+    const saved = localStorage.getItem('site_lang');
+    if (saved === 'en' || saved === 'ta') {
+      setLanguage(saved);
     }
-    return 'en';
-  });
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem('site_lang', language);
-  }, [language]);
+    if (mounted) {
+      localStorage.setItem('site_lang', language);
+    }
+  }, [language, mounted]);
 
   const toggleLanguage = () => {
     setLanguage(prev => (prev === 'en' ? 'ta' : 'en'));
   };
 
   const t = (key: string): string => {
+    // If not mounted yet, default to English to match server HTML strings precisely
+    if (!mounted) return translations['en']?.[key] || key;
     return translations[language]?.[key] || translations['en']?.[key] || key;
   };
 
@@ -540,7 +549,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function InnerHtmlShell({ children }: { children: ReactNode }) {
   const { language } = useLanguage();
   return (
-    <html lang={language}>
+    <html lang={language} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
