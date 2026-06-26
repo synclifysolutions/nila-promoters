@@ -41,14 +41,28 @@ export function Navbar() {
             boxShadow: scrolled ? "0 8px 32px rgba(0,0,0,0.3)" : "none",
           }}
         >
-          {/* Logo — slightly smaller on mobile */}
-          <Link to="/" className="flex shrink-0 items-center">
+          {/* Logo + Company name — visible on all screens, scales down on mobile */}
+          <Link to="/" className="flex min-w-0 shrink items-center gap-1.5 sm:gap-3">
             <img
               src={nilaLogo}
               alt="Nila Promoters"
-              className="h-8 w-auto object-contain sm:h-10 md:h-11"
+              className="h-7 w-auto shrink-0 object-contain sm:h-10 md:h-11"
               style={{ filter: "drop-shadow(0 1px 6px rgba(0,0,0,0.7))" }}
             />
+            <div className="flex min-w-0 flex-col leading-tight">
+              <span
+                className="truncate text-[11.5px] font-semibold tracking-wide sm:text-[15px] md:text-[17px]"
+                style={{ color: "#F9F4F1" }}
+              >
+                NILA PROMOTERS
+              </span>
+              <span
+                className="hidden truncate text-[10px] tracking-[0.15em] sm:block md:text-[11px]"
+                style={{ color: "rgba(232,199,126,0.85)" }}
+              >
+                DTCP &amp; RERA APPROVED
+              </span>
+            </div>
           </Link>
 
           {/* Center links — desktop only */}
@@ -117,11 +131,11 @@ export function Navbar() {
           </div>
 
           {/* Mobile: "Book" CTA + hamburger */}
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex shrink-0 items-center gap-1.5 md:hidden">
             {/* Compact CTA on mobile */}
             <Link to="/contact">
               <motion.div
-                className="rounded-full px-3 py-1.5 text-[11px] font-semibold text-center min-w-[75px]"
+                className="rounded-full px-2.5 py-1.5 text-[10.5px] font-semibold text-center min-w-[64px] whitespace-nowrap"
                 style={{
                   background: "linear-gradient(135deg, #E8C77E, #c9a84c)",
                   color: "#0F2235",
