@@ -17,6 +17,7 @@ import anugragha7 from "@/assets/logos/anugraha-7.jpg";
 import anugragha8 from "@/assets/logos/anugraha-8.jpg";
 import anugragha9 from "@/assets/logos/anugraha-9.jpg";
 import anugraghaLayout from "@/assets/anugragha-layout.jpg";
+import commingSoon from "@/assets/coming-soon.webp";
 
 export type ProjectStatus = "Completed" | "Ongoing" | "Upcoming";
 
@@ -281,12 +282,12 @@ export const UPCOMING: Project[] = [
     description: "A landmark pre-launch development inspired by world-class planning, offering premium plots at early-bird pricing.",
     descriptionTa: "உலகத்தரம் வாய்ந்த உள்கட்டமைப்பு திட்டமிடலால் ஈர்க்கப்பட்டு, ஆரம்பகால சலுகை விலையில் பிரீமியம் மனைகளை வழங்கும் ஒரு வரலாற்றுச் சிறப்புமிக்க புதிய மனைப்பிரிவு.",
     status: "Upcoming",
-    imageLabel: "London City",
+    imageLabel: "comingSoon",
     highlight: "Pre-Launch — Register Interest",
     highlightTa: "முன்பதிவு தொடங்குகிறது — உங்கள் விருப்பத்தை பதிவு செய்யவும்",
     cta: "Register Interest",
     ctaTa: "விருப்பத்தை பதிவு செய்க",
-    logo: megalogo,
+    logo: commingSoon,
   },
   {
     slug: "shanthi-nagar-virivakkam",
@@ -297,12 +298,12 @@ export const UPCOMING: Project[] = [
     description: "A peaceful upcoming layout in the growing Analagragharam belt — ideal for families and long-term investors.",
     descriptionTa: "வளர்ந்து வரும் அனலாக்ரஹாரம் பகுதியில் அமையவிருக்கும் ஒரு அமைதியான குடியிருப்பு மனைப்பிரிவு — குடும்பங்களுக்கும் நீண்ட கால முதலீட்டாளர்களுக்கும் ஏற்றது.",
     status: "Upcoming",
-    imageLabel: "Shanthi Nagar Virivakkam",
+    imageLabel: "comingSoon",
     highlight: "Coming Soon",
     highlightTa: "விரைவில் வருகிறது",
     cta: "Register Interest",
     ctaTa: "விருப்பத்தை பதிவு செய்க",
-    logo: senchinalogo,
+    logo: commingSoon,
   },
 ];
 

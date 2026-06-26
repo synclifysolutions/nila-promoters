@@ -28,6 +28,7 @@ import anugraha9 from "@/assets/logos/anugraha-9.jpg";
 
 import { useLanguage } from "./__root";
 
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
