@@ -142,7 +142,7 @@ const translations: Record<Language, Record<string, string>> = {
     "about.m1.t": "Kurunji Nagar", "about.m1.d": "First plotted layout launched in Kumbakonam.",
     "about.m2.t": "Mahalakshmi Nagar & SPM Garden", "about.m2.d": "100+ families served across two landmark projects.",
     "about.m3.t": "Mega City Launched", "about.m3.d": "Expanded to new micro-markets with Mega City.",
-    "about.m4.t": "Saleh Nagar Delivered", "about.m4.d": "300+ happy families milestone crossed.",
+    "about.m4.t": "Salih Nagar Delivered", "about.m4.d": "300+ happy families milestone crossed.",
     "about.m5.t": "PAM Nagar & Sanjeeena Nagar Launched", "about.m5.d": "Scaling new heights across Kumbakonam.",
     "about.m6.t": "SPM Garden Launched", "about.m6.d": "Scaling new heights across Kumbakonam.",
     "about.m7.t": "Anugraha Avenue Launched", "about.m7.d": "Our flagship ongoing project.",
