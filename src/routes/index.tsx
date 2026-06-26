@@ -28,7 +28,6 @@ import anugraha9 from "@/assets/logos/anugraha-9.jpg";
 
 import { useLanguage } from "./__root";
 
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -72,7 +71,6 @@ type Particle = {
   alpha: number; life: number;
 };
 
-/* ─── Popup Ad Component ─── */
 function AdPopup() {
   const { t } = useLanguage();
   const [visible, setVisible] = useState(false);
@@ -228,7 +226,6 @@ function AdPopup() {
   );
 }
 
-/* ─── Fullscreen Lightbox ─── */
 function Lightbox({ images, startIndex, onClose }: { images: typeof GALLERY_IMAGES; startIndex: number; onClose: () => void }) {
   const { t } = useLanguage();
   const [current, setCurrent] = useState(startIndex);
@@ -337,7 +334,6 @@ function Lightbox({ images, startIndex, onClose }: { images: typeof GALLERY_IMAG
   );
 }
 
-/* ─── Infinite Scroll Gallery ─── */
 function InfiniteGallery() {
   const { t } = useLanguage();
   const [paused, setPaused] = useState(false);
@@ -441,7 +437,6 @@ function InfiniteGallery() {
   );
 }
 
-/* ─── count-up hook ─── */
 function useCountUp(target: number, duration = 2000) {
   const [count, setCount] = useState(0);
   const [started, setStarted] = useState(false);
@@ -489,9 +484,6 @@ function StatItem({ value, suffix, labelKey, index, dark }: { value: number; suf
   );
 }
 
-/* ═══════════════════════════════════════════
-    MAIN HOME PAGE COMPONENT
-═══════════════════════════════════════════ */
 function HomePage() {
   const { t } = useLanguage();
   const heroRef = useRef<HTMLDivElement>(null);
@@ -544,7 +536,6 @@ function HomePage() {
         <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(15,34,53,0.42) 0%, transparent 50%)" }} />
 
         <motion.div style={{ y: textY, opacity: heroOpacity }} className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-center px-5 sm:px-6 pb-16 pt-28 sm:pt-32">
-          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, x: -28, filter: "blur(10px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.9, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -556,7 +547,7 @@ function HomePage() {
             </span>
           </motion.div>
 
-          {/* Hero heading */}
+          {/* ── Hero heading with translatable brand name ── */}
           <h1 className="font-hero font-bold leading-[1.02] text-white">
             <div className="overflow-visible">
               <motion.div
@@ -575,8 +566,17 @@ function HomePage() {
                 className="text-[34px] sm:text-5xl md:text-7xl lg:text-[82px] leading-tight"
               >
                 <span className="italic">
-                  <span style={{ color: "#1a7a2e", WebkitTextStroke: "clamp(3px, 1vw, 8px) #E8C77E", paintOrder: "stroke fill" }}>Nila </span>
-                  <span style={{ color: "#e01b1b", WebkitTextStroke: "clamp(3px, 1vw, 8px) #E8C77E", paintOrder: "stroke fill" }}>Promoters.</span>
+                  <span
+                    style={{ color: "#1a7a2e", WebkitTextStroke: "clamp(3px, 1vw, 8px) #E8C77E", paintOrder: "stroke fill" }}
+                  >
+                    {t("hero.brand1")}
+                  </span>
+                  {" "}
+                  <span
+                    style={{ color: "#e01b1b", WebkitTextStroke: "clamp(3px, 1vw, 8px) #E8C77E", paintOrder: "stroke fill" }}
+                  >
+                    {t("hero.brand2")}
+                  </span>
                 </span>
               </motion.div>
             </div>

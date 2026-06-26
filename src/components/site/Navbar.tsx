@@ -12,10 +12,8 @@ export function Navbar() {
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 40));
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   
-  // Connect to our native language setup
   const { language, toggleLanguage, t } = useLanguage();
 
-  // Dynamically pull translated labels
   const links = [
     { to: "/", label: t("nav.home") },
     { to: "/about", label: t("nav.about") },
@@ -41,7 +39,7 @@ export function Navbar() {
             boxShadow: scrolled ? "0 8px 32px rgba(0,0,0,0.3)" : "none",
           }}
         >
-          {/* Logo + Company name — visible on all screens, scales down on mobile */}
+          {/* Logo + Company name */}
           <Link to="/" className="flex min-w-0 shrink items-center gap-1.5 sm:gap-3">
             <img
               src={nilaLogo}
@@ -104,7 +102,6 @@ export function Navbar() {
 
           {/* Right side: Translate Button + CTA — desktop */}
           <div className="hidden shrink-0 items-center gap-4 md:flex">
-            {/* Custom Language Switcher Option */}
             <button
               onClick={toggleLanguage}
               className="text-[12px] font-semibold px-3 py-1.5 rounded-full border border-[rgba(232,199,126,0.5)] bg-[rgba(232,199,126,0.12)] text-[#E8C77E] hover:bg-[rgba(232,199,126,0.22)] hover:border-[rgba(232,199,126,0.8)] transition-all duration-200"
@@ -130,8 +127,17 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile: "Book" CTA + hamburger */}
+          {/* Mobile: Language Toggle + "Book" CTA + hamburger */}
           <div className="flex shrink-0 items-center gap-1.5 md:hidden">
+            {/* Language toggle — mobile header */}
+            <button
+              onClick={toggleLanguage}
+              className="text-[10.5px] font-semibold px-2.5 py-1.5 rounded-full border border-[rgba(232,199,126,0.5)] bg-[rgba(232,199,126,0.12)] text-[#E8C77E] hover:bg-[rgba(232,199,126,0.22)] transition-all duration-200 whitespace-nowrap"
+              aria-label="Toggle Language"
+            >
+              {language === "en" ? "தமிழ்" : "English"}
+            </button>
+
             {/* Compact CTA on mobile */}
             <Link to="/contact">
               <motion.div
@@ -206,23 +212,6 @@ export function Navbar() {
                     </Link>
                   );
                 })}
-
-                {/* Translate row — mobile */}
-                <motion.div
-                  className="flex items-center justify-between rounded-xl px-4 py-2.5 mt-0.5 text-[14px]"
-                  style={{ border: "1px solid rgba(232,199,126,0.14)", color: "rgba(249,244,241,0.6)" }}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: links.length * 0.05, duration: 0.22 }}
-                >
-                  <span>Language / மொழி</span>
-                  <button
-                    onClick={toggleLanguage}
-                    className="text-[12px] font-semibold px-3 py-1 rounded-full border border-[rgba(232,199,126,0.5)] bg-[rgba(232,199,126,0.12)] text-[#E8C77E]"
-                  >
-                    {language === "en" ? "தமிழ்" : "English"}
-                  </button>
-                </motion.div>
               </div>
             </motion.div>
           )}

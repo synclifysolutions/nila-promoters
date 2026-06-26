@@ -16,9 +16,6 @@ import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppButton } from "@/components/site/WhatsAppButton";
 
-// ==========================================
-// 1. LIGHTWEIGHT TRANSLATION SETUP
-// ==========================================
 type Language = 'en' | 'ta';
 
 interface LanguageContextType {
@@ -35,7 +32,6 @@ export const useLanguage = () => {
   return context;
 };
 
-// Simple global translation lookup
 const translations: Record<Language, Record<string, string>> = {
   en: {
     "nav.home": "Home",
@@ -46,13 +42,13 @@ const translations: Record<Language, Record<string, string>> = {
     "notfound.subtitle": "Page not found",
     "notfound.desc": "The page you're looking for doesn't exist.",
     "notfound.btn": "Go home",
-    // Ad Popup
     "ad.call": "📞 Call Now",
     "ad.whatsapp": "💬 WhatsApp",
     "ad.close": "Close",
-    // Hero
     "hero.badge": "DTCP · RERA Approved · Est. 2020",
     "hero.title": "Where Your Dream Begins with",
+    "hero.brand1": "Nila ",
+    "hero.brand2": "Promoters.",
     "hero.desc": "Premium DTCP & RERA-approved plots for families who demand clear titles, prime locations, and absolute transparency.",
     "hero.btnExplore": "Explore Projects",
     "hero.btnVisit": "Book a Site Visit",
@@ -61,14 +57,12 @@ const translations: Record<Language, Record<string, string>> = {
     "trust.rera": "RERA Certified",
     "trust.title": "100% Clear Title",
     "trust.charges": "No Hidden Charges",
-    // Stats
     "stats.sub": "Our Track Record",
     "stats.title": "Numbers That Speak Trust",
     "stats.families": "Happy Families",
     "stats.projects": "Projects Delivered",
     "stats.years": "Years of Trust",
     "stats.titles": "Clear Title Plots",
-    // Why Choose
     "why.sub": "Our Promise",
     "why.title1": "Why Families Trust",
     "why.f1.title": "DTCP & RERA Approved",
@@ -83,20 +77,17 @@ const translations: Record<Language, Record<string, string>> = {
     "why.f5.desc": "Five years of consistent delivery and 500+ families who chose us as their partner.",
     "why.f6.title": "Transparent Dealings",
     "why.f6.desc": "What we promise on paper is exactly what we deliver on the ground.",
-    // Portfolio
     "portfolio.sub": "Portfolio",
     "portfolio.title1": "Our Signature",
     "portfolio.title2": "Projects",
     "portfolio.desc": "A curated selection of layouts that define quality, trust, and lasting value.",
     "portfolio.btnViewAll": "View All Projects",
-    // Gallery
     "gallery.sub": "Site Gallery",
     "gallery.title1": "Glimpses from the",
     "gallery.title2": "Ground",
     "gallery.desc": "Hover to pause · Click any photo to view fullscreen",
     "gallery.pausedHint": "Click to open · Arrow keys to navigate",
     "gallery.hint": "← → keys to navigate · Esc to close",
-    // Reviews
     "reviews.sub": "Voices of Trust",
     "reviews.title1": "What Our",
     "reviews.title2": "Families",
@@ -113,14 +104,12 @@ const translations: Record<Language, Record<string, string>> = {
     "reviews.r3.name": "Suresh Babu",
     "reviews.r3.loc": "Thanjavur",
     "reviews.r3.quote": "I evaluated five developers before choosing Nila. Their transparency and DTCP approvals stood out. Couldn't be happier.",
-    // CTA
     "cta.sub": "Take the Next Step",
     "cta.title1": "Ready to Own Your Dream Plot in",
     "cta.title2": "Kumbakonam?",
     "cta.desc": "Schedule a complimentary site visit. Walk the land, ask every question, and decide with complete confidence.",
     "cta.btnVisit": "Book a Site Visit Today",
     "cta.btnView": "View All Projects",
-    // Footer Keys
     "footer.brandDesc": "Premium DTCP & RERA-approved plots in Kumbakonam since 2020.",
     "footer.hNavigate": "Navigate",
     "footer.hProjects": "Projects",
@@ -135,7 +124,6 @@ const translations: Record<Language, Record<string, string>> = {
     "footer.p5": "London City",
     "footer.rights": "All rights reserved.",
     "footer.devBy": "Developed by",
-    // About Page Banners & Story
     "about.bannerTitle": "About Nila Promoters",
     "about.bannerDesc": "Kumbakonam's most trusted DTCP & RERA approved plot developer since 2020.",
     "about.storySub": "Our Story",
@@ -143,14 +131,12 @@ const translations: Record<Language, Record<string, string>> = {
     "about.storyP1": "was founded in 2020 with a single, powerful commitment — to make land ownership in Kumbakonam transparent, accessible, and truly valuable.",
     "about.storyP2": "Every plot we sell carries a clear legal title, government approvals, and the promise of long-term investment growth — backed by five years of unwavering trust.",
     "about.est": "Est. 2020",
-    // Leadership
     "about.leadSub": "Leadership",
     "about.leadTitle1": "The Vision Behind",
     "about.mdName": "Mr.R. Mahesh",
     "about.mdTitle": "Managing Director, Nila Promoters",
     "about.mdQuote1": "At",
     "about.mdQuote2": "we don't just sell land — we build futures, one plot at a time.",
-    // Journey
     "about.journeySub": "Our Journey",
     "about.journeyTitle": "Five Years. One Promise.",
     "about.m1.t": "Kurunji Nagar", "about.m1.d": "First plotted layout launched in Kumbakonam.",
@@ -160,11 +146,9 @@ const translations: Record<Language, Record<string, string>> = {
     "about.m5.t": "PAM Nagar & Sanjeeena Nagar Launched", "about.m5.d": "Scaling new heights across Kumbakonam.",
     "about.m6.t": "SPM Garden Launched", "about.m6.d": "Scaling new heights across Kumbakonam.",
     "about.m7.t": "Anugraha Avenue Launched", "about.m7.d": "Our flagship ongoing project.",
-    // Vision & Mission
     "about.driveSub": "What Drives Us",
     "about.visTitle": "Our Vision", "about.visDesc": "To be Kumbakonam's most trusted land developer — where every plot is a promise of prosperity, legal clarity, and lifelong value.",
     "about.misTitle": "Our Mission", "about.misDesc": "To deliver DTCP & RERA approved plots at prime locations across Kumbakonam with complete transparency, fair pricing, and unwavering customer support.",
-    // Core Values
     "about.valuesSub": "What Guides Us",
     "about.valuesTitle1": "Our Core", "about.valuesTitle2": "Values",
     "about.valuesDesc": "Six principles that shape every decision we make.",
@@ -175,7 +159,6 @@ const translations: Record<Language, Record<string, string>> = {
     "about.v5.t": "Legal Compliance", "about.v5.d": "100% DTCP & RERA approved, every time.",
     "about.v6.t": "Community Growth", "about.v6.d": "Building neighbourhoods, not just plots.",
     "about.footerTag": "Nila Promoters — Est. 2020",
-    // Contact Page Keys
     "contact.heroSub": "Let's Talk Land",
     "contact.heroTitle1": "Every great plot starts with",
     "contact.heroTitle2": "one conversation.",
@@ -209,14 +192,12 @@ const translations: Record<Language, Record<string, string>> = {
     "contact.mapSub": "Find Us",
     "contact.mapTitle": "On the map",
     "contact.btnMapOpen": "Open in Google Maps",
-    // Projects Page Keys
     "projects.bannerTitle": "Our Portfolio",
     "projects.bannerDesc": "Explore Nila Promoters' completed, ongoing, and upcoming DTCP & RERA approved plotted developments across Kumbakonam.",
     "projects.tabAll": "All Projects",
     "projects.tabOngoing": "Ongoing",
     "projects.tabCompleted": "Completed",
     "projects.tabUpcoming": "Upcoming",
-    // Project Dynamic Detail Screen Keys
     "details.notFound": "Project Not Found",
     "details.backBtn": "Back to Projects",
     "details.subHeader": "Project Details",
@@ -239,13 +220,13 @@ const translations: Record<Language, Record<string, string>> = {
     "notfound.subtitle": "பக்கம் காணப்படவில்லை",
     "notfound.desc": "நீங்கள் தேடும் பக்கம் இங்கு இல்லை.",
     "notfound.btn": "முகப்பு பக்கத்திற்கு செல்ல",
-    // Ad Popup
     "ad.call": "📞 இப்போது அழைக்கவும்",
     "ad.whatsapp": "💬 வாட்ஸ்அப்",
     "ad.close": "மூடுக",
-    // Hero
     "hero.badge": "DTCP · RERA அங்கீகாரம் · துவங்கப்பட்ட ஆண்டு 2020",
     "hero.title": "உங்கள் கனவு இல்லம் நனவாகும் இடம்",
+    "hero.brand1": "நிலா ",
+    "hero.brand2": "புரோமோட்டர்ஸ்.",
     "hero.desc": "முறையான ஆவணங்கள், சிறந்த இருப்பிடம் மற்றும் முழுமையான வெளிப்படைத்தன்மையை விரும்பும் குடும்பங்களுக்கான பிரீமியம் DTCP மற்றும் RERA அங்கீகரிக்கப்பட்ட மனைகள்.",
     "hero.btnExplore": "திட்டங்களை ஆராய்க",
     "hero.btnVisit": "இடத்தை பார்வையிட முன்பதிவு செய்க",
@@ -254,14 +235,12 @@ const translations: Record<Language, Record<string, string>> = {
     "trust.rera": "RERA சான்றளிக்கப்பட்டது",
     "trust.title": "100% வில்லங்கமற்ற பட்டா",
     "trust.charges": "மறைமுக கட்டணங்கள் இல்லை",
-    // Stats
     "stats.sub": "எங்களது சாதனைப் பயணம்",
     "stats.title": "நம்பிக்கையின் எண்கள்",
     "stats.families": "மகிழ்ச்சியான குடும்பங்கள்",
     "stats.projects": "நிறைவடைந்த திட்டங்கள்",
     "stats.years": "ஆண்டுகால நம்பிக்கை",
     "stats.titles": "தெளிவான தலைப்பு மனைகள்",
-    // Why Choose
     "why.sub": "எங்களது வாக்குறுதி",
     "why.title1": "குடும்பங்கள் ஏன் எங்களை நம்புகிறார்கள்?",
     "why.f1.title": "DTCP & RERA அங்கீகாரம்",
@@ -276,20 +255,17 @@ const translations: Record<Language, Record<string, string>> = {
     "why.f5.desc": "ஐந்து ஆண்டுகளாக துல்லியமான நிர்வாகம் மற்றும் எங்களை தேர்ந்தெடுத்த 500-க்கும் மேற்பட்ட மகிழ்ச்சியான குடும்பங்கள்.",
     "why.f6.title": "வெளிப்படையான நடைமுறை",
     "why.f6.desc": "பத்திரத்தில் நாங்கள் வாக்குறுதி அளிப்பது எதுவோ, அதை அப்படியே களத்தில் வழங்குகிறோம்.",
-    // Portfolio
     "portfolio.sub": "எங்களது பணிகள்",
     "portfolio.title1": "எங்களின் முக்கிய",
     "portfolio.title2": "திட்டங்கள்",
     "portfolio.desc": "தரம், நம்பிக்கை மற்றும் நீடித்த மதிப்பை வரையறுக்கும் வீட்டுமனைகளின் தொகுப்பு.",
     "portfolio.btnViewAll": "அனைத்து திட்டங்களையும் காண்க",
-    // Gallery
     "gallery.sub": "புகைப்பட தொகுப்பு",
     "gallery.title1": "களத்தில் இருந்து நேரடி",
     "gallery.title2": "காட்சிகள்",
     "gallery.desc": "நிறுத்துவதற்கு கர்சரை வைக்கவும் · முழுத்திரையில் காண ஏதேனும் ஒரு புகைப்படத்தை கிளிக் செய்யவும்",
     "gallery.pausedHint": "திறக்க கிளிக் செய்க · வழிநடத்த அம்பு விசைகளைப் பயன்படுத்தவும்",
     "gallery.hint": "நகர்த்த ← → விசைகள் · மூட Esc விசை",
-    // Reviews
     "reviews.sub": "வாடிக்கையாளர்களின் குரல்",
     "reviews.title1": "எங்கள்",
     "reviews.title2": "குடும்பங்கள்",
@@ -306,15 +282,12 @@ const translations: Record<Language, Record<string, string>> = {
     "reviews.r3.name": "சுரேஷ் பாபு",
     "reviews.r3.loc": "தஞ்சாவூர்",
     "reviews.r3.quote": "நிலா நிறுவனத்தை தேர்ந்தெடுப்பதற்கு முன் ஐந்து நிறுவனங்களை ஒப்பிட்டுப் பார்த்தேன். அவர்களின் வெளிப்படைத்தன்மையும் DTCP அங்கீகாரமும் என்னை கவர்ந்தது. மிகவும் மகிழ்ச்சி.",
-    // CTA
     "cta.sub": "அடுத்த அடியை எடுத்து வையுங்கள்",
     "cta.title1": "கும்பகோணத்தில் உங்கள் கனவு மனையை சொந்தமாக்க",
     "cta.title2": "தயாரா?",
     "cta.desc": "இலவசமாக இடத்தை பார்வையிட முன்பதிவு செய்யுங்கள். நிலத்தை நேரடியாகப் பார்த்து, உங்கள் சந்தேகங்களைத் தெளிவுபடுத்தி, முழு நம்பிக்கையுடன் முடிவெடுங்கள்.",
     "cta.btnVisit": "இன்றே இடத்தை பார்வையிட முன்பதிவு செய்க",
     "cta.btnView": "அனைத்து திட்டங்களையும் பார்க்க",
-
-    // Footer Keys
     "footer.brandDesc": "2020 முதல் கும்பகோணத்தில் பிரீமியம் DTCP மற்றும் RERA அங்கீகரிக்கப்பட்ட வீட்டுமனைகள்.",
     "footer.hNavigate": "வழிசெலுத்தல்",
     "footer.hProjects": "திட்டங்கள்",
@@ -329,7 +302,6 @@ const translations: Record<Language, Record<string, string>> = {
     "footer.p5": "லண்டன் சிட்டி",
     "footer.rights": "அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.",
     "footer.devBy": "வடிவமைக்கப்பட்டது",
-    // About Page Banners & Story
     "about.bannerTitle": "நிலா புரோமோட்டர்ஸ் பற்றி",
     "about.bannerDesc": "2020 முதல் கும்பகோணத்தில் மிகவும் நம்பகமான DTCP மற்றும் RERA அங்கீகரிக்கப்பட்ட வீட்டுமனை மேம்பாட்டாளர்.",
     "about.storySub": "எங்களது வரலாறு",
@@ -337,14 +309,12 @@ const translations: Record<Language, Record<string, string>> = {
     "about.storyP1": "கும்பகோணத்தில் நிலம் வாங்குவதை வெளிப்படையானதாகவும், எளியமுறையிலும், உண்மையான மதிப்புமிக்கதாகவும் மாற்ற வேண்டும் என்ற ஒரே ஒரு உறுதியான நோக்கத்துடன் 2020 இல் தொடங்கப்பட்டது.",
     "about.storyP2": "நாங்கள் விற்கும் ஒவ்வொரு மனையும் தெளிவான சட்டப்பூர்வ ஆவணங்கள், அரசு அங்கீகாரங்கள் மற்றும் நீண்ட கால முதலீட்டு வளர்ச்சியின் உத்தரவாதத்தைக் கொண்டுள்ளது — இது ஐந்து ஆண்டுகால அசைக்க முடியாத நம்பிக்கையால் ஆதரிக்கப்படுகிறது.",
     "about.est": "தொடக்கம் 2020",
-    // Leadership
     "about.leadSub": "தலைமைத்துவம்",
     "about.leadTitle1": "பின்னால் இருக்கும் தொலைநோக்கு பார்வை",
     "about.mdName": "திரு. R. மகேஷ்",
     "about.mdTitle": "நிர்வாக இயக்குனர், நிலா புரோமோட்டர்ஸ்",
     "about.mdQuote1": "நாங்கள்",
     "about.mdQuote2": "வெறும் நிலத்தை மட்டும் விற்கவில்லை — ஒவ்வொரு மனையின் மூலமும் மக்களின் எதிர்காலத்தை உருவாக்குகிறோம்.\"",
-    // Journey
     "about.journeySub": "எங்களது பயணம்",
     "about.journeyTitle": "ஐந்து ஆண்டுகள். ஒரு வாக்குறுதி.",
     "about.m1.t": "குறிஞ்சி நகர்", "about.m1.d": "கும்பகோணத்தில் தொடங்கப்பட்ட எங்களின் முதல் வீட்டுமனைத் திட்டம்.",
@@ -354,11 +324,9 @@ const translations: Record<Language, Record<string, string>> = {
     "about.m5.t": "PAM நகர் & சஞ்சீனா நகர் தொடக்கம்", "about.m5.d": "கும்பகோணம் முழுவதும் புதிய உயரங்களை எட்டியது.",
     "about.m6.t": "SPM கார்டன் விரிவாக்கம்", "about.m6.d": "கும்பகோணம் முழுவதும் புதிய வீட்டுமனைகள் விற்பனை.",
     "about.m7.t": "அனுக்கிரஹா அவென்யூ", "about.m7.d": "தற்போது சிறப்பாக நடைபெற்று வரும் எங்களது முதன்மைத் திட்டம்.",
-    // Vision & Mission
     "about.driveSub": "எங்களை இயக்குவது எது?",
     "about.visTitle": "எங்களது தொலைநோக்கு", "about.visDesc": "கும்பகோணத்தின் மிகவும் நம்பகமான நில மேம்பாட்டாளராக விளங்குவதே எங்களின் நோக்கம் — இங்கு ஒவ்வொரு மனையும் செழிப்பு, சட்டத் தெளிவு மற்றும் வாழ்நாள் மதிப்பின் வாக்குறுதியாகும்.",
     "about.misTitle": "எங்களது லட்சியம்", "about.misDesc": "கும்பகோணம் முழுவதும் முதன்மையான இடங்களில் DTCP மற்றும் RERA அங்கீகரிக்கப்பட்ட மனைகளை முழுமையான வெளிப்படைத்தன்மை, நியாயமான விலை மற்றும் அசைக்க முடியாத வாடிக்கையாளர் ஆதரவுடன் வழங்குவது.",
-    // Core Values
     "about.valuesSub": "எங்களை வழிநடத்துவது எது?",
     "about.valuesTitle1": "எங்களது முக்கிய", "about.valuesTitle2": "நெறிமுறைகள்",
     "about.valuesDesc": "நாங்கள் எடுக்கும் ஒவ்வொரு முடிவையும் வடிவமைக்கும் ஆறு முக்கிய கொள்கைகள்.",
@@ -369,7 +337,6 @@ const translations: Record<Language, Record<string, string>> = {
     "about.v5.t": "சட்டப்பூர்வ இணக்கம்", "about.v5.d": "எப்போதும் 100% DTCP மற்றும் RERA அங்கீகரிக்கப்பட்ட ஆவணங்கள்.",
     "about.v6.t": "சமூக வளர்ச்சி", "about.v6.d": "வெறும் மனைகளை மட்டுமல்லாமல், சிறந்த குடியிருப்புப் பகுதிகளை உருவாக்குகிறோம்.",
     "about.footerTag": "நிலா புரோமோட்டர்ஸ் — துவங்கப்பட்ட ஆண்டு 2020",
-    // Contact Page Keys
     "contact.heroSub": "வீட்டுமனைகளைப் பற்றி பேசுவோம்",
     "contact.heroTitle1": "ஒவ்வொரு சிறந்த நிலமும் ஒரு",
     "contact.heroTitle2": "சிறு உரையாடலுடன் தொடங்குகிறது.",
@@ -388,7 +355,7 @@ const translations: Record<Language, Record<string, string>> = {
     "contact.optGeneral": "பொதுவான விசாரணை",
     "contact.fMsg": "செய்தி",
     "contact.fMsgPlaceholder": "உங்களது வீட்டுமனைத் தேவைகளைப் பற்றி எழுதவும்...",
-    "contact.btnSubmit": "விசாரணையை அனுப்பുക",
+    "contact.btnSubmit": "விசாரணையை அனுப்புக",
     "contact.formSuccess": "நன்றி! உங்களது விசாரணை எங்களுக்குக் கிடைத்துள்ளது. விரைவில் உங்களைத் தொடர்பு கொள்கிறோம்.",
     "contact.hoursTitle": "வேலை நேரங்கள்",
     "contact.hoursWeekdays": "திங்கள் – சனிக்கிழமை",
@@ -403,14 +370,12 @@ const translations: Record<Language, Record<string, string>> = {
     "contact.mapSub": "இருப்பிடம்",
     "contact.mapTitle": "வரைபடத்தில் காண்க",
     "contact.btnMapOpen": "கூகுள் மேப்பில் திறக்க",
-    // Projects Page Keys
     "projects.bannerTitle": "எங்களது திட்டங்கள்",
     "projects.bannerDesc": "கும்பகோணம் முழுவதும் நிறைவடைந்த, தற்போதைய மற்றும் வரவிருக்கும் பிரீமியம் வீட்டுமனை திட்டங்களை ஆராயுங்கள்.",
     "projects.tabAll": "அனைத்து மனைகள்",
     "projects.tabOngoing": "விற்பனையில் உள்ளவை",
     "projects.tabCompleted": "நிறைவடைந்தவை",
     "projects.tabUpcoming": "வரவிருப்பவை",
-    // Project Dynamic Detail Screen Keys
     "details.notFound": "திட்டம் கண்டறியப்படவில்லை",
     "details.backBtn": "திட்டங்கள் பக்கத்திற்கு செல்ல",
     "details.subHeader": "திட்ட விவரங்கள்",
@@ -427,11 +392,9 @@ const translations: Record<Language, Record<string, string>> = {
 };
 
 function LanguageProvider({ children }: { children: ReactNode }) {
-  // 1. Keep the initialization simple to match the server baseline
   const [language, setLanguage] = useState<Language>('en');
   const [mounted, setMounted] = useState(false);
 
-  // 2. Synchronize your localStorage values securely safely after mount
   useEffect(() => {
     const saved = localStorage.getItem('site_lang');
     if (saved === 'en' || saved === 'ta') {
@@ -451,7 +414,6 @@ function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   const t = (key: string): string => {
-    // If not mounted yet, default to English to match server HTML strings precisely
     if (!mounted) return translations['en']?.[key] || key;
     return translations[language]?.[key] || translations['en']?.[key] || key;
   };
@@ -463,9 +425,6 @@ function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// ==========================================
-// 2. COMPONENTS & ROUTE DEFINITIONS
-// ==========================================
 function NotFoundComponent() {
   const { t } = useLanguage();
   return (
@@ -522,23 +481,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-  { rel: "icon", href: "/favicon.png", type: "image/png" },
-
-  { rel: "stylesheet", href: appCss },
-
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&display=swap",
-  },
-],
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&display=swap" },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -554,7 +502,6 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-// Inner shell handles binding context state directly to the core <html> tag
 function InnerHtmlShell({ children }: { children: ReactNode }) {
   const { language } = useLanguage();
   return (
